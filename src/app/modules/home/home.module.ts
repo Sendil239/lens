@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { BarComponent } from 'src/app/visualizations/bar/bar.component';
 import { PieComponent } from 'src/app/visualizations/pie/pie.component';
 import { ScatterComponent } from 'src/app/visualizations/scatter/scatter.component';
+import { ListingComponent } from 'src/app/shared/listing/listing.component';
 
 const routes: Routes = [
   {
@@ -19,7 +20,13 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [HomeComponent, SearchComponent, FilterComponent, BarComponent, PieComponent, ScatterComponent],
+  declarations: [HomeComponent, 
+    SearchComponent, 
+    FilterComponent, 
+    BarComponent, 
+    PieComponent, 
+    ScatterComponent,
+    ListingComponent],
   imports: [MaterialModule, 
     FormsModule, 
     ReactiveFormsModule,

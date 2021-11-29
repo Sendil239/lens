@@ -6,3 +6,29 @@
   mat-grid-tile {
     background: lightblue;
   }
+
+  .example-form {
+    min-width: 150px;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .input-search {
+    width: 40%;
+  }
+
+mat-form-field {
+  .mat-form-field-wrapper{
+    div {
+      .mat-form-field-flex{
+        background-color: white;
+      }
+    }
+  }
+      
+}
+
+.btn-search {
+  margin-left: 1%;
+  max-height: 52px;
+}

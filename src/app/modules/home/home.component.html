@@ -1,22 +1,43 @@
 
-<!-- <mat-grid-list cols="2" rowHeight="2:1">
-    <mat-grid-tile>
-        <app-search></app-search>
-    </mat-grid-tile>
-    <mat-grid-tile>
-        <app-filter></app-filter>
-    </mat-grid-tile>
-</mat-grid-list> -->
+<div >
+    <div style="text-align: center;">
+        <form class="example-form" (ngSubmit)="searchKeyword()" #formDirective="ngForm">
+        <mat-form-field class="input-search" appearance="fill">
+            <!-- <mat-label>Enter Keyword To Search</mat-label> -->
+            <input 
+                matInput 
+                placeholder="Ex. Narendra Modi"
+                [formControl]="searchForm" />
+            <mat-error *ngIf="searchForm.hasError('required')">
+            Please enter search text
+            </mat-error>
+        </mat-form-field>
+        <button
+            type="submit"
+            mat-raised-button
+            color="primary"
+            name="searchKeyword"
+            class="btn-search"
+            [disabled]="!searchForm.valid"
+        > Search </button>
+        </form>
+    </div>
+    <div>
+        <app-filter
+        [filterData]="filterData"
+        (filterApplied)="applyFilter($event)"
+        ></app-filter>
+    </div>
+    <div>
+        <app-listing
+            [tweetsList]="tweetsList"
+        >
+        </app-listing>
+    </div>
 
-<app-search></app-search>
+</div>
 
-<app-filter
-    [filterData]="filterData"
 
-    ></app-filter>
 
-<app-bar></app-bar>
 
-<app-pie></app-pie>
 
-<app-scatter></app-scatter>

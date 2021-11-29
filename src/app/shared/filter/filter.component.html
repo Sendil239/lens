@@ -28,11 +28,19 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <button           
-            mat-raised-button
-            class='btn-clear-filter'
-            (click)="clearFilters()"
-            > Clear Filter </button>
+            <div style="text-align: end;">
+                <button           
+                mat-raised-button
+                color="primary"
+                class='btn-filter-results'
+                (click)="applyFilter()"
+                > Apply Filter </button>
+                <button           
+                mat-raised-button
+                class='btn-clear-filter'
+                (click)="clearFilters()"
+                > Clear Filter </button>
+            </div>
         </mat-expansion-panel>
     </mat-accordion>
 </div>

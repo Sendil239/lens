@@ -22,8 +22,14 @@ export class HomeService {
         )
     }
 
-    postFilterData(searchTerm: string, filterData: any) {
-
+    postFilterData(filterData: any) {
+        return this.dataService.post(filterData, '/searchQuery').pipe(
+            map(
+                (response: any) => {
+                    return response;
+                }
+            )
+        )
     }
     
 }
