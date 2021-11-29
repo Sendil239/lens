@@ -18,6 +18,7 @@ from nltk.stem import PorterStemmer
 import re
 from nltk.corpus import stopwords
 import nltk
+import glob
 nltk.download('stopwords')
 
 import re
@@ -78,6 +79,18 @@ def tokenizer(text):
     # print(tokenized_text)
 
     return tokenized_text
+def get_poi():
+    results = []
+    root_dir = '/home/ubuntu/IRF_Project_21/project4/project1_data/'
+    dir_names = glob.glob(root_dir + "/*")
+
+    for dir_name in dir_names:
+        dir_name = dir_name.split('/')[6]
+        if 'keyword' not in dir_name:
+            results.append(dir_name)
+
+    print(results)
+    return results
 
 def get_from_solr(core_name, text):
     host = "localhost"
@@ -180,21 +193,40 @@ def search_query(query, solr_core):
 
     return lens_doc
 
-@app.route("/execute_query", methods=['POST'])
-def execute_query(query):
+@app.route("/searchQuery", methods=['POST'])
+def searchQuery():
     """ This function handles the POST request to your endpoint.
         Do NOT change it."""
-    start_time = time.time()
+    #start_time = time.time()
+
+    payload = json.loads(request.data.decode("utf-8").replace("'", '"'))
+    #print(payload)
+
+    if "query" in payload:
+        query = payload['query']
+        print(payload['query'])
 
     # Search document in solr with query
     lens_doc = search_query(query, ind)
 
     response = {
-        "Response": lens_doc,
-        "time_taken": str(time.time() - start_time)
+        "Response": lens_doc
     }
+    return flask.jsonify(lens_doc)
+
+@app.route("/getPoi", methods=['GET'])
+def getPoi():
+    poi_list = get_poi()
+
+    response = {
+        "poi_names": poi_list
+    }
+    print(response)
     return flask.jsonify(response)
 
 if __name__ == "__main__":
-    search_query("Modi and India", ind)
-    #app.run(host="0.0.0.0", port=9999)
+    #search_query("Modi and India", ind)
+    #get_poi()
+
+    #app.run(debug=True)
+    app.run(host="0.0.0.0", port=9999)
