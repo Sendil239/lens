@@ -6,7 +6,8 @@ import pysolr
 
 import simplejson
 import pprint
-import time
+import os
+from pathlib import Path
 
 
 import urllib.request as urllib2
@@ -80,13 +81,15 @@ def tokenizer(text):
     # print(tokenized_text)
 
     return tokenized_text
+
 def get_poi():
     results = []
-    root_dir = '/home/ubuntu/IRF_Project_21/project4/project1_data/'
+    path = os.path.dirname(Path(__file__))
+    root_dir = path + '\\project1_data'
     dir_names = glob.glob(root_dir + "/*")
 
     for dir_name in dir_names:
-        dir_name = dir_name.split('/')[6]
+        dir_name = dir_name.split('\\')[-1]
         if 'keyword' not in dir_name:
             results.append(dir_name)
 
