@@ -38,6 +38,8 @@ from flask import request
 app = Flask(__name__)
 
 ind = indexer.Indexer()
+AWS_IP = 'localhost'
+PORT = '8983'
 
 def save_file(data, filename):
     df = pd.DataFrame(data)
@@ -97,8 +99,8 @@ def get_poi():
     return results
 
 def get_from_solr(core_name, text):
-    host = "localhost"
-    port = "8983"
+    host = AWS_IP
+    port = PORT
     collection = core_name
     qt = "select"
     url = "http://" + host + ":" + port + "/solr/" + collection + "/" + qt + "?"
