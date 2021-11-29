@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
+import { Observable, throwError } from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
 })
 export class DataService {
+    protected baseUrl = 'http://localhost:9999';
     constructor(
         private _httpClient: HttpClient
     ) {}
+    
     private setRequestheaders() {
         return new HttpHeaders({
             'Content-Type': 'application/json',
@@ -30,7 +29,7 @@ export class DataService {
     public get(url: string, params?: any, responseType?: any): Observable<any> {
         const headers = this.setRequestheaders();
         return this._httpClient
-            .get(url, {
+            .get(this.baseUrl + url, {
                 headers,
                 params,
                 responseType
@@ -41,7 +40,7 @@ export class DataService {
     public post(body: Object, url: string, params?: any, responseType?: any): Observable<any> {
         const headers = this.setRequestheaders();
         return this._httpClient
-            .post(url, body, {
+            .post(this.baseUrl + url, body, {
                 headers,
                 params,
                 responseType
@@ -52,18 +51,18 @@ export class DataService {
     public put(body: Object, url: string): Observable<any> {
         const headers = this.setRequestheaders();
         return this._httpClient
-            .put(url, body, { headers })
+            .put(this.baseUrl + url, body, { headers })
             .pipe(catchError(this.handleError));
     }
 
     public delete(url: string): Observable<any> {
         const headers = this.setRequestheaders();
         return this._httpClient
-            .delete(url, { headers })
+            .delete(this.baseUrl + url, { headers })
             .pipe(catchError(this.handleError));
     }
 
-    private handleError(error: any) {
+    private handleError(error: any) {  
         return throwError(() => new Error(error));
     }
 }

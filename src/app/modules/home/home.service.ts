@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { stringify } from 'querystring';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DataService } from 'src/app/shared/data.service';
 
@@ -8,14 +6,20 @@ import { DataService } from 'src/app/shared/data.service';
     providedIn: 'root'
 })
 
-export class HomeService {
-    protected baseUrl = 'http://backend_url';
+export class HomeService {    
 
-    constructor(private service: DataService) {
+    constructor(private dataService: DataService) {
+
     }
 
-    getFilterData() {
-
+    getPois() {
+        return this.dataService.get('/getPoi').pipe(
+            map(
+                (response: any) => {
+                    return response;
+                }
+            )
+        )
     }
 
     postFilterData(searchTerm: string, filterData: any) {

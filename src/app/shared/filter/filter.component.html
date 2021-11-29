@@ -11,20 +11,20 @@
             <div class='filter-wrapper'>
                 <mat-form-field appearance="fill">
                     <mat-label>POIs</mat-label>
-                    <mat-select #matPoi [formControl]="pois" multiple>
-                    <mat-option *ngFor="let poiValue of poisList" [value]="poiValue">{{poiValue}}</mat-option>
+                    <mat-select #matPoi [formControl]="selectedPois" multiple>
+                    <mat-option *ngFor="let poi of filterData.poiList" [value]="poi">{{poi}}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field appearance="fill">
                     <mat-label>Country</mat-label>
-                    <mat-select #matCountry [formControl]="countries" multiple>
-                    <mat-option *ngFor="let countryValue of countryList" [value]="countryValue">{{countryValue}}</mat-option>
+                    <mat-select #matCountry [formControl]="selectedCountries" multiple>
+                    <mat-option *ngFor="let country of filterData.countryList" [value]="country">{{country}}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field appearance="fill">
                     <mat-label>Language</mat-label>
-                    <mat-select #matLanguage [formControl]="languages" multiple>
-                    <mat-option *ngFor="let languageValue of languagesList" [value]="languageValue">{{languageValue}}</mat-option>
+                    <mat-select #matLanguage [formControl]="selectedLanguages" multiple>
+                    <mat-option *ngFor="let language of filterData.languageList" [value]="language">{{language}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
