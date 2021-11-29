@@ -6,6 +6,7 @@ import pysolr
 
 import simplejson
 import pprint
+import time
 
 
 import urllib.request as urllib2
