@@ -53,7 +53,7 @@ def remove_emoji(text):
 
 def solr_search_query(connection, query, rows=0):
     results = connection.search(q=query, rows=rows)
-    print("Saw {0} result(s).".format(len(results)))
+    #print("Saw {0} result(s).".format(len(results)))
     return results
 
 def tokenizer(text):
@@ -101,17 +101,104 @@ def get_poi():
     print(results)
     return results
 
-def get_from_solr(core_name, text):
+def checkPayloadRequirement(doc, payload):
+    lang_dict = {
+        "en": "English",
+        "hi": "Hindi",
+        "es": "Spanish"
+    }
+    if len(payload['countries']) > 0 and doc['country'] not in payload['countries']:
+        return False
+    if len(payload['languages']) > 0 and lang_dict[doc['tweet_lang']] not in payload['languages']:
+        return False
+    if len(payload['poi_names']) > 0 and doc['poi_name'] not in payload['poi_names']:
+        return False
+
+    return True
+
+def getPoiTweetCount(payload, tweet_list, poi_set):
+
+    temp_poi_set = set()
+    if len(payload['poi_names']) > 0:
+        for poi in payload['poi_names']:
+            temp_poi_set.add(poi)
+    else:
+        temp_poi_set = poi_set.copy()
+    poi_tweet_count = {}
+    for poi in temp_poi_set:
+        poi_tweet_count[poi] = 0
+
+    for tweet in tweet_list:
+        poi_name = tweet['poi_name']
+        if poi_name in temp_poi_set:
+            poi_tweet_count[poi_name] += 1
+
+    return poi_tweet_count
+
+def getCountryTweetCount(payload, tweet_list, country_set):
+
+    temp_country_set = set()
+    if len(payload['countries']) > 0:
+        for country in payload['countries']:
+            temp_country_set.add(country)
+    else:
+        temp_country_set = country_set.copy()
+    country_tweet_count = {}
+    for country in temp_country_set:
+        country_tweet_count[country] = 0
+
+    for tweet in tweet_list:
+        country_name = tweet['country']
+        if country_name in temp_country_set:
+            country_tweet_count[country_name] += 1
+
+    return country_tweet_count
+
+def getPoiReplyCount(payload, tweet_list, poi_set):
+
+    temp_poi_set = set()
+    if len(payload['poi_names']) > 0:
+        for poi in payload['poi_names']:
+            temp_poi_set.add(poi)
+    else:
+        temp_poi_set = poi_set.copy()
+    poi_reply_count = {}
+    poi_reply_sentiment = {}
+    for poi in temp_poi_set:
+        poi_reply_count[poi] = 0
+        poi_reply_sentiment[poi] = 0.0
+
+    analyzer = SentimentIntensityAnalyzer()
+    for tweet in tweet_list:
+        poi_name = tweet['poi_name']
+
+        if poi_name in temp_poi_set:
+            tweet_id = tweet['id']
+            query = "replied_to_tweet_id:" + tweet_id
+            reply_tweet_list = solr_search_query(ind.connection, query, 5000000)
+            poi_reply_count[poi_name] += len(reply_tweet_list)
+
+            sentiment = 0.0
+            for reply_tweet in reply_tweet_list:
+                vs = analyzer.polarity_scores(reply_tweet['reply_text'])
+                sentiment += vs['pos']
+                #print(vs)
+            #print( vs['pos'])
+            poi_reply_sentiment[poi_name] += sentiment
+    for poi_name in temp_poi_set:
+        poi_reply_sentiment[poi_name] /= poi_reply_count[poi_name]
+
+    return poi_reply_count, poi_reply_sentiment
+
+def get_from_solr(core_name, query_text, payload):
     host = AWS_IP
     port = PORT
     collection = core_name
     qt = "select"
     url = "http://" + host + ":" + port + "/solr/" + collection + "/" + qt + "?"
 
-    #text = text[:-1]
-    query_string = "text_en%3A" + text + "text_hi%3A" + text + "text_es%3A" + text
+    query_string = "text_en%3A" + query_text + "text_hi%3A" + query_text + "text_es%3A" + query_text
 
-   # query_string = "\"" + query_string + "\"~3"
     print("Query------>>>>>  ", query_string)
     q = "defType=edismax&df=text_en&df=text_hi&df=text_es&q=" + query_string
     q = "defType=edismax&q=" + query_string
@@ -119,7 +206,8 @@ def get_from_solr(core_name, text):
 
     extra_percent = '%2C%20'
     result_fields = "id" + extra_percent + 'poi_name' + extra_percent + 'tweet_text'  + \
-                    extra_percent + 'hashtags' + extra_percent + 'tweet_date' + extra_percent + 'country' + extra_percent + 'score'
+                    extra_percent + 'hashtags' + extra_percent + 'tweet_date' + extra_percent + 'country' + extra_percent + 'score' + \
+                    extra_percent + 'tweet_lang'
 
     fl = "q.op=OR&fl=" + result_fields
     fq = "fq="
@@ -139,24 +227,24 @@ def get_from_solr(core_name, text):
     else:
         response = eval(connection.read())
 
-    print("Number of hits: " + str(response['response']['numFound']))
-
-    print(type(response))
-
-    dict_result = []
-
-    cnt =0
+    #print("Number of hits: " + str(response['response']['numFound']))
+    #print(type(response))
+    result_tweet_list = []
+    poi_set = set()
+    country_set = set()
     for doc in response['response']['docs']:
         if 'poi_name' in doc.keys():
-            #print(doc['id'])
-            dict_result.append(doc)
-            cnt += 1
-            #if cnt == 10:
-                #break
+            result_tweet_list.append(doc)
+            poi_set.add(doc['poi_name'])
+        if 'country' in doc.keys():
+            country_set.add(doc['country'])
 
     analyzer = SentimentIntensityAnalyzer()
     lens_doc = []
-    for doc in dict_result:
+
+    for doc in result_tweet_list:
+        if checkPayloadRequirement(doc, payload) == False:
+            continue
         vs = analyzer.polarity_scores(doc['tweet_text'])
        # print( vs['pos'])
         doc['sentiment'] = vs['pos']
@@ -165,30 +253,27 @@ def get_from_solr(core_name, text):
             short_summary = doc['tweet_text']
         else:
             short_summary = summarize(doc['tweet_text'])
-
         doc['topics'] = short_summary
-
         doc['top_pos_reply'] = 'Top Positive reply. need to be implemented'
         doc['top_neg_reply'] = 'Top Negative reply. need to be implemented'
-
         lens_doc.append(doc)
-        #print(dict_result[0])
+        #print(doc)
+        if(len(lens_doc) == 10):
+            break
 
-    print(lens_doc[0].keys())
+    poi_tweet_count = getPoiTweetCount(payload, result_tweet_list, poi_set)
+    country_tweet_count = getCountryTweetCount(payload, result_tweet_list, country_set)
+    poi_reply_count, poi_reply_sentiment = getPoiReplyCount(payload, result_tweet_list, poi_set)
+    #print(lens_doc)
+    return lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment
 
-    return lens_doc
 
 
-
-def search_query(query, solr_core):
-    connection = solr_core.connection
-    lang = 'Mexico'
-    search_query = 'country:' + lang
+def search_query(payload, solr_core):
     core_name = 'IRF_21'
 
-
-    #print("Collecting data  ", line[0], line[1::])
     search_query = ""
+    query = payload['query']
 
     tokenized_text = tokenizer(query)
     print(tokenized_text)
@@ -197,8 +282,8 @@ def search_query(query, solr_core):
         search_query += word + "%20"
     print("Search query==", search_query)
     #search_query = re.sub(r'[^\x00-\x7F]+',' ', search_query)
-    print("query id   core name and query  _______>>>>>>>>>    ", core_name, search_query)
-    lens_doc = get_from_solr(core_name, (search_query))
+    #print("query id   core name and query  _______>>>>>>>>>    ", core_name, search_query)
+    lens_doc = get_from_solr(core_name, (search_query), payload)
 
     return lens_doc
 
@@ -216,12 +301,16 @@ def searchQuery():
         print(payload['query'])
 
     # Search document in solr with query
-    lens_doc = search_query(query, ind)
+    lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment = search_query(payload, ind)
 
     response = {
-        "Response": lens_doc
+        'tweet_list': lens_doc,
+        'poi_tweet_count': poi_tweet_count,
+        'country_tweet_count': country_tweet_count,
+        'poi_reply_count': poi_reply_count,
+        'poi_reply_sentiment': poi_reply_sentiment
     }
-    return flask.jsonify(lens_doc)
+    return flask.jsonify(response)
 
 @app.route("/getPoi", methods=['GET'])
 @cross_origin()
@@ -231,11 +320,11 @@ def getPoi():
     response = {
         "poi_names": poi_list
     }
-    print(response)
+    #print(response)
     return flask.jsonify(response)
 
 if __name__ == "__main__":
-    #search_query("Modi and India", ind)
+    #search_query(payload, ind)
     #get_poi()
 
     #app.run(debug=True)
