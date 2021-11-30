@@ -56,10 +56,10 @@ export class HomeComponent implements OnInit {
         'languages': filterParams?.selectedLanguages ?? []
       }
       this.homeService.postFilterData(filterBody)
-      .subscribe((result:ITwitterData[]) =>{
+      .subscribe((result: any) =>{
         this.isLoading = false;
         if(result){
-          this.tweetsList = result;
+          this.tweetsList = result.tweet_list;
         }
       })
     }
