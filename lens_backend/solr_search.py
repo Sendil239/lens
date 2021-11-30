@@ -98,7 +98,7 @@ def get_poi():
     print(results)
     return results
 
-def get_from_solr(core_name, text):
+def get_from_solr(core_name, query_text, payload):
     host = AWS_IP
     port = PORT
     collection = core_name
@@ -106,7 +106,7 @@ def get_from_solr(core_name, text):
     url = "http://" + host + ":" + port + "/solr/" + collection + "/" + qt + "?"
 
     #text = text[:-1]
-    query_string = "text_en%3A" + text + "text_hi%3A" + text + "text_es%3A" + text
+    query_string = "text_en%3A" + query_text + "text_hi%3A" + query_text + "text_es%3A" + query_text
 
    # query_string = "\"" + query_string + "\"~3"
     print("Query------>>>>>  ", query_string)
@@ -116,7 +116,8 @@ def get_from_solr(core_name, text):
 
     extra_percent = '%2C%20'
     result_fields = "id" + extra_percent + 'poi_name' + extra_percent + 'tweet_text'  + \
-                    extra_percent + 'hashtags' + extra_percent + 'tweet_date' + extra_percent + 'country' + extra_percent + 'score'
+                    extra_percent + 'hashtags' + extra_percent + 'tweet_date' + extra_percent + 'country' + extra_percent + 'score' + \
+                    extra_percent + 'tweet_lang'
 
     fl = "q.op=OR&fl=" + result_fields
     fq = "fq="
@@ -145,15 +146,22 @@ def get_from_solr(core_name, text):
     cnt =0
     for doc in response['response']['docs']:
         if 'poi_name' in doc.keys():
-            #print(doc['id'])
             dict_result.append(doc)
             cnt += 1
-            #if cnt == 10:
-                #break
 
     analyzer = SentimentIntensityAnalyzer()
     lens_doc = []
+    lang_dict = {}
+    lang_dict['en'] = "English"
+    lang_dict['hi'] = "Hindi"
+    lang_dict['es'] = "Spanish"
     for doc in dict_result:
+        if len(payload['countries']) > 0 and doc['country'] not in payload['countries']:
+            continue
+        if len(payload['languages']) > 0 and lang_dict[doc['tweet_lang']] not in payload['languages']:
+            continue
+        if len(payload['poi_names']) > 0 and doc['poi_name'] not in payload['poi_names']:
+            continue
         vs = analyzer.polarity_scores(doc['tweet_text'])
        # print( vs['pos'])
         doc['sentiment'] = vs['pos']
@@ -162,30 +170,24 @@ def get_from_solr(core_name, text):
             short_summary = doc['tweet_text']
         else:
             short_summary = summarize(doc['tweet_text'])
-
         doc['topics'] = short_summary
-
         doc['top_pos_reply'] = 'Top Positive reply. need to be implemented'
         doc['top_neg_reply'] = 'Top Negative reply. need to be implemented'
-
         lens_doc.append(doc)
-        #print(dict_result[0])
+        print(doc)
+        if(len(lens_doc) == 10):
+            break
 
-   # print(lens_doc[0].keys())
-
+    #print(lens_doc)
     return lens_doc
 
 
 
-def search_query(query, solr_core):
-    connection = solr_core.connection
-    lang = 'Mexico'
-    search_query = 'country:' + lang
+def search_query(payload, solr_core):
     core_name = 'IRF_21'
 
-
-    #print("Collecting data  ", line[0], line[1::])
     search_query = ""
+    query = payload['query']
 
     tokenized_text = tokenizer(query)
     print(tokenized_text)
@@ -194,8 +196,8 @@ def search_query(query, solr_core):
         search_query += word + "%20"
     print("Search query==", search_query)
     #search_query = re.sub(r'[^\x00-\x7F]+',' ', search_query)
-    print("query id   core name and query  _______>>>>>>>>>    ", core_name, search_query)
-    lens_doc = get_from_solr(core_name, (search_query))
+    #print("query id   core name and query  _______>>>>>>>>>    ", core_name, search_query)
+    lens_doc = get_from_solr(core_name, (search_query), payload)
 
     return lens_doc
 
@@ -213,7 +215,7 @@ def searchQuery():
         print(payload['query'])
 
     # Search document in solr with query
-    lens_doc = search_query(query, ind)
+    lens_doc = search_query(payload, ind)
 
     response = {
         "Response": lens_doc
@@ -231,7 +233,13 @@ def getPoi():
     return flask.jsonify(response)
 
 if __name__ == "__main__":
-    #search_query("Modi and India", ind)
+    payload = {
+        "query" : "Modi and India",
+        "poi_names": ["ShashiTharoor", "nsitharaman"],
+        "countries": ["India"],
+        "languages": ["English", "Hindi"]
+    }
+    search_query(payload, ind)
     #get_poi()
 
     #app.run(debug=True)
