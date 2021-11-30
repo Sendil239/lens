@@ -183,7 +183,8 @@ def getPoiReplyCount(payload, tweet_list, poi_set):
             #print( vs['pos'])
             poi_reply_sentiment[poi_name] += sentiment
     for poi_name in temp_poi_set:
-        poi_reply_sentiment[poi_name] /= poi_reply_count[poi_name]
+        if poi_reply_count[poi_name] > 0.000001:
+            poi_reply_sentiment[poi_name] /= poi_reply_count[poi_name]
 
     return poi_reply_count, poi_reply_sentiment
 
