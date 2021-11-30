@@ -171,7 +171,7 @@ def get_from_solr(core_name, text):
         lens_doc.append(doc)
         #print(dict_result[0])
 
-    print(lens_doc[0].keys())
+   # print(lens_doc[0].keys())
 
     return lens_doc
 
