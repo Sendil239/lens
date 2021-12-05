@@ -11,6 +11,7 @@ import { BarComponent } from 'src/app/visualizations/bar/bar.component';
 import { PieComponent } from 'src/app/visualizations/pie/pie.component';
 import { ScatterComponent } from 'src/app/visualizations/scatter/scatter.component';
 import { ListingComponent } from 'src/app/shared/listing/listing.component';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 const routes: Routes = [
   {
@@ -31,7 +32,10 @@ const routes: Routes = [
     FormsModule, 
     ReactiveFormsModule,
     CommonModule,
-    RouterModule.forChild(routes)],
+    RouterModule.forChild(routes),
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts')
+    })],
   exports: [HomeComponent]
 })
 export class HomeModule { }

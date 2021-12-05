@@ -23,7 +23,7 @@ import { LoaderComponent } from './shared/loader/loader.component';
     BrowserAnimationsModule,
     MatSliderModule,
     MaterialModule,
-    HttpClientModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
