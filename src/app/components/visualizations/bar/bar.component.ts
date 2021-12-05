@@ -14,20 +14,44 @@ export class BarComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  initOpts = {
+    renderer: 'svg',
+    width: 300,
+    height: 300
+  };
+
   chartOption: EChartsOption = {
-    xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    color: ['#3398DB'],
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
     },
-    yAxis: {
-      type: 'value',
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
     },
-    series: [
+    xAxis: [
       {
-        data: [820, 932, 901, 934, 1290, 1330, 1320],
-        type: 'line',
-      },
+        type: 'category',
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        axisTick: {
+          alignWithLabel: true
+        }
+      }
     ],
+    yAxis: [{
+      type: 'value'
+    }],
+    series: [{
+      name: 'Counters',
+      type: 'bar',
+      barWidth: '60%',
+      data: [10, 52, 200, 334, 390, 330, 220]
+    }]
   };
 
 }
