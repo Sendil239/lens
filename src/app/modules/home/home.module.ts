@@ -9,9 +9,12 @@ import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { CommonModule } from '@angular/common'; 
 import { BarComponent } from 'src/app/components/visualizations/bar/bar.component';
 import { PieComponent } from 'src/app/components/visualizations/pie/pie.component';
-import { ScatterComponent } from 'src/app/components/visualizations/scatter/scatter.component';
 import { ListingComponent } from 'src/app/shared/listing/listing.component';
 import { NgxEchartsModule } from 'ngx-echarts';
+import { CategoryComponent } from 'src/app/components/visualizations/category/category.component'
+import { RoseComponent } from 'src/app/components/visualizations/rose/rose.component'
+import { LineComponent } from 'src/app/components/visualizations/line/line.component';
+import { TimeseriesComponent } from 'src/app/components/visualizations/timeseries/timeseries.component';
 
 const routes: Routes = [
   {
@@ -26,7 +29,10 @@ const routes: Routes = [
     FilterComponent, 
     BarComponent, 
     PieComponent, 
-    ScatterComponent,
+    CategoryComponent,
+    RoseComponent,
+    LineComponent,
+    TimeseriesComponent,
     ListingComponent],
   imports: [MaterialModule, 
     FormsModule, 
