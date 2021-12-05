@@ -46,8 +46,9 @@
         <div *ngIf='!isDataLoading && tweetsList.length===0'> NO DATA FOUND.</div>
         <mat-spinner *ngIf='isDataLoading'></mat-spinner>
     </mat-grid-tile>
-    <mat-grid-tile [colspan]="30" [style.background]="'orange'" style="height: calc(100vh - 155px)">
-    <!-- <mat-grid-tile [colspan]="30" style="height: calc(100vh - 155px)"> -->
-        GRAPHS
+    <!-- <mat-grid-tile [colspan]="30" [style.background]="'orange'" style="height: calc(100vh - 155px)"> -->
+    <mat-grid-tile [colspan]="20" style="height: calc(100vh - 155px)" id="filter-wrapper">
+        <app-bar></app-bar>
+        <app-pie></app-pie>
     </mat-grid-tile>
   </mat-grid-list>
