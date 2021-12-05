@@ -3,32 +3,41 @@
     background-color: white;
   }
 
-  mat-grid-tile {
-    background: lightblue;
-  }
 
-  .example-form {
-    min-width: 150px;
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .input-search {
-    width: 40%;
-  }
 
-mat-form-field {
-  .mat-form-field-wrapper{
-    div {
-      .mat-form-field-flex{
-        background-color: white;
-      }
-    }
-  }
+// mat-form-field {
+//   .mat-form-field-wrapper{
+//     div {
+//       .mat-form-field-flex{
+//         background-color: white;
+//       }
+//     }
+//   }
       
-}
+// }
 
 .btn-search {
-  margin-left: 1%;
-  max-height: 52px;
+  margin-left: 2%;
+  max-height: 42px;
+  height: auto;
+  margin-top: 2%;
+}
+
+.mat-grid-tile .mat-figure {
+  justify-content: flex-start !important ;
+  align-items: flex-start !important;
+}
+
+::ng-deep #filter-wrapper {
+  .mat-grid-tile-content {
+    display: block;
+    overflow-y: auto;
+  }
+}
+
+.loader-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 20%;
+  position: fixed;
 }

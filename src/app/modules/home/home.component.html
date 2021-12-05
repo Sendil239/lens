@@ -1,9 +1,56 @@
+<mat-grid-list rowHeight="{{rowHeight}}px" cols="1">
+    <!-- <mat-grid-tile [colspan]="1" [rowspan]="1" [style.background]="'red'"> -->
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+        <div style="display: inline-flex;">
+            <mat-form-field class="input-search" appearance="fill" [style.width.px]=400>
+                <input 
+                    matInput 
+                    placeholder="Ex. Narendra Modi"
+                    [(ngModel)]="keyword" 
+                    required/>
+                <mat-error *ngIf="keyword==''">
+                    Please enter search text
+                </mat-error>
+            </mat-form-field>
+            <button
+                type="button"
+                mat-raised-button
+                color="primary"
+                class="btn-search"
+                (click)="searchKeyword()"
+                [disabled]="keyword==''"
+            > Search </button>
+        </div>
+    </mat-grid-tile>
+</mat-grid-list>
 
-<div >
-    <div style="text-align: center;">
+<mat-grid-list cols="100">
+    <!-- <mat-grid-tile [colspan]="25" [style.background]="'blue'" style="height: calc(100vh - 155px)" id="filter-wrapper"> -->
+    <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)" id="filter-wrapper">      
+        <app-filter
+        *ngIf="!isFilterLoading"
+        [filterData]="filterData"
+        (filterApplied)="applyFilter($event)"
+        ></app-filter>
+        <mat-spinner class="loader-wrapper" *ngIf='isFilterLoading'></mat-spinner>
+    </mat-grid-tile>
+    <!-- <mat-grid-tile [colspan]="45" [style.background]="'yellow'" style="height: calc(100vh - 155px)" id="filter-wrapper"> -->
+    <mat-grid-tile [colspan]="45" style="height: calc(100vh - 155px)" id="filter-wrapper">
+        <app-listing
+            *ngIf='!isDataLoading'
+            [tweetsList]="tweetsList"
+        >
+        </app-listing>
+        <mat-spinner class="loader-wrapper" *ngIf='isDataLoading'></mat-spinner>
+    </mat-grid-tile>
+    <!-- <mat-grid-tile [colspan]="30" [style.background]="'orange'" style="height: calc(100vh - 155px)"> -->
+    <mat-grid-tile [colspan]="30" style="height: calc(100vh - 155px)">
+        GRAPHS
+    </mat-grid-tile>
+  </mat-grid-list>
+    <!-- <div style="text-align: center;">
         <form class="example-form" (ngSubmit)="searchKeyword()" #formDirective="ngForm">
         <mat-form-field class="input-search" appearance="fill">
-            <!-- <mat-label>Enter Keyword To Search</mat-label> -->
             <input 
                 matInput 
                 placeholder="Ex. Narendra Modi"
@@ -27,17 +74,20 @@
         [filterData]="filterData"
         (filterApplied)="applyFilter($event)"
         ></app-filter>
-    </div>
-    <div>
+    </div> -->
+    <!-- <div>
         <app-listing
             [tweetsList]="tweetsList"
         >
         </app-listing>
-    </div>
+    </div> -->
 
-</div>
-
-
-
-
-
+<!-- <mat-grid-list cols="4" rowHeight="100px">
+    <mat-grid-tile
+        *ngFor="let tile of tiles"
+        [colspan]="tile.cols"
+        [rowspan]="tile.rows"
+        [style.background]="tile.color">
+      {{tile.text}}
+    </mat-grid-tile>
+  </mat-grid-list> -->

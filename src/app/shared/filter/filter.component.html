@@ -1,46 +1,96 @@
+<!-- <div class='filter-wrapper'>
+    <mat-list-option>
+    <mat-form-field appearance="fill">
+        <mat-label>POIs</mat-label>
+        <mat-select #matPoi [formControl]="selectedPois" multiple>
+        <mat-option *ngFor="let poi of filterData.poiList" [value]="poi">{{poi}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    </mat-list-option>
+    <mat-form-field appearance="fill">
+        <mat-label>Country</mat-label>
+        <mat-select #matCountry [formControl]="selectedCountries" multiple>
+        <mat-option *ngFor="let country of filterData.countryList" [value]="country">{{country}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Language</mat-label>
+        <mat-select #matLanguage [formControl]="selectedLanguages" multiple>
+        <mat-option *ngFor="let language of filterData.languageList" [value]="language">{{language}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</div> -->
 
-<div class='filter-box'>
-    <mat-accordion>
-        <mat-expansion-panel (opened)="panelOpenState = true"
-                            (closed)="panelOpenState = false">
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                Additional Filters
-                </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class='filter-wrapper'>
-                <mat-form-field appearance="fill">
-                    <mat-label>POIs</mat-label>
-                    <mat-select #matPoi [formControl]="selectedPois" multiple>
-                    <mat-option *ngFor="let poi of filterData.poiList" [value]="poi">{{poi}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-form-field appearance="fill">
-                    <mat-label>Country</mat-label>
-                    <mat-select #matCountry [formControl]="selectedCountries" multiple>
-                    <mat-option *ngFor="let country of filterData.countryList" [value]="country">{{country}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-form-field appearance="fill">
-                    <mat-label>Language</mat-label>
-                    <mat-select #matLanguage [formControl]="selectedLanguages" multiple>
-                    <mat-option *ngFor="let language of filterData.languageList" [value]="language">{{language}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div style="text-align: end;">
-                <button           
-                mat-raised-button
-                color="primary"
-                class='btn-filter-results'
-                (click)="applyFilter()"
-                > Apply Filter </button>
-                <button           
-                mat-raised-button
-                class='btn-clear-filter'
-                (click)="clearFilters()"
-                > Clear Filter </button>
-            </div>
-        </mat-expansion-panel>
-    </mat-accordion>
+<!-- <mat-drawer-container class="example-container" autosize>
+    <mat-drawer #drawer class="example-sidenav" mode="side">
+      <p>Auto-resizing sidenav</p>
+      <p *ngIf="showFiller">Lorem, ipsum dolor sit amet consectetur.</p>
+      <button (click)="showFiller = !showFiller" mat-raised-button>
+        Toggle extra text
+      </button>
+    </mat-drawer>
+  
+    <div class="example-sidenav-content">
+      <button type="button" mat-button (click)="drawer.toggle()">
+        Toggle sidenav
+      </button>
+    </div>
+  
+</mat-drawer-container> -->
+<!-- <mat-form-field appearance="fill">
+    <mat-label>POIs</mat-label>
+    <mat-select #matPoi [formControl]="selectedPois" multiple>
+    <mat-option *ngFor="let poi of filterData.poiList" [value]="poi">{{poi}}</mat-option>
+    </mat-select>
+</mat-form-field> -->
+<mat-list class="filter-list">
+    <div mat-subheader>Additional Filters</div>
+    <!-- <mat-chip-list>
+        <mat-chip
+            class='color-accent'
+            *ngFor="let vegetable of vegetables">
+            {{vegetable.name}}
+            <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+            </button>
+        </mat-chip>
+    </mat-chip-list> -->
+    <mat-list-item>
+        <mat-form-field appearance="fill" class="filter-form-field">
+            <mat-label>POIs</mat-label>
+            <mat-select #matPoi [formControl]="selectedPois" multiple>
+            <mat-option *ngFor="let poi of filterData.poiList" [value]="poi">{{poi}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </mat-list-item>
+    <mat-list-item>
+        <mat-form-field appearance="fill" class="filter-form-field">
+            <mat-label>Country</mat-label>
+            <mat-select #matCountry [formControl]="selectedCountries" multiple>
+            <mat-option *ngFor="let country of filterData.countryList" [value]="country">{{country}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </mat-list-item>
+    <mat-list-item>
+        <mat-form-field appearance="fill" class="filter-form-field">
+            <mat-label>Language</mat-label>
+            <mat-select #matLanguage [formControl]="selectedLanguages" multiple>
+            <mat-option *ngFor="let language of filterData.languageList" [value]="language">{{language}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </mat-list-item>
+</mat-list>
+
+<div style="text-align: end;">
+    <button           
+    mat-raised-button
+    color="primary"
+    class='btn-filter-results'
+    (click)="applyFilter()"
+    > Apply Filter </button>
+    <button           
+    mat-raised-button
+    class='btn-clear-filter'
+    (click)="clearFilters()"
+    > Clear Filter </button>
 </div>

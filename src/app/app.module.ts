@@ -8,12 +8,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { MaterialModule } from '../app/modules/material/material.module'
 import { LayoutComponent } from './modules/layout/layout.component';
+import { LoaderComponent } from './shared/loader/loader.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LayoutComponent,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -21,7 +23,7 @@ import { LayoutComponent } from './modules/layout/layout.component';
     BrowserAnimationsModule,
     MatSliderModule,
     MaterialModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

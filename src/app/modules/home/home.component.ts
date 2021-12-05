@@ -12,8 +12,12 @@ import { HomeService } from './home.service';
 })
 export class HomeComponent implements OnInit {
   filterData: IFilter;
-  isLoading: boolean;
+  isDataLoading: boolean;
   tweetsList: ITwitterData[];
+  isError: boolean = false;
+  keyword: string;
+  rowHeight: number;
+  isFilterLoading: boolean;
 
   constructor(private homeService: HomeService) {
     this.filterData = {
@@ -22,27 +26,27 @@ export class HomeComponent implements OnInit {
       poiList: []
     };
     this.tweetsList = [];
+    this.keyword = "";
+    this.rowHeight = 75;
+    this.isDataLoading = false;
+    this.isFilterLoading = false;
    }
 
   ngOnInit(): void {
     this.filterData.countryList = ['India', 'Mexico', 'USA'];
     this.filterData.languageList = ['English', 'Hindi', 'Spanish'];
+    this.isFilterLoading = true;
     this.homeService.getPois()
       .subscribe(result => {
-        this.isLoading = false;
+        this.isFilterLoading = false;
         if(result){
           this.filterData.poiList = result.poi_names;
         }
       })
   }
-
-  isError: boolean = false;
-
-  searchForm = new FormControl('', [Validators.required]);
-  @ViewChild('formDirective', {static: false}) private formDirective: NgForm;
     
   searchKeyword() {
-      if (this.searchForm.valid) {
+      if (this.keyword != '') {
           this.applyFilter([]);
       }
   }
@@ -50,14 +54,15 @@ export class HomeComponent implements OnInit {
   applyFilter(filterParams: any) {
     if(this.checkIfValidSearch(filterParams)){
       const filterBody = {
-        'query': this.searchForm.value,
+        'query': this.keyword,
         'poi_names': filterParams?.selectedPois ?? [],
         'countries': filterParams?.selectedCountries ?? [],
         'languages': filterParams?.selectedLanguages ?? []
       }
+      this.isDataLoading = true;
       this.homeService.postFilterData(filterBody)
       .subscribe((result: any) =>{
-        this.isLoading = false;
+        this.isDataLoading = false;
         if(result){
           this.tweetsList = result.tweet_list;
         }
@@ -66,7 +71,7 @@ export class HomeComponent implements OnInit {
   }
 
   checkIfValidSearch(filterParams: any){
-    if(this.searchForm.value != '')
+    if(this.keyword != '')
       return true;
 
     if(filterParams.selectedPois.length == 0 || filterParams.selectedCountries.length == 0 || filterParams.selectedLanguages.length == 0)

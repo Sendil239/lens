@@ -14,11 +14,13 @@ export class FilterComponent implements OnInit {
   selectedPois: any;
   selectedCountries: any;
   selectedLanguages: any;
+  showFiller: boolean;
 
   constructor() { 
     this.selectedPois = new FormControl();
     this.selectedCountries = new FormControl();
     this.selectedLanguages = new FormControl();
+    this.showFiller= false;
   }
 
   ngOnInit(): void {
