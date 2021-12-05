@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { MaterialModule } from '../app/modules/material/material.module'
-import { LayoutComponent } from './modules/layout/layout.component';
+import { LayoutComponent } from './components/layout/layout.component';
 import { LoaderComponent } from './shared/loader/loader.component';
 
 

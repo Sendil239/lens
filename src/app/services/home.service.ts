@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { DataService } from 'src/app/shared/data.service';
+import { DataService } from 'src/app/services/data.service';
 
 @Injectable({
     providedIn: 'root'

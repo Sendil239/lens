@@ -3,7 +3,7 @@ import { FormControl, NgForm, Validators } from '@angular/forms';
 import { filter } from 'd3-array';
 import { IFilter } from 'src/app/shared/interfaces/filter.interface';
 import { ITwitterData } from 'src/app/shared/interfaces/twitter_data.interface';
-import { HomeService } from './home.service';
+import { HomeService } from '../../services/home.service';
 
 @Component({
   selector: 'app-home',
