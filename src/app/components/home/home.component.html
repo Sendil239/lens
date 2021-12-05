@@ -1,5 +1,5 @@
 <mat-grid-list rowHeight="{{rowHeight}}px" cols="1">
-    <mat-grid-tile [colspan]="1" [rowspan]="1" [style.background]="'red'">
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
     <!-- <mat-grid-tile [colspan]="1" [rowspan]="1"> -->
         <div style="display: inline-flex;">
             <mat-form-field class="input-search" appearance="fill" [style.width.px]=400>
@@ -25,7 +25,7 @@
 </mat-grid-list>
 
 <mat-grid-list cols="100">
-    <mat-grid-tile [colspan]="25" [style.background]="'blue'" style="height: calc(100vh - 155px)"
+    <mat-grid-tile [colspan]="27" style="height: calc(100vh - 155px)"
     [id]="(!isFilterLoading ? 'filter-wrapper' : '')">
     <!-- <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)" id="filter-wrapper">       -->
         <app-filter
@@ -35,7 +35,7 @@
         ></app-filter>
         <mat-spinner *ngIf='isFilterLoading'></mat-spinner>
     </mat-grid-tile>
-    <mat-grid-tile [colspan]="45" [style.background]="'yellow'" style="height: calc(100vh - 155px)"
+    <mat-grid-tile [colspan]="48" style="height: calc(100vh - 155px)"
     [id]="(!isDataLoading && tweetsList.length>0 ? 'filter-wrapper' : '')">
     <!-- <mat-grid-tile [colspan]="45" style="height: calc(100vh - 155px)" id="filter-wrapper"> -->
         <app-listing
@@ -47,8 +47,11 @@
         <mat-spinner *ngIf='isDataLoading'></mat-spinner>
     </mat-grid-tile>
     <!-- <mat-grid-tile [colspan]="30" [style.background]="'orange'" style="height: calc(100vh - 155px)"> -->
-    <mat-grid-tile [colspan]="20" style="height: calc(100vh - 155px)" id="filter-wrapper">
-        <app-bar></app-bar>
-        <app-pie></app-pie>
+    <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)" [id]="(!isDataLoading ? 'filter-wrapper' : '')">
+        <div *ngIf='!isDataLoading'>
+            <app-bar></app-bar>
+            <app-pie></app-pie>
+        </div>        
+        <mat-spinner *ngIf='isDataLoading'></mat-spinner>
     </mat-grid-tile>
   </mat-grid-list>

@@ -90,6 +90,7 @@ export class FilterComponent implements OnInit {
       this.matLanguage.options.forEach((data: MatOption) => data.deselect());
       this.appliedFilter = this.appliedFilter.filter((i: any) => i.key !== keyValue);
     } 
+    this.applyFilter();
 
   }
 
