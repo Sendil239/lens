@@ -1,6 +1,6 @@
 <mat-grid-list rowHeight="{{rowHeight}}px" cols="1">
-    <!-- <mat-grid-tile [colspan]="1" [rowspan]="1" [style.background]="'red'"> -->
-    <mat-grid-tile [colspan]="1" [rowspan]="1">
+    <mat-grid-tile [colspan]="1" [rowspan]="1" [style.background]="'red'">
+    <!-- <mat-grid-tile [colspan]="1" [rowspan]="1"> -->
         <div style="display: inline-flex;">
             <mat-form-field class="input-search" appearance="fill" [style.width.px]=400>
                 <input 
@@ -25,69 +25,29 @@
 </mat-grid-list>
 
 <mat-grid-list cols="100">
-    <!-- <mat-grid-tile [colspan]="25" [style.background]="'blue'" style="height: calc(100vh - 155px)" id="filter-wrapper"> -->
-    <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)" id="filter-wrapper">      
+    <mat-grid-tile [colspan]="25" [style.background]="'blue'" style="height: calc(100vh - 155px)"
+    [id]="(!isFilterLoading ? 'filter-wrapper' : '')">
+    <!-- <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)" id="filter-wrapper">       -->
         <app-filter
         *ngIf="!isFilterLoading"
         [filterData]="filterData"
         (filterApplied)="applyFilter($event)"
         ></app-filter>
-        <mat-spinner class="loader-wrapper" *ngIf='isFilterLoading'></mat-spinner>
+        <mat-spinner *ngIf='isFilterLoading'></mat-spinner>
     </mat-grid-tile>
-    <!-- <mat-grid-tile [colspan]="45" [style.background]="'yellow'" style="height: calc(100vh - 155px)" id="filter-wrapper"> -->
-    <mat-grid-tile [colspan]="45" style="height: calc(100vh - 155px)" id="filter-wrapper">
+    <mat-grid-tile [colspan]="45" [style.background]="'yellow'" style="height: calc(100vh - 155px)"
+    [id]="(!isDataLoading && tweetsList.length>0 ? 'filter-wrapper' : '')">
+    <!-- <mat-grid-tile [colspan]="45" style="height: calc(100vh - 155px)" id="filter-wrapper"> -->
         <app-listing
-            *ngIf='!isDataLoading'
+            *ngIf='!isDataLoading && tweetsList.length>0'
             [tweetsList]="tweetsList"
         >
         </app-listing>
-        <mat-spinner class="loader-wrapper" *ngIf='isDataLoading'></mat-spinner>
+        <div *ngIf='!isDataLoading && tweetsList.length===0'> NO DATA FOUND.</div>
+        <mat-spinner *ngIf='isDataLoading'></mat-spinner>
     </mat-grid-tile>
-    <!-- <mat-grid-tile [colspan]="30" [style.background]="'orange'" style="height: calc(100vh - 155px)"> -->
-    <mat-grid-tile [colspan]="30" style="height: calc(100vh - 155px)">
+    <mat-grid-tile [colspan]="30" [style.background]="'orange'" style="height: calc(100vh - 155px)">
+    <!-- <mat-grid-tile [colspan]="30" style="height: calc(100vh - 155px)"> -->
         GRAPHS
     </mat-grid-tile>
   </mat-grid-list>
-    <!-- <div style="text-align: center;">
-        <form class="example-form" (ngSubmit)="searchKeyword()" #formDirective="ngForm">
-        <mat-form-field class="input-search" appearance="fill">
-            <input 
-                matInput 
-                placeholder="Ex. Narendra Modi"
-                [formControl]="searchForm" />
-            <mat-error *ngIf="searchForm.hasError('required')">
-            Please enter search text
-            </mat-error>
-        </mat-form-field>
-        <button
-            type="submit"
-            mat-raised-button
-            color="primary"
-            name="searchKeyword"
-            class="btn-search"
-            [disabled]="!searchForm.valid"
-        > Search </button>
-        </form>
-    </div>
-    <div>
-        <app-filter
-        [filterData]="filterData"
-        (filterApplied)="applyFilter($event)"
-        ></app-filter>
-    </div> -->
-    <!-- <div>
-        <app-listing
-            [tweetsList]="tweetsList"
-        >
-        </app-listing>
-    </div> -->
-
-<!-- <mat-grid-list cols="4" rowHeight="100px">
-    <mat-grid-tile
-        *ngFor="let tile of tiles"
-        [colspan]="tile.cols"
-        [rowspan]="tile.rows"
-        [style.background]="tile.color">
-      {{tile.text}}
-    </mat-grid-tile>
-  </mat-grid-list> -->
