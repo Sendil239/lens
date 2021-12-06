@@ -1,1 +1,34 @@
-<p>analytics works!</p>
+<mat-grid-list cols="100">
+    <mat-grid-tile [colspan]="5" style="height: 1300px"></mat-grid-tile>
+    <mat-grid-tile [colspan]="90" id="charts-wrapper" style="height: 1300px">
+        <div class="barDiv">
+            <app-bar
+                *ngIf="!isLoading"
+                [barChartData]="poiTweetList"
+                [name]="'Tweets'"
+            ></app-bar>
+        </div><div class="barDiv">
+            <app-bar
+                *ngIf="!isLoading"
+                [barChartData]="poiTweetList"
+                [name]="'Tweets'"
+            ></app-bar>
+        </div>
+        <div class="barDiv">
+            <app-bar
+                *ngIf="!isLoading"
+                [barChartData]="poiTweetList"
+                [name]="'Tweets'"
+            ></app-bar>
+        </div>
+        <div class="barDiv">
+            <app-bar
+                *ngIf="!isLoading"
+                [barChartData]="poiTweetList"
+                [name]="'Tweets'"
+            ></app-bar>
+        </div>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="5" style="height: 1300px"></mat-grid-tile>
+
+</mat-grid-list>

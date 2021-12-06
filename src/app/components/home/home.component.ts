@@ -3,8 +3,10 @@ import { FormControl, NgForm, Validators } from '@angular/forms';
 import { filter } from 'd3-array';
 import { IBarChart } from 'src/app/shared/interfaces/barchart.interface';
 import { IFilter } from 'src/app/shared/interfaces/filter.interface';
+import { IPoiTweet, CountryTweetCount } from 'src/app/shared/interfaces/poi_tweet.interface';
 import { ITwitterData } from 'src/app/shared/interfaces/twitter_data.interface';
 import { HomeService } from '../../services/home.service';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-home',
@@ -26,8 +28,9 @@ export class HomeComponent implements OnInit {
   totalTweetsCount: number;
   countryTweetData: IBarChart[];
   poiTweetData: IBarChart[];
+  poiTweetsCountList: IPoiTweet[];
 
-  constructor(private homeService: HomeService) {
+  constructor(private homeService: HomeService, private utilService: UtilService) {
     this.filterData = {
       countryList: [],
       languageList: [],
@@ -44,6 +47,7 @@ export class HomeComponent implements OnInit {
     this.totalTweetsCount = 0;
     this.countryTweetData = [];
     this.poiTweetData = [];
+    this.poiTweetsCountList = [];
    }
 
   ngOnInit(): void {
@@ -93,14 +97,9 @@ export class HomeComponent implements OnInit {
           this.tweetsList = result.tweet_list;
           this.totalTweetsCount = result.total_tweet_count;          
           if(isFilterSearch){
-            this.countryTweetData = Object.keys(result.country_tweet_count).map((key)=> {
-              const obj = {'name': key, 'value': result.country_tweet_count[key]};
-              return obj;
-            });
-            this.poiTweetData = Object.keys(result.poi_tweet_count).map((key)=> {
-              const obj = {'name': key, 'value': result.poi_tweet_count[key]};
-              return obj;
-            });
+            this.countryTweetData = this.utilService.objectToArray(result.country_tweet_count);
+            this.poiTweetData = this.utilService.objectToArray(result.poi_tweet_count);
+            this.poiTweetsCountList =  this.utilService.objectToArray(result.poi_tweet_count); 
           }
         }
       })

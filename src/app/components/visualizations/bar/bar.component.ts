@@ -10,17 +10,25 @@ import { IBarChart } from 'src/app/shared/interfaces/barchart.interface';
 
 export class BarComponent implements OnInit {
   initOpts: object;
-  chartOption: EChartsOption;
-  
+  chartOption: any;
+
   constructor() { }
 
   ngOnInit(): void {
     this.initOpts = {
       renderer: 'svg',
-      width: 300,
+      width: this.barChartData.length > 4 ? this.barChartData.length * 130 : 300,
       height: 300
     };
     this.chartOption = {
+      title: {
+        text: 'Country Vs Tweet Count',
+        left: 'center',
+        top: 20,
+        textStyle: {
+          color: 'black',
+        },
+      },
       color: ['#3398DB'],
       tooltip: {
         trigger: 'axis',
@@ -51,7 +59,8 @@ export class BarComponent implements OnInit {
         type: 'bar',
         barWidth: '60%',
         data: this.barChartData.map(x=>x.value)
-      }]
+      }],
+      
     };
   }
 

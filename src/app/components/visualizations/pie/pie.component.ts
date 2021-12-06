@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
+import { IPoiTweet } from 'src/app/shared/interfaces/poi_tweet.interface';
 
 @Component({
   selector: 'app-pie',
@@ -7,72 +8,47 @@ import { EChartsOption } from 'echarts';
   styleUrls: ['./pie.component.css']
 })
 export class PieComponent implements OnInit {
+  initOpts: object;
+  chartOption: any;
 
   constructor() { }
 
   ngOnInit(): void {
-  }
-  chartInstance: any;
-  initOpts = {
-    renderer: 'svg',
-    width: 300,
-    height: 300
-  };
-  chartOption: EChartsOption =  {
-    title: {
-      text: 'Customized Pie',
-      left: 'center',
-      top: 20,
-      textStyle: {
-        color: '#ccc',
+    this.initOpts = {
+      renderer: 'svg',
+      width: 300,
+      height: 300
+    };
+    this.chartOption= {
+      title: {
+        text: 'POIs Vs Tweet Count',
+        left: 'center',
+        top: 20,
+        textStyle: {
+          color: 'black',
+        },
       },
-    },
-    tooltip: {
-      trigger: 'item'
-    },
-    series: [
-      {
-        type: 'pie',
-        radius: '55%',
-        center: ['50%', '50%'],
-        data: [
-          {
-             "value":60000,
-             "name":"Opus Mei"
-          },
-          {
-             "value":50000,
-             "name":"Blinky Scene"
-          },
-          {
-             "value":600000,
-             "name":"Governor Rover"
-          },
-          {
-             "value":20000,
-             "name":"Yeezu Joy"
-          },
-          {
-             "value":400000,
-             "name":"Mercy Windsor"
-          },
-          {
-             "value":400000,
-             "name":"Lucy Cheng"
-          },
-          {
-             "value":200000,
-             "name":"Frum Lezilia"
-          }
-       ],
-        emphasis: {
-          itemStyle: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
+      tooltip: {
+        trigger: 'item'
+      },
+      series: [
+        {
+          type: 'pie',
+          radius: '55%',
+          center: ['50%', '50%'],
+          data: this.poiTweetsList,
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
           }
         }
-      }
-    ]
-  };
+      ]
+    };
+
+  }
+  @Input('poiTweetsCountList')
+    poiTweetsList: IPoiTweet[];
 }

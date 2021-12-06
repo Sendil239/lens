@@ -1,49 +1,4 @@
 
-::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
-    background-color: white;
-  }
-
-
-
-// mat-form-field {
-//   .mat-form-field-wrapper{
-//     div {
-//       .mat-form-field-flex{
-//         background-color: white;
-//       }
-//     }
-//   }
-      
-// }
-
-.btn-search {
-  margin-left: 2%;
-  max-height: 42px;
-  height: auto;
-  margin-top: 2%;
-}
-
-.mat-grid-tile .mat-figure {
-  justify-content: flex-start !important ;
-  align-items: flex-start !important;
-}
-
-::ng-deep #filter-wrapper {
-  .mat-grid-tile-content {
-    display: block;
-    overflow-y: auto;
-    overflow-x: auto;
-  }
-}
-
-.loader-wrapper {
-  display: flex;
-  justify-content: center;
-  margin: 20%;
-  position: fixed;
-}
-
-
 ::ng-deep .mat-toolbar.mat-primary.mat-toolbar-single-row {
 	background: #D32F2F;
 }
@@ -103,7 +58,14 @@
 	margin: 0px auto;
 }
 
-.chartDiv{
-	width: auto;
+::ng-deep #charts-wrapper {
+	.mat-grid-tile-content {
+	  display: block;
+	  overflow-x: auto;
+	}
+  }
+
+.barDiv{
 	overflow-x: scroll;
+	width: auto;
 }

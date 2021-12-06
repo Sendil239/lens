@@ -49,18 +49,30 @@
         <mat-spinner *ngIf='isDataLoading'></mat-spinner>
     </mat-grid-tile>
     <!-- <mat-grid-tile [colspan]="30" [style.background]="'orange'" style="height: calc(100vh - 155px)"> -->
-    <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)" [id]="(!isGraphDataLoading ? 'filter-wrapper' : '')">        
-            <app-bar *ngIf="!isGraphDataLoading && countryTweetData.length>0"
+    <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)" [id]="(!isGraphDataLoading ? 'filter-wrapper' : '')"> 
+        <div class='chartDiv' *ngIf="!isGraphDataLoading && countryTweetData.length>0">       
+            <app-bar 
             [barChartData]="countryTweetData"
             [name]="'Tweets'"
             ></app-bar>
-            <app-bar *ngIf="!isGraphDataLoading && poiTweetData.length>0"
+        </div>
+        <div class='chartDiv' *ngIf="!isGraphDataLoading && poiTweetData.length>0">
+            <app-bar 
                 [barChartData]="poiTweetData"
                 [name]="'Tweets'"
             ></app-bar>
+        </div>
+        <div class='chartDiv' *ngIf="!isGraphDataLoading">
+            <app-pie
+            
+            [poiTweetsCountList]="poiTweetsCountList"
+            ></app-pie>
+        </div>
             <!-- <app-pie></app-pie>
-            <app-category></app-category>
-            <app-rose></app-rose>
+            <app-rose
+            [poiTweetsCountList]="poiTweetsCountList"
+            >
+            </app-rose>
             <app-line></app-line>
             <app-timeseries></app-timeseries>             -->
         <mat-spinner *ngIf='isGraphDataLoading'></mat-spinner>
