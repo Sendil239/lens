@@ -10,8 +10,8 @@ import { IBarChart } from 'src/app/shared/interfaces/barchart.interface';
 
 export class BarComponent implements OnInit {
   initOpts: object;
-  chartOption: EChartsOption;
-  
+  chartOption: any;
+
   constructor() { }
 
   ngOnInit(): void {
@@ -21,6 +21,14 @@ export class BarComponent implements OnInit {
       height: 300
     };
     this.chartOption = {
+      title: {
+        text: 'Country Vs Tweet Count',
+        left: 'center',
+        top: 20,
+        textStyle: {
+          color: 'black',
+        },
+      },
       color: ['#3398DB'],
       tooltip: {
         trigger: 'axis',

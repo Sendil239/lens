@@ -3,6 +3,7 @@ import { FormControl, NgForm, Validators } from '@angular/forms';
 import { filter } from 'd3-array';
 import { IBarChart } from 'src/app/shared/interfaces/barchart.interface';
 import { IFilter } from 'src/app/shared/interfaces/filter.interface';
+import { IPoiTweet, CountryTweetCount } from 'src/app/shared/interfaces/poi_tweet.interface';
 import { ITwitterData } from 'src/app/shared/interfaces/twitter_data.interface';
 import { HomeService } from '../../services/home.service';
 
@@ -26,6 +27,7 @@ export class HomeComponent implements OnInit {
   totalTweetsCount: number;
   countryTweetData: IBarChart[];
   poiTweetData: IBarChart[];
+  poiTweetsCountList: IPoiTweet[];
 
   constructor(private homeService: HomeService) {
     this.filterData = {
@@ -44,6 +46,7 @@ export class HomeComponent implements OnInit {
     this.totalTweetsCount = 0;
     this.countryTweetData = [];
     this.poiTweetData = [];
+    this.poiTweetsCountList = [];
    }
 
   ngOnInit(): void {
@@ -100,6 +103,9 @@ export class HomeComponent implements OnInit {
             this.poiTweetData = Object.keys(result.poi_tweet_count).map((key)=> {
               const obj = {'name': key, 'value': result.poi_tweet_count[key]};
               return obj;
+            });
+            this.poiTweetsCountList = Object.keys(result.poi_tweet_count).map(function(poi: string){
+              return {name: poi, value: result.poi_tweet_count[poi]};
             });
           }
         }

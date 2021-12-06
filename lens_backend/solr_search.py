@@ -39,7 +39,7 @@ from flask import request
 app = Flask(__name__)
 
 ind = indexer.Indexer()
-AWS_IP = 'localhost'
+AWS_IP = '3.134.191.90'
 PORT = '8983'
 
 def save_file(data, filename):

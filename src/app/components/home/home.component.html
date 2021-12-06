@@ -58,9 +58,15 @@
                 [barChartData]="poiTweetData"
                 [name]="'Tweets'"
             ></app-bar>
+            <app-pie
+            *ngIf="!isGraphDataLoading"
+            [poiTweetsCountList]="poiTweetsCountList"
+            ></app-pie>
             <!-- <app-pie></app-pie>
-            <app-category></app-category>
-            <app-rose></app-rose>
+            <app-rose
+            [poiTweetsCountList]="poiTweetsCountList"
+            >
+            </app-rose>
             <app-line></app-line>
             <app-timeseries></app-timeseries>             -->
         <mat-spinner *ngIf='isGraphDataLoading'></mat-spinner>
