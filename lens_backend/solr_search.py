@@ -1,5 +1,5 @@
 import indexer
-#import static_data
+import static_data as sd
 import json
 import emoji
 import pickle
@@ -89,22 +89,7 @@ def tokenizer(text):
 
     return tokenized_text
 
-def get_poi():
-    results = []
-    path = os.path.dirname(Path(__file__))
-    root_dir = path + '/home/ubuntu/lens/lens_backend/project1_data/'
-    dir_names = glob.glob(root_dir + "/*")
 
-    #print(path, root_dir, dir_names)
-    for dir_name in dir_names:
-        dir_name = dir_name.split('\\')[-1]
-        #print(dir_name)
-        if 'keyword' not in dir_name:
-            f_name = dir_name.split('/')[6]
-            results.append(f_name)
-
-    print(results)
-    return results
 
 def checkPayloadRequirement(doc, payload):
     lang_dict = {
@@ -198,113 +183,6 @@ def getPoiReplyCount(payload, tweet_list, poi_set):
 
     return poi_reply_count, poi_reply_sentiment
 
-def getAllPoiTweetCount():
-    temp_poi_set = set(get_poi())
-    poi_tweet_count = {}
-    with open("/home/ubuntu/lens/lens_backend/static_data/poi_distribution.json") as json_file:
-        data = json.load(json_file)
-    return data
-    for poi in temp_poi_set:
-        poi_tweet_count[poi] = 0
-    for poi in temp_poi_set:
-        query = "poi_name:" + poi
-        print(query)
-        tweet_list = solr_search_query(ind.connection, query, 5000)
-        poi_tweet_count[poi] = len(tweet_list)
-        print(poi, len(tweet_list))
-    return poi_tweet_count
-
-def getAllCountryTweetCount():
-    country_tweet_count = {"India":0, "USA":0, "Mexico":0}
-    country_tweet_count = {"Mexico": 26650, "USA":29675, "India":20809}
-    return country_tweet_count
-
-    for country in country_tweet_count:
-        query = "country:" + country
-        print(query)
-        tweet_list = solr_search_query(ind.connection, query, 50000)
-        country_tweet_count[country] = len(tweet_list)
-        print(country, len(tweet_list))
-    return country_tweet_count
-
-def getAllLanguageTweetCount():
-    language_tweet_count = {"en":0, "hi":0, "es":0}
-    language_tweet_count = {"en": 36470, "hi": 14018, "es": 26646}
-    return language_tweet_count
-
-    for language in language_tweet_count:
-        query = "tweet_lang:" + country
-        #print(query)
-        tweet_list = solr_search_query(ind.connection, query, 50000)
-        language_tweet_count[language] = len(tweet_list)
-        print(language, len(tweet_list))
-    return language_tweet_count
-
-def getAllPoiTimeSeriesData():
-    temp_poi_set = set(get_poi())
-    poi_date_info = {}
-
-    with open("/home/ubuntu/lens/lens_backend/static_data/poi_time_series.json") as json_file:
-        data = json.load(json_file)
-    return data
-    for poi in temp_poi_set:
-        #poi_date_info[poi] = []
-        query = "poi_name:" + poi
-        #print(query)
-        tweet_list = solr_search_query(ind.connection, query, 3000)
-        poi_date = {}
-        print(poi, len(tweet_list))
-        for tweet in tweet_list:
-            #print(tweet["tweet_date"])
-            tweet["tweet_date"] = tweet["tweet_date"].split('T')[0]
-            #datetime.datetime.strptime(tweet["tweet_date"], "%d/%m/%Y").strftime("%Y-%m-%d")
-            #print(tweet["tweet_date"])
-            #return
-            if tweet["tweet_date"] not in poi_date:
-                poi_date[tweet["tweet_date"]] = 1
-                #poi_date['tweet_count'] = 1
-            else:
-                poi_date[tweet["tweet_date"]] += 1
-
-        poi_date_info[poi] = poi_date
-        #print(poi_date_info)
-    #print(poi_date_info)
-
-    #with open('/home/ubuntu/lens/lens_backend/static_data/poi_time_series.json', 'w') as outfile:
-    #    json.dump(poi_date_info, outfile)
-    return poi_date_info
-
-def getAllCountryTimeSeriesData():
-    country_set= {"India":0, "USA":0, "Mexico":0}
-    country_date_info = {}
-
-    #with open("/home/ubuntu/lens/lens_backend/static_data/poi_time_series.json") as json_file:
-    #    data = json.load(json_file)
-    #return data
-    for country in country_set:
-        #poi_date_info[poi] = []
-        query = "country:" + country
-        #print(query)
-        tweet_list = solr_search_query(ind.connection, query, 35000)
-        country_date = {}
-        print(country, len(tweet_list))
-        for tweet in tweet_list:
-            tweet["tweet_date"] = tweet["tweet_date"].split('T')[0]
-            #datetime.datetime.strptime(tweet["tweet_date"], "%d/%m/%Y").strftime("%Y-%m-%d")
-            #print(tweet["tweet_date"])
-            #return
-            if tweet["tweet_date"] not in country_date:
-                country_date[tweet["tweet_date"]] = 1
-                #poi_date['tweet_count'] = 1
-            else:
-                country_date[tweet["tweet_date"]] += 1
-
-        country_date_info[country] = country_date
-
-    with open('/home/ubuntu/lens/lens_backend/static_data/country_time_series.json', 'w') as outfile:
-        json.dump(country_date_info, outfile)
-    return country_date_info
-
 def get_from_solr(core_name, query_text, payload):
     host = AWS_IP
     port = PORT
@@ -386,7 +264,7 @@ def get_from_solr(core_name, query_text, payload):
     country_tweet_count = getCountryTweetCount(payload, result_tweet_list, country_set)
     poi_reply_count, poi_reply_sentiment = getPoiReplyCount(payload, result_tweet_list, poi_set)
     #print(lens_doc)
-    return lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment
+    return lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment, len(result_tweet_list)
 
 
 
@@ -422,21 +300,22 @@ def searchQuery():
         print(payload['query'])
 
     # Search document in solr with query
-    lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment = search_query(payload, ind)
+    lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment, total_tweet_count = search_query(payload, ind)
 
     response = {
         'tweet_list': lens_doc,
         'poi_tweet_count': poi_tweet_count,
         'country_tweet_count': country_tweet_count,
         'poi_reply_count': poi_reply_count,
-        'poi_reply_sentiment': poi_reply_sentiment
+        'poi_reply_sentiment': poi_reply_sentiment,
+        'total_tweet_count': total_tweet_count
     }
     return flask.jsonify(response)
 
 @app.route("/getPoi", methods=['GET'])
 @cross_origin()
 def getPoi():
-    poi_list = get_poi()
+    poi_list = sd.get_poi()
     response = {
         "poi_names": poi_list
     }
@@ -444,27 +323,27 @@ def getPoi():
 
 @app.route("/getPoiDistribution", methods=['GET'])
 def getPoiDistribution():
-    poi_tweet_count = getAllPoiTweetCount()
+    poi_tweet_count = sd.getAllPoiTweetCount(ind)
     return flask.jsonify(poi_tweet_count)
 
 @app.route("/getCountryDistribution", methods=['GET'])
 def getCountryDistribution():
-    country_tweet_count = getAllCountryTweetCount()
+    country_tweet_count = sd.getAllCountryTweetCount(ind)
     return flask.jsonify(country_tweet_count)
 
 @app.route("/getLanguageDistribution", methods=['GET'])
 def getLanguageDistribution():
-    language_tweet_count = getAllLanguageTweetCount()
+    language_tweet_count = sd.getAllLanguageTweetCount(ind)
     return flask.jsonify(language_tweet_count)
 
 @app.route("/getTimeSeriesData", methods=['GET'])
 def getTimeSeriesData():
-    time_series_data = getAllPoiTimeSeriesData()
+    time_series_data = sd.getAllPoiTimeSeriesData(ind)
     return flask.jsonify(time_series_data)
 
 @app.route("/getCountryTimeSeriesData", methods=['GET'])
 def getCountryTimeSeriesData():
-    country_time_series_data = getAllCountryTimeSeriesData()
+    country_time_series_data = sd.getAllCountryTimeSeriesData(ind)
     return flask.jsonify(country_time_series_data)
 
 if __name__ == "__main__":
@@ -477,4 +356,4 @@ if __name__ == "__main__":
     #getAllCountryTimeSeriesData()
 
     #app.run(debug=True)
-    app.run(host="0.0.0.0", port=9999)
+    app.run(host="0.0.0.0", port=8888)
