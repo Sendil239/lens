@@ -22,5 +22,45 @@ export class AnalyticsService {
         )
     }
 
+    getCountryDistribution(){
+        return this.dataService.get('/getCountryDistribution').pipe(
+            map(
+                (response: any) => {
+                    return response;
+                }
+            )
+        )
+    }
+
+    getLanguageDistribution(){
+        return this.dataService.get('/getLanguageDistribution').pipe(
+            map(
+                (response: any) => {
+                    return response;
+                }
+            )
+        )
+    }
+
+    getTimeSeriesData(){
+        return this.dataService.get('/getTimeSeriesData').pipe(
+            map(
+                (response: any) => {
+                    return response;
+                }
+            )
+        )
+    }
+
+    getCountryTimeSeriesData(){
+        return this.dataService.get('/getCountryTimeSeriesData').pipe(
+            map(
+                (response: any) => {
+                    return response;
+                }
+            )
+        )
+    }
+
         
 }
