@@ -19,7 +19,6 @@ export class RoseComponent implements OnInit {
       width: 300,
       height: 300
     };
-    debugger;
     this.chartOption ={
       tooltip: {
         trigger: 'item',
