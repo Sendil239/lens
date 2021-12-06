@@ -35,11 +35,8 @@ from gensim.summarization.summarizer import summarize
 import flask
 from flask import Flask
 from flask import request
-from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
-cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
 
 ind = indexer.Indexer()
 AWS_IP = 'localhost'
@@ -138,18 +135,36 @@ def getPoiReplyCount(payload, tweet_list, poi_set):
         poi_reply_count[poi] = 0
         poi_reply_sentiment[poi] = 0.0
 
+    poi_reply = sd.saveAllReply(ind)
+    print(poi_reply.keys(), len(tweet_list))
     analyzer = SentimentIntensityAnalyzer()
+    #''''
     for tweet in tweet_list:
         poi_name = tweet['poi_name']
         if poi_name in temp_poi_set:
             tweet_id = tweet['id']
             sentiment = 0.0
-            #for reply_tweet in reply_tweet_list:
-            #    vs = analyzer.polarity_scores(reply_tweet['reply_text'])
-            #    sentiment += vs['pos']
-                #print(vs)
-            #print( vs['pos'])
+            for reply in poi_reply[poi_name]:
+                #print(type(reply['replied_to_tweet_id']), type(tweet_id))
+                if str(reply['replied_to_tweet_id']) == str(tweet_id):
+                    poi_reply_count[poi_name] += 1
+                    vs = analyzer.polarity_scores(reply['reply_text'])
+                    sentiment += vs['pos']
+
+            '''
+            query = "replied_to_tweet_id:" + tweet_id
+            reply_tweet_list = sd.solr_search_query(ind.connection, query, 500)
+            poi_reply_count[poi_name] += len(reply_tweet_list)
+
+            sentiment = 0.0
+            for reply_tweet in reply_tweet_list:
+                vs = analyzer.polarity_scores(reply_tweet['reply_text'])
+                sentiment += vs['pos']
+                # print(vs)
+            # print( vs['pos'])
+            #'''
             poi_reply_sentiment[poi_name] += sentiment
+    #'''
     for poi_name in temp_poi_set:
         if poi_reply_count[poi_name] > 0.000001:
             poi_reply_sentiment[poi_name] /= poi_reply_count[poi_name]
@@ -173,11 +188,11 @@ def get_from_solr(core_name, query_text, payload):
     extra_percent = '%2C%20'
     result_fields = "id" + extra_percent + 'poi_name' + extra_percent + 'tweet_text'  + \
                     extra_percent + 'hashtags' + extra_percent + 'tweet_date' + extra_percent + 'country' + extra_percent + 'score' + \
-                    extra_percent + 'tweet_lang'
+                    extra_percent + 'tweet_lang' + extra_percent +'poi_id'
 
     fl = "q.op=OR&fl=" + result_fields
     fq = "fq="
-    rows = "rows=200000"
+    rows = "rows=10000"
     wt = "wt=json"
     # wt        = "wt=python"
     params = [q, fl, fq, wt, rows]
@@ -280,7 +295,6 @@ def searchQuery():
     return flask.jsonify(response)
 
 @app.route("/getPoi", methods=['GET'])
-@cross_origin()
 def getPoi():
     poi_list = sd.get_poi()
     response = {

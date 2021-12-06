@@ -14,7 +14,7 @@ def get_poi():
     root_dir = '/home/ubuntu/lens/lens_backend/project1_data/'
     dir_names = glob.glob(root_dir + "/*")
 
-    print(path, root_dir, dir_names)
+    #print(path, root_dir, dir_names)
     for dir_name in dir_names:
         dir_name = dir_name.split('\\')[-1]
         #print(dir_name)
@@ -22,7 +22,7 @@ def get_poi():
             f_name = dir_name.split('/')[6]
             results.append(f_name)
 
-    print(results)
+    #print(results)
     return results
 
 def getAllPoiTweetCount(ind):
@@ -135,16 +135,38 @@ def getAllCountryTimeSeriesData(ind):
     return country_date_info
 
 def saveAllReply(ind):
+    with open("/home/ubuntu/lens/lens_backend/static_data/poi_reply.json") as json_file:
+       data = json.load(json_file)
+    return data
+    poi_id_name = {}
+    for poi in get_poi():
+        query = "poi_name:" + poi
+        result = solr_search_query(ind.connection, query, 1)
+        for tweet in result:
+            #print(result)
+            poi_id_name[tweet['poi_id']] = tweet['poi_name']
+
+    #print(poi_id_name)
+    #return
     query = "replied_to_tweet_id:" + "*"
-    reply_tweet_list = solr_search_query(ind.connection, query, 15000)
+    reply_tweet_list = solr_search_query(ind.connection, query, 14000)
+    print(len(reply_tweet_list))
 
-    reply_count = {}
+    poi_reply = {}
     for reply_tweet in reply_tweet_list:
-        replied_to_tweet_id = reply_tweet['replied_to_tweet_id']
-        if replied_to_tweet_id not in reply_count:
-            reply_count[replied_to_tweet_id] = 1
-        else:
-            reply_count[replied_to_tweet_id] += 1
+        if reply_tweet['replied_to_user_id'] not in poi_id_name:
+            continue
+        replied_to_user_id = poi_id_name[reply_tweet['replied_to_user_id']]
+        if replied_to_user_id not in poi_reply:
+            poi_reply[replied_to_user_id] = []
 
-    print(reply_count)
+        poi_reply[replied_to_user_id].append(reply_tweet)
+
+    #print(poi_reply)
+    #print(reply_count)
+
+    with open('/home/ubuntu/lens/lens_backend/static_data/poi_reply.json', 'w') as outfile:
+       json.dump(poi_reply, outfile)
+
+    return poi_reply
 
