@@ -22,6 +22,7 @@ import re
 from nltk.corpus import stopwords
 import nltk
 import glob
+import datetime
 nltk.download('stopwords')
 
 import re
@@ -236,6 +237,71 @@ def getAllLanguageTweetCount():
         print(language, len(tweet_list))
     return language_tweet_count
 
+def getAllPoiTimeSeriesData():
+    temp_poi_set = set(get_poi())
+    poi_date_info = {}
+
+    with open("/home/ubuntu/lens/lens_backend/static_data/poi_time_series.json") as json_file:
+        data = json.load(json_file)
+    return data
+    for poi in temp_poi_set:
+        #poi_date_info[poi] = []
+        query = "poi_name:" + poi
+        #print(query)
+        tweet_list = solr_search_query(ind.connection, query, 3000)
+        poi_date = {}
+        print(poi, len(tweet_list))
+        for tweet in tweet_list:
+            #print(tweet["tweet_date"])
+            tweet["tweet_date"] = tweet["tweet_date"].split('T')[0]
+            #datetime.datetime.strptime(tweet["tweet_date"], "%d/%m/%Y").strftime("%Y-%m-%d")
+            #print(tweet["tweet_date"])
+            #return
+            if tweet["tweet_date"] not in poi_date:
+                poi_date[tweet["tweet_date"]] = 1
+                #poi_date['tweet_count'] = 1
+            else:
+                poi_date[tweet["tweet_date"]] += 1
+
+        poi_date_info[poi] = poi_date
+        #print(poi_date_info)
+    #print(poi_date_info)
+
+    #with open('/home/ubuntu/lens/lens_backend/static_data/poi_time_series.json', 'w') as outfile:
+    #    json.dump(poi_date_info, outfile)
+    return poi_date_info
+
+def getAllCountryTimeSeriesData():
+    country_set= {"India":0, "USA":0, "Mexico":0}
+    country_date_info = {}
+
+    #with open("/home/ubuntu/lens/lens_backend/static_data/poi_time_series.json") as json_file:
+    #    data = json.load(json_file)
+    #return data
+    for country in country_set:
+        #poi_date_info[poi] = []
+        query = "country:" + country
+        #print(query)
+        tweet_list = solr_search_query(ind.connection, query, 35000)
+        country_date = {}
+        print(country, len(tweet_list))
+        for tweet in tweet_list:
+            tweet["tweet_date"] = tweet["tweet_date"].split('T')[0]
+            #datetime.datetime.strptime(tweet["tweet_date"], "%d/%m/%Y").strftime("%Y-%m-%d")
+            #print(tweet["tweet_date"])
+            #return
+            if tweet["tweet_date"] not in country_date:
+                country_date[tweet["tweet_date"]] = 1
+                #poi_date['tweet_count'] = 1
+            else:
+                country_date[tweet["tweet_date"]] += 1
+
+        country_date_info[country] = country_date
+
+    with open('/home/ubuntu/lens/lens_backend/static_data/country_time_series.json', 'w') as outfile:
+        json.dump(country_date_info, outfile)
+    return country_date_info
+
 def get_from_solr(core_name, query_text, payload):
     host = AWS_IP
     port = PORT
@@ -387,6 +453,16 @@ def getLanguageDistribution():
     language_tweet_count = getAllLanguageTweetCount()
     return flask.jsonify(language_tweet_count)
 
+@app.route("/getTimeSeriesData", methods=['GET'])
+def getTimeSeriesData():
+    time_series_data = getAllPoiTimeSeriesData()
+    return flask.jsonify(time_series_data)
+
+@app.route("/getCountryTimeSeriesData", methods=['GET'])
+def getCountryTimeSeriesData():
+    country_time_series_data = getAllCountryTimeSeriesData()
+    return flask.jsonify(country_time_series_data)
+
 if __name__ == "__main__":
     #search_query(payload, ind)
     #get_poi()
@@ -394,6 +470,7 @@ if __name__ == "__main__":
     #print("OK")
 
     #getAllCountryTweetCount()
+    #getAllCountryTimeSeriesData()
 
     #app.run(debug=True)
     app.run(host="0.0.0.0", port=9999)
