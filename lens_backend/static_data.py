@@ -11,7 +11,8 @@ def solr_search_query(connection, query, rows=0):
 def get_poi():
     results = []
     path = os.path.dirname(Path(__file__))
-    root_dir = '/home/ubuntu/lens/lens_backend/project1_data/'
+    # root_dir = '/home/ubuntu/lens/lens_backend/project1_data/'
+    root_dir = path + '\\project1_data'
     dir_names = glob.glob(root_dir + "/*")
 
     #print(path, root_dir, dir_names)
@@ -19,8 +20,8 @@ def get_poi():
         dir_name = dir_name.split('\\')[-1]
         #print(dir_name)
         if 'keyword' not in dir_name:
-            f_name = dir_name.split('/')[6]
-            results.append(f_name)
+            # f_name = dir_name.split('/')[6]
+            results.append(dir_name)
 
     #print(results)
     return results
@@ -28,7 +29,10 @@ def get_poi():
 def getAllPoiTweetCount(ind):
     temp_poi_set = set(get_poi())
     poi_tweet_count = {}
-    with open("/home/ubuntu/lens/lens_backend/static_data/poi_distribution.json") as json_file:
+    path = os.path.dirname(Path(__file__))
+    # root_dir = '/home/ubuntu/lens/lens_backend/project1_data/'
+    root_dir = path + '\\static_data\\poi_distribution.json'
+    with open(root_dir) as json_file:
         data = json.load(json_file)
     return data
     for poi in temp_poi_set:
@@ -71,7 +75,10 @@ def getAllPoiTimeSeriesData(ind):
     temp_poi_set = set(get_poi())
     poi_date_info = {}
 
-    with open("/home/ubuntu/lens/lens_backend/static_data/poi_time_series.json") as json_file:
+    path = os.path.dirname(Path(__file__))
+    # root_dir = '/home/ubuntu/lens/lens_backend/project1_data/'
+    root_dir = path + '\\static_data\\poi_time_series.json'
+    with open(root_dir) as json_file:
         data = json.load(json_file)
     return data
     for poi in temp_poi_set:
@@ -129,14 +136,20 @@ def getAllCountryTimeSeriesData(ind):
                 country_date[tweet["tweet_date"]] += 1
 
         country_date_info[country] = country_date
-
-    with open('/home/ubuntu/lens/lens_backend/static_data/country_time_series.json', 'w') as outfile:
+    path = os.path.dirname(Path(__file__))
+    # root_dir = '/home/ubuntu/lens/lens_backend/project1_data/'
+    root_dir = path + '\\static_data\\country_time_series.json'
+    with open(root_dir, 'w') as outfile:
         json.dump(country_date_info, outfile)
     return country_date_info
 
 def saveAllReply(ind):
-    with open("/home/ubuntu/lens/lens_backend/static_data/poi_reply.json") as json_file:
-       data = json.load(json_file)
+    path = os.path.dirname(Path(__file__))
+    # root_dir = '/home/ubuntu/lens/lens_backend/project1_data/'
+    root_dir = path + '\\static_data\\poi_reply.json' 
+    with open(root_dir) as json_file:
+        data = json.load(json_file)
+            
     return data
     poi_id_name = {}
     for poi in get_poi():
