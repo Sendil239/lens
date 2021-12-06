@@ -7,8 +7,7 @@ import pysolr
 
 import simplejson
 import pprint
-import os
-from pathlib import Path
+
 
 
 import urllib.request as urllib2
@@ -50,17 +49,7 @@ def save_file(data, filename):
 def remove_emoji(text):
     return emoji.get_emoji_regexp().sub(u'', text)
 
-def solr_search_query(connection, query, rows=0):
-    results = connection.search(q=query, rows=rows)
-    #print("Saw {0} result(s).".format(len(results)))
-    return results
-
 def tokenizer(text):
-    """ Implement logic to pre-process & tokenize document text.
-        Write the code in such a way that it can be re-used for processing the user's query.
-        To be implemented."""
-
-    # print("Original ---->>>>  ", text)
     stop_words = set(stopwords.words('english'))
 
     text = text.lower()
@@ -72,21 +61,11 @@ def tokenizer(text):
     text = re.sub('[,]', ' ', text)
     text = re.sub(' +', ' ', text)
 
-
     tokenized_text = text.split()
-
-    #print(text)
-    #print(tokenized_text)
-
     ps = PorterStemmer()
     tokenized_text = [word for word in tokenized_text if word not in stop_words]
     #tokenized_text = [ps.stem(word) for word in tokenized_text]
-
-    # print(tokenized_text)
-
     return tokenized_text
-
-
 
 def checkPayloadRequirement(doc, payload):
     lang_dict = {
@@ -144,7 +123,6 @@ def getCountryTweetCount(payload, tweet_list, country_set):
     return country_tweet_count
 
 def getPoiReplyCount(payload, tweet_list, poi_set):
-
     temp_poi_set = set()
     if len(payload['poi_names']) > 0:
         for poi in payload['poi_names']:
@@ -160,17 +138,12 @@ def getPoiReplyCount(payload, tweet_list, poi_set):
     analyzer = SentimentIntensityAnalyzer()
     for tweet in tweet_list:
         poi_name = tweet['poi_name']
-
         if poi_name in temp_poi_set:
             tweet_id = tweet['id']
-            query = "replied_to_tweet_id:" + tweet_id
-            reply_tweet_list = solr_search_query(ind.connection, query, 5000000)
-            poi_reply_count[poi_name] += len(reply_tweet_list)
-
             sentiment = 0.0
-            for reply_tweet in reply_tweet_list:
-                vs = analyzer.polarity_scores(reply_tweet['reply_text'])
-                sentiment += vs['pos']
+            #for reply_tweet in reply_tweet_list:
+            #    vs = analyzer.polarity_scores(reply_tweet['reply_text'])
+            #    sentiment += vs['pos']
                 #print(vs)
             #print( vs['pos'])
             poi_reply_sentiment[poi_name] += sentiment
@@ -285,13 +258,7 @@ def search_query(payload, solr_core):
 
 @app.route("/searchQuery", methods=['POST'])
 def searchQuery():
-    """ This function handles the POST request to your endpoint.
-        Do NOT change it."""
-    #start_time = time.time()
-
     payload = json.loads(request.data.decode("utf-8").replace("'", '"'))
-    #print(payload)
-
     if "query" in payload:
         query = payload['query']
         print(payload['query'])
@@ -351,5 +318,6 @@ if __name__ == "__main__":
     #getAllCountryTweetCount()
     #getAllCountryTimeSeriesData()
 
+    #sd.saveAllReply(ind)
     #app.run(debug=True)
-    app.run(host="0.0.0.0", port=8888)
+    app.run(host="0.0.0.0", port=9999)

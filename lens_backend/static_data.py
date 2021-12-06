@@ -3,6 +3,11 @@ from pathlib import Path
 import glob
 import json
 
+def solr_search_query(connection, query, rows=0):
+    results = connection.search(q=query, rows=rows)
+    #print("Saw {0} result(s).".format(len(results)))
+    return results
+
 def get_poi():
     results = []
     path = os.path.dirname(Path(__file__))
@@ -128,3 +133,18 @@ def getAllCountryTimeSeriesData(ind):
     with open('/home/ubuntu/lens/lens_backend/static_data/country_time_series.json', 'w') as outfile:
         json.dump(country_date_info, outfile)
     return country_date_info
+
+def saveAllReply(ind):
+    query = "replied_to_tweet_id:" + "*"
+    reply_tweet_list = solr_search_query(ind.connection, query, 15000)
+
+    reply_count = {}
+    for reply_tweet in reply_tweet_list:
+        replied_to_tweet_id = reply_tweet['replied_to_tweet_id']
+        if replied_to_tweet_id not in reply_count:
+            reply_count[replied_to_tweet_id] = 1
+        else:
+            reply_count[replied_to_tweet_id] += 1
+
+    print(reply_count)
+
