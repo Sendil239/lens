@@ -18,6 +18,11 @@ export class HomeComponent implements OnInit {
   keyword: string;
   rowHeight: number;
   isFilterLoading: boolean;
+  page_group: number;
+  result_in_page: number;
+  appliedFilter: any;
+  isGraphDataLoading: boolean;
+  totalTweetsCount: number;
 
   constructor(private homeService: HomeService) {
     this.filterData = {
@@ -30,6 +35,10 @@ export class HomeComponent implements OnInit {
     this.rowHeight = 75;
     this.isDataLoading = false;
     this.isFilterLoading = false;
+    this.result_in_page = 10;
+    this.page_group = 1;
+    this.isGraphDataLoading = false;
+    this.totalTweetsCount = 0;
    }
 
   ngOnInit(): void {
@@ -51,23 +60,40 @@ export class HomeComponent implements OnInit {
       }
   }
 
+  setAppliedFilter(filterParams: any){
+    this.appliedFilter = {
+      'query': this.keyword,
+      'poi_names': filterParams?.selectedPois ?? [],
+      'countries': filterParams?.selectedCountries ?? [],
+      'languages': filterParams?.selectedLanguages ?? []
+    };
+
+  }
+
   applyFilter(filterParams: any) {
     if(this.checkIfValidSearch(filterParams)){
-      const filterBody = {
-        'query': this.keyword,
-        'poi_names': filterParams?.selectedPois ?? [],
-        'countries': filterParams?.selectedCountries ?? [],
-        'languages': filterParams?.selectedLanguages ?? []
-      }
-      this.isDataLoading = true;
-      this.homeService.postFilterData(filterBody)
+      this.setAppliedFilter(filterParams);
+      this.isGraphDataLoading = true;
+      this.fetchData();
+    }
+  }
+
+  fetchData(){
+    this.isDataLoading = true;
+      this.homeService.postFilterData({...this.appliedFilter, 'page_group': this.page_group, 'result_in_page': this.result_in_page})
       .subscribe((result: any) =>{
         this.isDataLoading = false;
+        this.isGraphDataLoading = false;
         if(result){
           this.tweetsList = result.tweet_list;
+          this.totalTweetsCount = result.total_tweet_count;
         }
       })
-    }
+  }
+
+  fetchMoreData(pageNumber: number) {
+    this.page_group = pageNumber;
+    this.fetchData();
   }
 
   checkIfValidSearch(filterParams: any){
@@ -79,7 +105,5 @@ export class HomeComponent implements OnInit {
 
     return false;
   }
-
-  
 
 }

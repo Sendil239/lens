@@ -39,16 +39,18 @@
     [id]="(!isDataLoading && tweetsList.length>0 ? 'filter-wrapper' : '')">
     <!-- <mat-grid-tile [colspan]="45" style="height: calc(100vh - 155px)" id="filter-wrapper"> -->
         <app-listing
-            *ngIf='!isDataLoading && tweetsList.length>0'
+            [hidden]='isDataLoading || tweetsList.length===0'
+            [totalTweetsCount]="totalTweetsCount"
             [tweetsList]="tweetsList"
+            (pageUpdated)="fetchMoreData($event)"
         >
         </app-listing>
         <div *ngIf='!isDataLoading && tweetsList.length===0'> NO DATA FOUND.</div>
         <mat-spinner *ngIf='isDataLoading'></mat-spinner>
     </mat-grid-tile>
     <!-- <mat-grid-tile [colspan]="30" [style.background]="'orange'" style="height: calc(100vh - 155px)"> -->
-    <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)" [id]="(!isDataLoading ? 'filter-wrapper' : '')">
-        <div *ngIf='!isDataLoading'>
+    <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)" [id]="(!isGraphDataLoading ? 'filter-wrapper' : '')">
+        <div [hidden]='isGraphDataLoading'>
             <app-bar></app-bar>
             <app-pie></app-pie>
             <app-category></app-category>
@@ -56,6 +58,6 @@
             <app-line></app-line>
             <app-timeseries></app-timeseries>
         </div>        
-        <mat-spinner *ngIf='isDataLoading'></mat-spinner>
+        <mat-spinner *ngIf='isGraphDataLoading'></mat-spinner>
     </mat-grid-tile>
   </mat-grid-list>

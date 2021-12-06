@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ITwitterData } from '../interfaces/twitter_data.interface';
 import {PageEvent} from '@angular/material/paginator';
 
@@ -8,13 +8,14 @@ import {PageEvent} from '@angular/material/paginator';
   styleUrls: ['./listing.component.scss']
 })
 export class ListingComponent implements OnInit {
-  length: number;
+  
   pageSize: number;
   pageSizeOptions: number[];
   pageEvent: PageEvent;
 
-  constructor() {
-    this.length = 100;
+  @Output() pageUpdated = new EventEmitter();
+
+  constructor() {    
     this.pageSize = 10;
     this.pageSizeOptions = [5, 10, 25, 100];
   }
@@ -22,13 +23,15 @@ export class ListingComponent implements OnInit {
   @Input('tweetsList')
   tweetsList: ITwitterData[];
 
+  @Input('totalTweetsCount')
+  length: number;
+
   ngOnInit(): void {
+    this.length = 100;
   }
 
-  setPageSizeOptions(setPageSizeOptionsInput: string) {
-    if (setPageSizeOptionsInput) {
-      this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
-    }
-  }
+  paginationUpdated(data: any) {
+    this.pageUpdated.emit(data.pageIndex + 1);
+}
 
 }
