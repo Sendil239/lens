@@ -35,11 +35,15 @@ from gensim.summarization.summarizer import summarize
 import flask
 from flask import Flask
 from flask import request
+from flask_cors import CORS
 
 app = Flask(__name__)
 
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 ind = indexer.Indexer()
-AWS_IP = '3.134.191.90'
+AWS_IP = 'localhost'
 PORT = '8983'
 
 def save_file(data, filename):
