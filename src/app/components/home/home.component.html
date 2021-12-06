@@ -49,15 +49,20 @@
         <mat-spinner *ngIf='isDataLoading'></mat-spinner>
     </mat-grid-tile>
     <!-- <mat-grid-tile [colspan]="30" [style.background]="'orange'" style="height: calc(100vh - 155px)"> -->
-    <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)" [id]="(!isGraphDataLoading ? 'filter-wrapper' : '')">
-        <div [hidden]='isGraphDataLoading'>
-            <app-bar></app-bar>
-            <app-pie></app-pie>
+    <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)" [id]="(!isGraphDataLoading ? 'filter-wrapper' : '')">        
+            <app-bar *ngIf="!isGraphDataLoading && countryTweetData.length>0"
+            [barChartData]="countryTweetData"
+            [name]="'Tweets'"
+            ></app-bar>
+            <app-bar *ngIf="!isGraphDataLoading && poiTweetData.length>0"
+                [barChartData]="poiTweetData"
+                [name]="'Tweets'"
+            ></app-bar>
+            <!-- <app-pie></app-pie>
             <app-category></app-category>
             <app-rose></app-rose>
             <app-line></app-line>
-            <app-timeseries></app-timeseries>
-        </div>        
+            <app-timeseries></app-timeseries>             -->
         <mat-spinner *ngIf='isGraphDataLoading'></mat-spinner>
     </mat-grid-tile>
   </mat-grid-list>

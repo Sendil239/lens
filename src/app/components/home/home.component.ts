@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, NgForm, Validators } from '@angular/forms';
 import { filter } from 'd3-array';
+import { IBarChart } from 'src/app/shared/interfaces/barchart.interface';
 import { IFilter } from 'src/app/shared/interfaces/filter.interface';
 import { ITwitterData } from 'src/app/shared/interfaces/twitter_data.interface';
 import { HomeService } from '../../services/home.service';
@@ -23,6 +24,8 @@ export class HomeComponent implements OnInit {
   appliedFilter: any;
   isGraphDataLoading: boolean;
   totalTweetsCount: number;
+  countryTweetData: IBarChart[];
+  poiTweetData: IBarChart[];
 
   constructor(private homeService: HomeService) {
     this.filterData = {
@@ -39,6 +42,8 @@ export class HomeComponent implements OnInit {
     this.page_group = 1;
     this.isGraphDataLoading = false;
     this.totalTweetsCount = 0;
+    this.countryTweetData = [];
+    this.poiTweetData = [];
    }
 
   ngOnInit(): void {
@@ -74,26 +79,36 @@ export class HomeComponent implements OnInit {
     if(this.checkIfValidSearch(filterParams)){
       this.setAppliedFilter(filterParams);
       this.isGraphDataLoading = true;
-      this.fetchData();
+      this.fetchData(true);
     }
   }
 
-  fetchData(){
+  fetchData(isFilterSearch: boolean){
     this.isDataLoading = true;
       this.homeService.postFilterData({...this.appliedFilter, 'page_group': this.page_group, 'result_in_page': this.result_in_page})
-      .subscribe((result: any) =>{
+      .subscribe((result: any) => {
         this.isDataLoading = false;
         this.isGraphDataLoading = false;
         if(result){
           this.tweetsList = result.tweet_list;
-          this.totalTweetsCount = result.total_tweet_count;
+          this.totalTweetsCount = result.total_tweet_count;          
+          if(isFilterSearch){
+            this.countryTweetData = Object.keys(result.country_tweet_count).map((key)=> {
+              const obj = {'name': key, 'value': result.country_tweet_count[key]};
+              return obj;
+            });
+            this.poiTweetData = Object.keys(result.poi_tweet_count).map((key)=> {
+              const obj = {'name': key, 'value': result.poi_tweet_count[key]};
+              return obj;
+            });
+          }
         }
       })
   }
 
   fetchMoreData(pageNumber: number) {
     this.page_group = pageNumber;
-    this.fetchData();
+    this.fetchData(false);
   }
 
   checkIfValidSearch(filterParams: any){
