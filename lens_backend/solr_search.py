@@ -231,8 +231,17 @@ def get_from_solr(core_name, query_text, payload):
     if  "result_in_page" in payload:
         total_tweet = payload['result_in_page']
 
+    sentiment_count = {"pos":0, "neg":0, "neu":0}
     for doc in result_tweet_list[(cur_page-1)*total_tweet::]:
         vs = analyzer.polarity_scores(doc['tweet_text'])
+        if vs['neu'] > .90:
+            sentiment_count['neu'] += 1
+        elif vs['pos'] > vs['neg']:
+            sentiment_count['pos'] += 1
+        else:
+            sentiment_count['neg'] += 1
+
+        #print(vs)
        # print( vs['pos'])
         doc['sentiment'] = vs['pos']
 
@@ -243,16 +252,16 @@ def get_from_solr(core_name, query_text, payload):
         doc['topics'] = short_summary
         doc['top_pos_reply'] = 'Top Positive reply. need to be implemented'
         doc['top_neg_reply'] = 'Top Negative reply. need to be implemented'
-        lens_doc.append(doc)
         #print(doc)
-        if(len(lens_doc) == total_tweet):
-            break
-
+        if(len(lens_doc) < total_tweet):
+            lens_doc.append(doc)
+            #break
+    #print(sentiment_count)
     poi_tweet_count = getPoiTweetCount(payload, result_tweet_list, poi_set)
     country_tweet_count = getCountryTweetCount(payload, result_tweet_list, country_set)
     poi_reply_count, poi_reply_sentiment = getPoiReplyCount(payload, result_tweet_list, poi_set)
     #print(lens_doc)
-    return lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment, len(result_tweet_list)
+    return lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment, len(result_tweet_list), sentiment_count
 
 
 
@@ -282,7 +291,7 @@ def searchQuery():
         print(payload['query'])
 
     # Search document in solr with query
-    lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment, total_tweet_count = search_query(payload, ind)
+    lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment, total_tweet_count, sentiment_count = search_query(payload, ind)
 
     response = {
         'tweet_list': lens_doc,
@@ -290,7 +299,8 @@ def searchQuery():
         'country_tweet_count': country_tweet_count,
         'poi_reply_count': poi_reply_count,
         'poi_reply_sentiment': poi_reply_sentiment,
-        'total_tweet_count': total_tweet_count
+        'total_tweet_count': total_tweet_count,
+        'sentiment_count':sentiment_count
     }
     return flask.jsonify(response)
 
