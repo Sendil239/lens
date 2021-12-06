@@ -59,7 +59,8 @@ export class BarComponent implements OnInit {
         type: 'bar',
         barWidth: '60%',
         data: this.barChartData.map(x=>x.value)
-      }]
+      }],
+      
     };
   }
 

@@ -1,0 +1,59 @@
+
+::ng-deep .mat-toolbar.mat-primary.mat-toolbar-single-row {
+	background: #D32F2F;
+}
+::ng-deep .mat-icon{
+	margin-right: 5px;
+}
+::ng-deep .mat-flat-button.mat-primary, .mat-raised-button.mat-primary, .mat-fab.mat-primary, .mat-mini-fab.mat-primary{
+	background-color: #D32F2F;
+}
+::ng-deep .mat-flat-button.mat-primary.mat-button-disabled, .mat-flat-button.mat-accent.mat-button-disabled, .mat-flat-button.mat-warn.mat-button-disabled, .mat-flat-button.mat-button-disabled.mat-button-disabled, .mat-raised-button.mat-primary.mat-button-disabled, .mat-raised-button.mat-accent.mat-button-disabled, .mat-raised-button.mat-warn.mat-button-disabled, .mat-raised-button.mat-button-disabled.mat-button-disabled, .mat-fab.mat-primary.mat-button-disabled, .mat-fab.mat-accent.mat-button-disabled, .mat-fab.mat-warn.mat-button-disabled, .mat-fab.mat-button-disabled.mat-button-disabled, .mat-mini-fab.mat-primary.mat-button-disabled, .mat-mini-fab.mat-accent.mat-button-disabled, .mat-mini-fab.mat-warn.mat-button-disabled, .mat-mini-fab.mat-button-disabled.mat-button-disabled{
+	background-color: rgba(0,0,0,.12);
+}
+::ng-deep .ng-star-inserted .mat-grid-list[cols="1"]{
+	background: #EEEEEE;
+}
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex{
+	margin-top: 0.75em;
+}
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex{
+	padding-top: 0px !important;
+}
+::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple{
+	background: #D32F2F;
+}
+::ng-deep .mat-form-field.mat-focused.mat-primary .mat-select-arrow{
+	color: #D32F2F;
+}
+::ng-deep .mat-form-field.mat-focused .mat-form-field-label{
+	color: #D32F2F;
+}
+::ng-deep .mat-primary .mat-pseudo-checkbox-checked, .mat-primary .mat-pseudo-checkbox-indeterminate{
+	background: #D32F2F;
+}
+::ng-deep .mat-primary .mat-option.mat-selected:not(.mat-option-disabled){
+	color: #D32F2F;
+}
+::ng-deep .mat-progress-spinner circle, .mat-spinner circle{
+	stroke: #D32F2F;
+}
+::ng-deep .mat-list-base.filter-list .mat-subheader{
+	font-size: 18px;
+    margin-top: 10px;
+}
+::ng-deep .mat-list-base .mat-subheader:first-child{
+	margin-top: 10px !important;
+}
+::ng-deep .mat-flat-button.mat-primary, .mat-raised-button.mat-primary, .mat-fab.mat-primary, .mat-mini-fab.mat-primary{
+	background: #D32F2F;
+}
+#filter-wrapper{
+	background: #EEEEEE;
+}
+::ng-deep .mat-grid-tile[ng-reflect-colspan="25"], .mat-grid-tile[ng-reflect-colspan="27"]{
+	background: #EEEEEE;
+}
+::ng-deep echarts > div:first-child{
+	margin: 0px auto;
+}
