@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
+import { IChart } from 'src/app/shared/interfaces/barchart.interface';
 import { IPoiTweet } from 'src/app/shared/interfaces/poi_tweet.interface';
 
 @Component({
@@ -21,22 +22,19 @@ export class PieComponent implements OnInit {
     };
     this.chartOption= {
       title: {
-        text: 'POIs Vs Tweet Count',
+        text: this.pieTitle,
         left: 'center',
         top: 20,
         textStyle: {
           color: 'black',
         },
       },
-      tooltip: {
-        trigger: 'item'
-      },
       series: [
         {
           type: 'pie',
           radius: '55%',
           center: ['50%', '50%'],
-          data: this.poiTweetsList,
+          data: this.pieChartData,
           emphasis: {
             itemStyle: {
               shadowBlur: 10,
@@ -49,6 +47,9 @@ export class PieComponent implements OnInit {
     };
 
   }
-  @Input('poiTweetsCountList')
-    poiTweetsList: IPoiTweet[];
+  @Input()
+    pieChartData: IChart[];
+
+  @Input()
+    pieTitle: string;
 }

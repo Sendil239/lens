@@ -107,3 +107,11 @@
 	width: auto;
 	overflow-x: scroll;
 }
+
+::ng-deep .mat-grid-list .mat-grid-tile-content div[_ngcontent-lub-c304]{
+	margin-right: 25px;
+}
+
+::ng-deep .mat-grid-tile-content .mat-raised-button.mat-primary{
+	background-color: #D32F2F;
+}

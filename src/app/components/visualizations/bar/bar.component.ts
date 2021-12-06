@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
-import { IBarChart } from 'src/app/shared/interfaces/barchart.interface';
+import { IChart } from 'src/app/shared/interfaces/barchart.interface';
 
 @Component({
   selector: 'app-bar',
@@ -17,12 +17,12 @@ export class BarComponent implements OnInit {
   ngOnInit(): void {
     this.initOpts = {
       renderer: 'svg',
-      width: this.barChartData.length > 4 ? this.barChartData.length * 130 : 300,
+      width: this.barChartData.length > 4 ? this.barChartData.length * 170 : 300,
       height: 300
     };
     this.chartOption = {
       title: {
-        text: 'Country Vs Tweet Count',
+        text: this.barTitle,
         left: 'center',
         top: 20,
         textStyle: {
@@ -57,7 +57,7 @@ export class BarComponent implements OnInit {
       series: [{
         name: this.name,
         type: 'bar',
-        barWidth: '60%',
+        barWidth: '25%',
         data: this.barChartData.map(x=>x.value)
       }],
       
@@ -65,8 +65,10 @@ export class BarComponent implements OnInit {
   }
 
   @Input()
-  barChartData: IBarChart[];
+  barChartData: IChart[];
   @Input()
   name: string;
+  @Input()
+  barTitle: string;
 
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, NgForm, Validators } from '@angular/forms';
 import { filter } from 'd3-array';
-import { IBarChart } from 'src/app/shared/interfaces/barchart.interface';
+import { IChart } from 'src/app/shared/interfaces/barchart.interface';
 import { IFilter } from 'src/app/shared/interfaces/filter.interface';
 import { IPoiTweet, CountryTweetCount } from 'src/app/shared/interfaces/poi_tweet.interface';
 import { ITwitterData } from 'src/app/shared/interfaces/twitter_data.interface';
@@ -26,15 +26,16 @@ export class HomeComponent implements OnInit {
   appliedFilter: any;
   isGraphDataLoading: boolean;
   totalTweetsCount: number;
-  countryTweetData: IBarChart[];
-  poiTweetData: IBarChart[];
-  poiTweetsCountList: IPoiTweet[];
+  countryTweetData: IChart[];
+  poiTweetData: IChart[];
+  sentimentTweetData: IChart[];
 
   constructor(private homeService: HomeService, private utilService: UtilService) {
     this.filterData = {
       countryList: [],
       languageList: [],
-      poiList: []
+      poiList: [],
+      topicList: []
     };
     this.tweetsList = [];
     this.keyword = "";
@@ -47,12 +48,13 @@ export class HomeComponent implements OnInit {
     this.totalTweetsCount = 0;
     this.countryTweetData = [];
     this.poiTweetData = [];
-    this.poiTweetsCountList = [];
+    this.sentimentTweetData = [{"name":"positive", "value":35}, {"name":"negative", "value":15}, {"name":"neutral","value":40}]
    }
 
   ngOnInit(): void {
     this.filterData.countryList = ['India', 'Mexico', 'USA'];
     this.filterData.languageList = ['English', 'Hindi', 'Spanish'];
+    this.filterData.topicList = ["president", "covid", "state", "country", "election", "congress", "pass", "voter", "thank", "life", "government", "today", "marriage", "supreme", "disease", "pandemic"];
     this.isFilterLoading = true;
     this.homeService.getPois()
       .subscribe(result => {
@@ -74,7 +76,8 @@ export class HomeComponent implements OnInit {
       'query': this.keyword,
       'poi_names': filterParams?.selectedPois ?? [],
       'countries': filterParams?.selectedCountries ?? [],
-      'languages': filterParams?.selectedLanguages ?? []
+      'languages': filterParams?.selectedLanguages ?? [],
+      'topics': filterParams?.selectedTopics ?? []
     };
 
   }
@@ -99,7 +102,6 @@ export class HomeComponent implements OnInit {
           if(isFilterSearch){
             this.countryTweetData = this.utilService.objectToArray(result.country_tweet_count);
             this.poiTweetData = this.utilService.objectToArray(result.poi_tweet_count);
-            this.poiTweetsCountList =  this.utilService.objectToArray(result.poi_tweet_count); 
           }
         }
       })
