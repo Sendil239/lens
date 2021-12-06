@@ -22,19 +22,12 @@ export class BarComponent implements OnInit {
     };
     this.chartOption = {
       title: {
-        text: 'Country Vs Tweet Count',
+        text: this.titleText,
         left: 'center',
         top: 20,
         textStyle: {
           color: 'black',
         },
-      },
-      color: ['#3398DB'],
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'shadow'
-        }
       },
       grid: {
         left: '3%',
@@ -68,5 +61,7 @@ export class BarComponent implements OnInit {
   barChartData: IBarChart[];
   @Input()
   name: string;
+  @Input()
+  titleText: string;
 
 }

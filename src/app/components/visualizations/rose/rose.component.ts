@@ -16,10 +16,18 @@ export class RoseComponent implements OnInit {
   ngOnInit(): void {
     this.initOpts = {
       renderer: 'svg',
-      width: 300,
-      height: 300
+      width: 400,
+      height: 400
     };
     this.chartOption ={
+      title: {
+        text: 'Sentiment Analysis on tweets',
+        left: 'center',
+        top: 20,
+        textStyle: {
+          color: 'black',
+        },
+      },
       tooltip: {
         trigger: 'item',
         formatter: '{a} <br/>{b} : {c} ({d}%)'

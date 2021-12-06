@@ -107,3 +107,14 @@
 	width: auto;
 	overflow-x: scroll;
 }
+
+// ::ng-deep app-pie > echarts > div:first-child{
+// 	position: absolute !important;
+// 	left : 10px;
+// }
+
+// ::ng-deep app-rose > echarts > div:first-child{
+// 	position: absolute !important;
+// 	top : 400px;
+// 	left : 10px;
+// }
