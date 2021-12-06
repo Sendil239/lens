@@ -1,4 +1,5 @@
 import indexer
+#import static_data
 import json
 import emoji
 import pickle
@@ -90,13 +91,16 @@ def tokenizer(text):
 def get_poi():
     results = []
     path = os.path.dirname(Path(__file__))
-    root_dir = path + '\\project1_data'
+    root_dir = path + '/home/ubuntu/lens/lens_backend/project1_data/'
     dir_names = glob.glob(root_dir + "/*")
 
+    #print(path, root_dir, dir_names)
     for dir_name in dir_names:
         dir_name = dir_name.split('\\')[-1]
+        #print(dir_name)
         if 'keyword' not in dir_name:
-            results.append(dir_name)
+            f_name = dir_name.split('/')[6]
+            results.append(f_name)
 
     print(results)
     return results
@@ -107,6 +111,8 @@ def checkPayloadRequirement(doc, payload):
         "hi": "Hindi",
         "es": "Spanish"
     }
+    if 'poi_name' not in doc:
+        return False
     if len(payload['countries']) > 0 and doc['country'] not in payload['countries']:
         return False
     if len(payload['languages']) > 0 and lang_dict[doc['tweet_lang']] not in payload['languages']:
@@ -191,6 +197,48 @@ def getPoiReplyCount(payload, tweet_list, poi_set):
 
     return poi_reply_count, poi_reply_sentiment
 
+def getAllPoiTweetCount():
+    temp_poi_set = set(get_poi())
+    poi_tweet_count = {}
+    with open("/home/ubuntu/lens/lens_backend/static_data/poi_distribution.json") as json_file:
+        data = json.load(json_file)
+    return data
+    for poi in temp_poi_set:
+        poi_tweet_count[poi] = 0
+    for poi in temp_poi_set:
+        query = "poi_name:" + poi
+        print(query)
+        tweet_list = solr_search_query(ind.connection, query, 5000)
+        poi_tweet_count[poi] = len(tweet_list)
+        print(poi, len(tweet_list))
+    return poi_tweet_count
+
+def getAllCountryTweetCount():
+    country_tweet_count = {"India":0, "USA":0, "Mexico":0}
+    country_tweet_count = {"Mexico": 26650, "USA":29675, "India":20809}
+    return country_tweet_count
+
+    for country in country_tweet_count:
+        query = "country:" + country
+        print(query)
+        tweet_list = solr_search_query(ind.connection, query, 50000)
+        country_tweet_count[country] = len(tweet_list)
+        print(country, len(tweet_list))
+    return country_tweet_count
+
+def getAllLanguageTweetCount():
+    language_tweet_count = {"en":0, "hi":0, "es":0}
+    language_tweet_count = {"en": 36470, "hi": 14018, "es": 26646}
+    return language_tweet_count
+
+    for language in language_tweet_count:
+        query = "tweet_lang:" + country
+        #print(query)
+        tweet_list = solr_search_query(ind.connection, query, 50000)
+        language_tweet_count[language] = len(tweet_list)
+        print(language, len(tweet_list))
+    return language_tweet_count
+
 def get_from_solr(core_name, query_text, payload):
     host = AWS_IP
     port = PORT
@@ -234,6 +282,8 @@ def get_from_solr(core_name, query_text, payload):
     poi_set = set()
     country_set = set()
     for doc in response['response']['docs']:
+        if checkPayloadRequirement(doc, payload) == False:
+            continue
         if 'poi_name' in doc.keys():
             result_tweet_list.append(doc)
             poi_set.add(doc['poi_name'])
@@ -243,9 +293,13 @@ def get_from_solr(core_name, query_text, payload):
     analyzer = SentimentIntensityAnalyzer()
     lens_doc = []
 
-    for doc in result_tweet_list:
-        if checkPayloadRequirement(doc, payload) == False:
-            continue
+    cur_page, total_tweet  = 1, 10
+    if "page_group" in payload:
+        cur_page = payload['page_group']
+    if  "result_in_page" in payload:
+        total_tweet = payload['result_in_page']
+
+    for doc in result_tweet_list[(cur_page-1)*total_tweet::]:
         vs = analyzer.polarity_scores(doc['tweet_text'])
        # print( vs['pos'])
         doc['sentiment'] = vs['pos']
@@ -259,7 +313,7 @@ def get_from_solr(core_name, query_text, payload):
         doc['top_neg_reply'] = 'Top Negative reply. need to be implemented'
         lens_doc.append(doc)
         #print(doc)
-        if(len(lens_doc) == 10):
+        if(len(lens_doc) == total_tweet):
             break
 
     poi_tweet_count = getPoiTweetCount(payload, result_tweet_list, poi_set)
@@ -317,16 +371,33 @@ def searchQuery():
 @cross_origin()
 def getPoi():
     poi_list = get_poi()
-
     response = {
         "poi_names": poi_list
     }
-    #print(response)
     return flask.jsonify(response)
+
+@app.route("/getPoiDistribution", methods=['GET'])
+def getPoiDistribution():
+    poi_tweet_count = getAllPoiTweetCount()
+    return flask.jsonify(poi_tweet_count)
+
+@app.route("/getCountryDistribution", methods=['GET'])
+def getCountryDistribution():
+    country_tweet_count = getAllCountryTweetCount()
+    return flask.jsonify(country_tweet_count)
+
+@app.route("/getLanguageDistribution", methods=['GET'])
+def getLanguageDistribution():
+    language_tweet_count = getAllLanguageTweetCount()
+    return flask.jsonify(language_tweet_count)
 
 if __name__ == "__main__":
     #search_query(payload, ind)
     #get_poi()
+
+    #print("OK")
+
+    #getAllCountryTweetCount()
 
     #app.run(debug=True)
     app.run(host="0.0.0.0", port=9999)
