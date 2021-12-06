@@ -17,7 +17,7 @@ export class BarComponent implements OnInit {
   ngOnInit(): void {
     this.initOpts = {
       renderer: 'svg',
-      width: 300,
+      width: this.barChartData.length > 4 ? this.barChartData.length * 130 : 300,
       height: 300
     };
     this.chartOption = {

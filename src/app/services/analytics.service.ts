@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { stringify } from 'querystring';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DataService } from 'src/app/services/data.service';
@@ -10,7 +9,17 @@ import { DataService } from 'src/app/services/data.service';
 
 export class AnalyticsService {
 
-    constructor(private service: DataService) {
+    constructor(private dataService: DataService) {
+    }
+
+    getPoiDistribution() {
+        return this.dataService.get('/getPoiDistribution').pipe(
+            map(
+                (response: any) => {
+                    return response;
+                }
+            )
+        )
     }
 
         
