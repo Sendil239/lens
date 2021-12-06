@@ -36,8 +36,11 @@ from gensim.summarization.summarizer import summarize
 import flask
 from flask import Flask
 from flask import request
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 ind = indexer.Indexer()
 AWS_IP = 'localhost'
@@ -310,6 +313,7 @@ def searchQuery():
     return flask.jsonify(response)
 
 @app.route("/getPoi", methods=['GET'])
+@cross_origin()
 def getPoi():
     poi_list = sd.get_poi()
     response = {

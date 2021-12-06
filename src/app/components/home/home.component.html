@@ -1,0 +1,63 @@
+<mat-grid-list rowHeight="{{rowHeight}}px" cols="1">
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+    <!-- <mat-grid-tile [colspan]="1" [rowspan]="1"> -->
+        <div style="display: inline-flex;">
+            <mat-form-field class="input-search" appearance="fill" [style.width.px]=400>
+                <input 
+                    matInput 
+                    placeholder="Ex. Narendra Modi"
+                    [(ngModel)]="keyword" 
+                    required/>
+                <mat-error *ngIf="keyword==''">
+                    Please enter search text
+                </mat-error>
+            </mat-form-field>
+            <button
+                type="button"
+                mat-raised-button
+                color="primary"
+                class="btn-search"
+                (click)="searchKeyword()"
+                [disabled]="keyword==''"
+            > Search </button>
+        </div>
+    </mat-grid-tile>
+</mat-grid-list>
+
+<mat-grid-list cols="100">
+    <mat-grid-tile [colspan]="27" style="height: calc(100vh - 155px)"
+    [id]="(!isFilterLoading ? 'filter-wrapper' : '')">
+    <!-- <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)" id="filter-wrapper">       -->
+        <app-filter
+        *ngIf="!isFilterLoading"
+        [filterData]="filterData"
+        (filterApplied)="applyFilter($event)"
+        ></app-filter>
+        <mat-spinner *ngIf='isFilterLoading'></mat-spinner>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="48" style="height: calc(100vh - 155px)"
+    [id]="(!isDataLoading && tweetsList.length>0 ? 'filter-wrapper' : '')">
+    <!-- <mat-grid-tile [colspan]="45" style="height: calc(100vh - 155px)" id="filter-wrapper"> -->
+        <app-listing
+            [hidden]='isDataLoading || tweetsList.length===0'
+            [totalTweetsCount]="totalTweetsCount"
+            [tweetsList]="tweetsList"
+            (pageUpdated)="fetchMoreData($event)"
+        >
+        </app-listing>
+        <div *ngIf='!isDataLoading && tweetsList.length===0'> NO DATA FOUND.</div>
+        <mat-spinner *ngIf='isDataLoading'></mat-spinner>
+    </mat-grid-tile>
+    <!-- <mat-grid-tile [colspan]="30" [style.background]="'orange'" style="height: calc(100vh - 155px)"> -->
+    <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)" [id]="(!isGraphDataLoading ? 'filter-wrapper' : '')">
+        <div [hidden]='isGraphDataLoading'>
+            <app-bar></app-bar>
+            <app-pie></app-pie>
+            <app-category></app-category>
+            <app-rose></app-rose>
+            <app-line></app-line>
+            <app-timeseries></app-timeseries>
+        </div>        
+        <mat-spinner *ngIf='isGraphDataLoading'></mat-spinner>
+    </mat-grid-tile>
+  </mat-grid-list>
