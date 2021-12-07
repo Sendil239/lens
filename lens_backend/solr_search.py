@@ -107,6 +107,23 @@ def getPoiTweetCount(payload, tweet_list, poi_set):
 
     return poi_tweet_count
 
+def getLangTweetCount(payload, tweet_list, language_set):
+    temp_language_set = set()
+    if len(payload['languages']) > 0:
+        for lang in payload['languages']:
+            temp_language_set.add(lang)
+    else:
+        temp_language_set = language_set.copy()
+    language_tweet_count = {}
+    for lang in temp_language_set:
+        language_tweet_count[lang] = 0
+
+    for tweet in tweet_list:
+        lang = tweet['tweet_lang']
+        if lang in temp_language_set:
+            language_tweet_count[lang] += 1
+    return language_tweet_count
+
 def getCountryTweetCount(payload, tweet_list, country_set):
 
     temp_country_set = set()
@@ -217,6 +234,7 @@ def get_from_solr(core_name, query_text, payload):
     result_tweet_list = []
     poi_set = set()
     country_set = set()
+    language_set = set()
     for doc in response['response']['docs']:
         if checkPayloadRequirement(doc, payload) == False:
             continue
@@ -225,6 +243,8 @@ def get_from_solr(core_name, query_text, payload):
             poi_set.add(doc['poi_name'])
         if 'country' in doc.keys():
             country_set.add(doc['country'])
+        if 'tweet_lang' in doc.keys():
+            language_set.add(doc['tweet_lang'])
 
     analyzer = SentimentIntensityAnalyzer()
     lens_doc = []
@@ -255,8 +275,9 @@ def get_from_solr(core_name, query_text, payload):
     poi_tweet_count = getPoiTweetCount(payload, result_tweet_list, poi_set)
     country_tweet_count = getCountryTweetCount(payload, result_tweet_list, country_set)
     poi_reply_count, poi_reply_sentiment = getPoiReplyCount(payload, result_tweet_list, poi_set)
+    language_tweet_count = getLangTweetCount(payload, result_tweet_list, language_set)
     #print(lens_doc)
-    return lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment, len(result_tweet_list)
+    return lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment, len(result_tweet_list), language_tweet_count
 
 
 
@@ -286,7 +307,7 @@ def searchQuery():
         print(payload['query'])
 
     # Search document in solr with query
-    lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment, total_tweet_count = search_query(payload, ind)
+    lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment, total_tweet_count, language_tweet_count = search_query(payload, ind)
 
     response = {
         'tweet_list': lens_doc,
@@ -294,7 +315,8 @@ def searchQuery():
         'country_tweet_count': country_tweet_count,
         'poi_reply_count': poi_reply_count,
         'poi_reply_sentiment': poi_reply_sentiment,
-        'total_tweet_count': total_tweet_count
+        'total_tweet_count': total_tweet_count,
+        'language_tweet_count': language_tweet_count
     }
     return flask.jsonify(response)
 
