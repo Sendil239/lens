@@ -65,7 +65,25 @@
 	}
   }
 
-.barDiv{
-	overflow-x: scroll;
+::ng-deep .pieChartDiv {
+    .pie-chart {
+        position: static !important;
+    }
+}
+
+::ng-deep .roseChartDiv {
+    .rose-chart {
+        position: static !important;
+    }
+}
+
+::ng-deep .lineChartDiv {
+    .line-chart {
+        position: static !important;
+    }
+}
+
+.barChartDiv, .pieChartDiv, .roseChartDiv, .lineChartDiv{
 	width: auto;
+	overflow-x: auto;
 }

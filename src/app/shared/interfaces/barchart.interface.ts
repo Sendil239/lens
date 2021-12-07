@@ -1,4 +1,4 @@
-export interface IBarChart {
+export interface IChart {
     value: number;
     name: string;
   }

@@ -14,6 +14,7 @@ export class FilterComponent implements OnInit {
   selectedPois: any;
   selectedCountries: any;
   selectedLanguages: any;
+  selectedTopics: any;
   showFiller: boolean;
   appliedFilter: any;
 
@@ -21,6 +22,7 @@ export class FilterComponent implements OnInit {
     this.selectedPois = new FormControl();
     this.selectedCountries = new FormControl();
     this.selectedLanguages = new FormControl();
+    this.selectedTopics = new FormControl();
     this.showFiller= false;
     this.appliedFilter = [];
   }
@@ -31,6 +33,7 @@ export class FilterComponent implements OnInit {
   @ViewChild('matPoi') matPoi: MatSelect;
   @ViewChild('matCountry') matCountry: MatSelect;
   @ViewChild('matLanguage') matLanguage: MatSelect;
+  @ViewChild('matTopic') matTopic: MatSelect;
 
   panelOpenState = false;
 
@@ -43,6 +46,7 @@ export class FilterComponent implements OnInit {
     this.matPoi.options.forEach((data: MatOption) => data.deselect());
     this.matCountry.options.forEach((data: MatOption) => data.deselect());
     this.matLanguage.options.forEach((data: MatOption) => data.deselect());
+    this.matTopic.options.forEach((data: MatOption) => data.deselect());
     this.appliedFilter = [];
   }
 
@@ -55,13 +59,14 @@ export class FilterComponent implements OnInit {
     const selectedFilter: any = {
       selectedPois: this.selectedPois.value ? this.selectedPois.value : [],
       selectedCountries: this.selectedCountries.value ? this.selectedCountries.value : [],
-      selectedLanguages: this.selectedLanguages.value ? this.selectedLanguages.value : []
+      selectedLanguages: this.selectedLanguages.value ? this.selectedLanguages.value : [],
+      selectedTopics: this.selectedTopics.value ? this.selectedTopics.value : []
     };
-    this.createFilterChip(this.selectedPois.value, this.selectedCountries.value, this.selectedLanguages.value);
+    this.createFilterChip(this.selectedPois.value, this.selectedCountries.value, this.selectedLanguages.value, this.selectedTopics.value);
     this.filterApplied.emit(selectedFilter);
   }
 
-  createFilterChip(poiList: string[], countryList: string[], languageList: string[]){
+  createFilterChip(poiList: string[], countryList: string[], languageList: string[], topicList: string[]){
     this.appliedFilter = [];
     if(poiList?.length > 0){
       const obj = {key: 0, text: `POIs: ${poiList.toString()}`};
@@ -73,6 +78,10 @@ export class FilterComponent implements OnInit {
     }
     if(languageList?.length > 0){
       const obj = {key: 2, text: `Language: ${languageList.toString()}`};
+      this.appliedFilter.push(obj);
+    }
+    if(topicList?.length > 0){
+      const obj = {key: 3, text: `Topic: ${topicList.toString()}`};
       this.appliedFilter.push(obj);
     }
   }
@@ -88,6 +97,10 @@ export class FilterComponent implements OnInit {
     }
     else if(keyValue == 2){
       this.matLanguage.options.forEach((data: MatOption) => data.deselect());
+      this.appliedFilter = this.appliedFilter.filter((i: any) => i.key !== keyValue);
+    } 
+    else if(keyValue == 3){
+      this.matTopic.options.forEach((data: MatOption) => data.deselect());
       this.appliedFilter = this.appliedFilter.filter((i: any) => i.key !== keyValue);
     } 
     this.applyFilter();

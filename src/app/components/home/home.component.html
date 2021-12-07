@@ -25,7 +25,7 @@
 </mat-grid-list>
 
 <mat-grid-list cols="100">
-    <mat-grid-tile [colspan]="20" style="height: calc(100vh - 155px)"
+    <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)"
     [id]="(!isFilterLoading ? 'filter-wrapper' : '')">
     <!-- <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)" id="filter-wrapper">       -->
         <app-filter
@@ -35,7 +35,7 @@
         ></app-filter>
         <mat-spinner *ngIf='isFilterLoading'></mat-spinner>
     </mat-grid-tile>
-    <mat-grid-tile [colspan]="55" style="height: calc(100vh - 155px)"
+    <mat-grid-tile [colspan]="50" style="height: calc(100vh - 155px)"
     [id]="(!isDataLoading && tweetsList.length>0 ? 'filter-wrapper' : '')">
     <!-- <mat-grid-tile [colspan]="45" style="height: calc(100vh - 155px)" id="filter-wrapper"> -->
         <app-listing
@@ -49,30 +49,43 @@
         <mat-spinner *ngIf='isDataLoading'></mat-spinner>
     </mat-grid-tile>
     <!-- <mat-grid-tile [colspan]="30" [style.background]="'orange'" style="height: calc(100vh - 155px)"> -->
-    <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)" [id]="(!isGraphDataLoading ? 'filter-wrapper' : '')"> 
-        <div class='chartDiv' *ngIf="!isGraphDataLoading && countryTweetData.length>0">       
+    <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)" [id]="(!isGraphDataLoading ? 'filter-wrapper' : '')">
+        <div class='barChartDiv' *ngIf="!isGraphDataLoading && countryTweetData.length>0">       
             <app-bar 
-            [barChartData]="countryTweetData"
+            [barChartData]="poiTweetData"
             [name]="'Tweets'"
-            [titleText]="'Country vs Tweet Count'"
+            [barTitle]="'POI vs Tweet Count'"
             ></app-bar>
         </div>
-        <div class='chartDiv' *ngIf="!isGraphDataLoading && poiTweetsCountList.length>0">
+        <div></div>
+        <div class='pieChartDiv' *ngIf="!isGraphDataLoading && poiTweetData.length>0">
             <app-pie
-            
-            [poiTweetsCountList]="poiTweetsCountList"
+            [pieTitle]="'Country Wise Distribution'"
+            [pieChartData]="countryTweetData"
             ></app-pie>
         </div>
-            <!-- <app-pie></app-pie>-->
-            <div class='chartDiv' *ngIf="!isGraphDataLoading && poiTweetData.length>0">
+        <!-- LANGUAGE WISE DISTRIBUTION -->
+        <!-- <div class='chartDiv' *ngIf="!isGraphDataLoading && poiTweetData.length>0">
             <app-rose
-            *ngIf="!isGraphDataLoading && poiTweetsCountList.length>0"
-            [poiTweetsCountList]="poiTweetsCountList"
+            [roseTitle] = "'Sentiment Analysis on tweets'"
+            [roseChartData]="sentimentTweetData"
             >
             </app-rose>
-            </div>
-            <!-- <app-line></app-line>
-            <app-timeseries></app-timeseries>             -->
+        </div> -->
+        <div class='repliesBarChartDiv' *ngIf="!isGraphDataLoading && poiReplyData.length>0">       
+            <app-bar 
+            [barChartData]="poiReplyData"
+            [name]="'Count'"
+            [barTitle]="'POI vs Reply Count'"
+            ></app-bar>
+        </div>
+        <div class='sentimentBarChartDiv' *ngIf="!isGraphDataLoading && poiRepliesSentimentAnalysisData.length>0">       
+            <app-bar 
+            [barChartData]="poiRepliesSentimentAnalysisData"
+            [name]="'Score'"
+            [barTitle]="'POI Replies Sentiment Analysis'"
+            ></app-bar>
+        </div>
         <mat-spinner *ngIf='isGraphDataLoading'></mat-spinner>
     </mat-grid-tile>
   </mat-grid-list>

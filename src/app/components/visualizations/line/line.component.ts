@@ -1,86 +1,101 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
 
 @Component({
   selector: 'app-line',
   templateUrl: './line.component.html',
-  styleUrls: ['./line.component.css']
+  styleUrls: ['./line.component.scss']
 })
 export class LineComponent implements OnInit {
+  initOpts: object;
+  chartOption: any;
 
   constructor() { }
 
   ngOnInit(): void {
+    this.initOpts = {
+      renderer: 'svg',
+      width: 7 * 150,
+      height: 300
+    };
+    this.chartOption = {
+      title: {
+        text: "TimeSeries Analysis of POIs",
+        left: 'center',
+        top: 0,
+        textStyle:{
+          color:'black',
+        }
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'cross',
+          label: {
+            backgroundColor: '#6a7985'
+          }
+        }
+      },
+      legend: {
+        x: 'center',
+        y: 'bottom',
+        data: ['Aravind Kejriwal', 'Narendra Modi', 'Barack Obama', 'Trump', 'Claudiashein']
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis: [
+        {
+          type: 'category',
+          boundaryGap: false,
+          data: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value'
+        }
+      ],
+      series: [
+        {
+          name: 'Aravind Kejriwal',
+          type: 'line',
+          stack: 'counts',
+          data: [20, 13, 8, 30, 12, 5, 35]
+        },
+        {
+          name: 'Narendira Modi',
+          type: 'line',
+          stack: 'counts',
+          data: [10, 5, 20, 24, 18, 2, 57]
+        },
+        {
+          name: 'Barack Obama',
+          type: 'line',
+          stack: 'counts',
+          data: [45, 30, 35, 10, 38, 20, 13]
+        },
+        {
+          name: 'Trump',
+          type: 'line',
+          stack: 'counts',
+          data: [14, 20, 23, 15, 30, 26, 32]
+        },
+        {
+          name: 'Claudiashein',
+          type: 'line',
+          stack: 'counts',
+          data: [4, 10, 5, 10, 13, 25, 20]
+        }
+      ]
+    }
   }
 
-  initOpts = {
-    renderer: 'svg',
-    width: 300,
-    height: 300
-  };
-  
-  chartOption: EChartsOption ={
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'cross',
-        label: {
-          backgroundColor: '#6a7985'
-        }
-      }
-    },
-    legend: {
-      data: ['X-1', 'X-2', 'X-3', 'X-4', 'X-5']
-    },
-    grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      containLabel: true
-    },
-    xAxis: [
-      {
-        type: 'category',
-        boundaryGap: false,
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-      }
-    ],
-    yAxis: [
-      {
-        type: 'value'
-      }
-    ],
-    series: [
-      {
-        name: 'X-1',
-        type: 'line',
-        stack: 'counts',
-        data: [120, 132, 101, 134, 90, 230, 210]
-      },
-      {
-        name: 'X-2',
-        type: 'line',
-        stack: 'counts',
-        data: [220, 182, 191, 234, 290, 330, 310]
-      },
-      {
-        name: 'X-3',
-        type: 'line',
-        stack: 'counts',
-        data: [150, 232, 201, 154, 190, 330, 410]
-      },
-      {
-        name: 'X-4',
-        type: 'line',
-        stack: 'counts',
-        data: [320, 332, 301, 334, 390, 330, 320]
-      },
-      {
-        name: 'X-5',
-        type: 'line',
-        stack: 'counts',
-        data: [820, 932, 901, 934, 1290, 1330, 1320]
-      }
-    ]
-  }
+  @Input()
+    lineChartData: any
+  @Input()
+    lineTitle: string;
 }
