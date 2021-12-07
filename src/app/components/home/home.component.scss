@@ -123,13 +123,19 @@
 	  }
 }
 
-::ng-deep .pieChartDiv {
+::ng-deep .countryTweetPieChartDiv {
     .pie-chart {
         position: static !important;
     }
 }
 
-.barChartDiv, .pieChartDiv, .sentimentBarChartDiv, .repliesBarChartDiv{
+::ng-deep .languageTweetPieChartDiv {
+    .pie-chart {
+        position: static !important;
+    }
+}
+
+.poiTweetBarChartDiv, .countryTweetPieChartDiv, .sentimentBarChartDiv, .repliesBarChartDiv, .languageTweetPieChartDiv{
 	width: auto;
 	overflow-x: auto;
 }

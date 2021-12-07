@@ -50,7 +50,7 @@
     </mat-grid-tile>
     <!-- <mat-grid-tile [colspan]="30" [style.background]="'orange'" style="height: calc(100vh - 155px)"> -->
     <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)" [id]="(!isGraphDataLoading ? 'filter-wrapper' : '')">
-        <div class='barChartDiv' *ngIf="!isGraphDataLoading && countryTweetData.length>0">       
+        <div class='poiTweetBarChartDiv' *ngIf="!isGraphDataLoading && countryTweetData.length>0">       
             <app-bar 
             [barChartData]="poiTweetData"
             [name]="'Tweets'"
@@ -58,10 +58,16 @@
             ></app-bar>
         </div>
         <div></div>
-        <div class='pieChartDiv' *ngIf="!isGraphDataLoading && poiTweetData.length>0">
+        <div class='countryTweetPieChartDiv' *ngIf="!isGraphDataLoading && poiTweetData.length>0">
             <app-pie
             [pieTitle]="'Country Wise Distribution'"
             [pieChartData]="countryTweetData"
+            ></app-pie>
+        </div>
+        <div class='languageTweetPieChartDiv' *ngIf="!isGraphDataLoading && languageTweetData.length>0">
+            <app-pie
+            [pieTitle]="'Language Wise Distribution'"
+            [pieChartData]="languageTweetData"
             ></app-pie>
         </div>
         <!-- LANGUAGE WISE DISTRIBUTION -->

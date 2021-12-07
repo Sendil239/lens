@@ -30,6 +30,7 @@ export class HomeComponent implements OnInit {
   poiTweetData: IChart[];
   poiRepliesSentimentAnalysisData: IChart[];
   poiReplyData: IChart[];
+  languageTweetData: IChart[];
 
   constructor(private homeService: HomeService, private utilService: UtilService) {
     this.filterData = {
@@ -51,6 +52,7 @@ export class HomeComponent implements OnInit {
     this.poiTweetData = [];
     this.poiRepliesSentimentAnalysisData = [];
     this.poiReplyData = [];
+    this.languageTweetData = [];
    }
 
   ngOnInit(): void {
@@ -106,6 +108,7 @@ export class HomeComponent implements OnInit {
             this.poiTweetData = this.utilService.objectToArray(result.poi_tweet_count);
             this.poiRepliesSentimentAnalysisData = this.utilService.objectToArray(result.poi_reply_sentiment);
             this.poiReplyData = this.utilService.objectToArray(result.poi_reply_count);
+            this.languageTweetData = this.utilService.objectToArray(result.language_tweet_count);
           }
         }
       })
