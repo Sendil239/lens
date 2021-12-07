@@ -6,7 +6,7 @@ import { IPoiTweet } from 'src/app/shared/interfaces/poi_tweet.interface';
 @Component({
   selector: 'app-pie',
   templateUrl: './pie.component.html',
-  styleUrls: ['./pie.component.css']
+  styleUrls: ['./pie.component.scss']
 })
 export class PieComponent implements OnInit {
   initOpts: object;
@@ -20,7 +20,7 @@ export class PieComponent implements OnInit {
       width: 300,
       height: 300
     };
-    this.chartOption= {
+    this.chartOption = {
       title: {
         text: this.pieTitle,
         left: 'center',
@@ -28,6 +28,10 @@ export class PieComponent implements OnInit {
         textStyle: {
           color: 'black',
         },
+      },
+      tooltip: {
+        trigger: 'item',
+        renderMode: 'html'
       },
       series: [
         {

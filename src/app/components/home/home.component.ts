@@ -28,7 +28,8 @@ export class HomeComponent implements OnInit {
   totalTweetsCount: number;
   countryTweetData: IChart[];
   poiTweetData: IChart[];
-  sentimentTweetData: IChart[];
+  poiRepliesSentimentAnalysisData: IChart[];
+  poiReplyData: IChart[];
 
   constructor(private homeService: HomeService, private utilService: UtilService) {
     this.filterData = {
@@ -48,7 +49,8 @@ export class HomeComponent implements OnInit {
     this.totalTweetsCount = 0;
     this.countryTweetData = [];
     this.poiTweetData = [];
-    this.sentimentTweetData = [{"name":"positive", "value":35}, {"name":"negative", "value":15}, {"name":"neutral","value":40}]
+    this.poiRepliesSentimentAnalysisData = [];
+    this.poiReplyData = [];
    }
 
   ngOnInit(): void {
@@ -102,6 +104,8 @@ export class HomeComponent implements OnInit {
           if(isFilterSearch){
             this.countryTweetData = this.utilService.objectToArray(result.country_tweet_count);
             this.poiTweetData = this.utilService.objectToArray(result.poi_tweet_count);
+            this.poiRepliesSentimentAnalysisData = this.utilService.objectToArray(result.poi_reply_sentiment);
+            this.poiReplyData = this.utilService.objectToArray(result.poi_reply_count);
           }
         }
       })

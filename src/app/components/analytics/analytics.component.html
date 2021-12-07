@@ -1,7 +1,7 @@
 <mat-grid-list cols="100">
     <mat-grid-tile [colspan]="5" style="height: 1300px"></mat-grid-tile>
-    <mat-grid-tile [colspan]="90" id="charts-wrapper" style="height: 1300px">
-        <div class="barDiv">
+    <mat-grid-tile [colspan]="90" id="charts-wrapper" style="height: 1400px">
+        <div class="barChartDiv">
             <app-bar
                 *ngIf="!isLoading"
                 [barChartData]="poiTweetList"
@@ -10,7 +10,7 @@
             ></app-bar>
         </div>
         <br>
-        <div class="barDiv">
+        <div class="pieChartDiv">
             <app-pie 
             *ngIf="!isLoading"
             [pieChartData]="countryTweetList"
@@ -19,7 +19,7 @@
             </app-pie>
         </div>
         <br>
-    <div class="barDiv">
+    <div class="roseChartDiv">
             <app-rose 
             *ngIf="!isLoading"
             [roseChartData]="languageTweetList"
@@ -28,14 +28,14 @@
             </app-rose>
         </div>
         <br>
-        <div class="barDiv">
-            <app-line 
-            *ngIf="!isLoading"
-            [lineChartData]="timeSeriesList"
-            [lineTitle]="'Language Vs Tweet Count'"
-            >
-            </app-line>
-        </div>
+    <div class="lineChartDiv">
+        <app-line 
+        *ngIf="!isLoading"
+        [lineChartData]="timeSeriesList"
+        [lineTitle]="'Language Vs Tweet Count'"
+        >
+        </app-line>
+    </div>
     </mat-grid-tile>
     <mat-grid-tile [colspan]="5" style="height: 1300px"></mat-grid-tile>
 

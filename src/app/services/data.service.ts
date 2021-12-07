@@ -7,7 +7,7 @@ import {catchError} from 'rxjs/operators';
     providedIn: 'root'
 })
 export class DataService {
-    protected baseUrl = 'http://192.168.1.164:9999';
+    protected baseUrl = 'http://localhost:9999';
     constructor(
         private _httpClient: HttpClient
     ) {}

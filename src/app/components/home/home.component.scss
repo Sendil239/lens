@@ -103,15 +103,33 @@
 	margin: 0px auto;
 }
 
-.chartDiv{
-	width: auto;
-	overflow-x: scroll;
-}
-
 ::ng-deep .mat-grid-list .mat-grid-tile-content div[_ngcontent-lub-c304]{
 	margin-right: 25px;
 }
 
 ::ng-deep .mat-grid-tile-content .mat-raised-button.mat-primary{
 	background-color: #D32F2F;
+}
+
+::ng-deep .sentimentBarChartDiv{
+	.bar-chart {
+	  position: static !important;
+	}
+}
+
+::ng-deep .repliesBarChartDiv{
+	.bar-chart {
+		position: static !important;
+	  }
+}
+
+::ng-deep .pieChartDiv {
+    .pie-chart {
+        position: static !important;
+    }
+}
+
+.barChartDiv, .pieChartDiv, .sentimentBarChartDiv, .repliesBarChartDiv{
+	width: auto;
+	overflow-x: auto;
 }
