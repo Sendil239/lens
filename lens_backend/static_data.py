@@ -3,6 +3,9 @@ from pathlib import Path
 import glob
 import json
 
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+
+
 def solr_search_query(connection, query, rows=0):
     results = connection.search(q=query, rows=rows)
     #print("Saw {0} result(s).".format(len(results)))
@@ -183,3 +186,26 @@ def saveAllReply(ind):
 
     return poi_reply
 
+def getTopPosNegReply(doc, ind):
+    poi_reply = saveAllReply(ind)
+    analyzer = SentimentIntensityAnalyzer()
+    top_pos_tweet = ""
+    top_neg_tweet = ""
+    max_pos = 0
+    max_neg = 0
+
+    query = "replied_to_tweet_id:" + doc['id']
+    result = solr_search_query(ind.connection, query, 10)
+    print(len(result))
+    for tweet in result:
+        vs = analyzer.polarity_scores(tweet['reply_text'])
+        print(vs)
+        if vs['pos'] > max_pos:
+            max_pos = vs['pos']
+            top_pos_tweet = tweet['reply_text']
+        if vs['neg'] < max_neg:
+            max_neg = vs['neg']
+            top_neg_tweet = tweet['reply_text']
+
+    #print("TOP--->>>>>   ", top_pos_tweet, top_neg_tweet)
+    return top_pos_tweet, top_neg_tweet
