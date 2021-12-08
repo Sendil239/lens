@@ -241,19 +241,17 @@ def get_from_solr(core_name, query_text, payload):
         else:
             sentiment_count['neg'] += 1
 
-        #print(vs)
-       # print( vs['pos'])
-        doc['sentiment'] = vs['pos']
-
-        if len(doc['tweet_text']) < 500000:
-            short_summary = doc['tweet_text']
-        else:
-            short_summary = summarize(doc['tweet_text'])
-        doc['topics'] = short_summary
-        doc['top_pos_reply'] = 'Top Positive reply. need to be implemented'
-        doc['top_neg_reply'] = 'Top Negative reply. need to be implemented'
-        #print(doc)
         if(len(lens_doc) < total_tweet):
+            if vs['pos'] < .0000000001:
+                vs['pos'] = .5
+            doc['sentiment'] = vs['pos']
+            if len(doc['tweet_text']) < 500000:
+                short_summary = doc['tweet_text']
+            else:
+                short_summary = summarize(doc['tweet_text'])
+            doc['topics'] = short_summary
+            doc['top_pos_reply'], doc['top_neg_reply']  = sd.getTopPosNegReply(doc, ind)
+            #doc['top_pos_reply'], doc['top_neg_reply'] = "No reply in indexed data", "No reply in indexed data"
             lens_doc.append(doc)
             #break
     #print(sentiment_count)
