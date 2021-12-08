@@ -24,7 +24,7 @@
     </mat-grid-tile>
 </mat-grid-list>
 
-<mat-grid-list cols="100">
+<mat-grid-list cols="100">    
     <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)"
     [id]="(!isFilterLoading ? 'filter-wrapper' : '')">
     <!-- <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)" id="filter-wrapper">       -->
@@ -35,63 +35,70 @@
         ></app-filter>
         <mat-spinner *ngIf='isFilterLoading'></mat-spinner>
     </mat-grid-tile>
-    <mat-grid-tile [colspan]="50" style="height: calc(100vh - 155px)"
-    [id]="(!isDataLoading && tweetsList.length>0 ? 'filter-wrapper' : '')">
-    <!-- <mat-grid-tile [colspan]="45" style="height: calc(100vh - 155px)" id="filter-wrapper"> -->
-        <app-listing
-            [hidden]='isDataLoading || tweetsList.length===0'
-            [totalTweetsCount]="totalTweetsCount"
-            [tweetsList]="tweetsList"
-            (pageUpdated)="fetchMoreData($event)"
-        >
-        </app-listing>
-        <div *ngIf='!isDataLoading && tweetsList.length===0'> NO DATA FOUND.</div>
-        <mat-spinner *ngIf='isDataLoading'></mat-spinner>
-    </mat-grid-tile>
-    <!-- <mat-grid-tile [colspan]="30" [style.background]="'orange'" style="height: calc(100vh - 155px)"> -->
-    <mat-grid-tile [colspan]="25" style="height: calc(100vh - 155px)" [id]="(!isGraphDataLoading ? 'filter-wrapper' : '')">
-        <div class='poiTweetBarChartDiv' *ngIf="!isGraphDataLoading && countryTweetData.length>0">       
-            <app-bar 
-            [barChartData]="poiTweetData"
-            [name]="'Tweets'"
-            [barTitle]="'POI vs Tweet Count'"
-            ></app-bar>
-        </div>
-        <div></div>
-        <div class='countryTweetPieChartDiv' *ngIf="!isGraphDataLoading && poiTweetData.length>0">
-            <app-pie
-            [pieTitle]="'Country Wise Distribution'"
-            [pieChartData]="countryTweetData"
-            ></app-pie>
-        </div>
-        <div class='languageTweetPieChartDiv' *ngIf="!isGraphDataLoading && languageTweetData.length>0">
-            <app-pie
-            [pieTitle]="'Language Wise Distribution'"
-            [pieChartData]="languageTweetData"
-            ></app-pie>
-        </div>
-        <!-- LANGUAGE WISE DISTRIBUTION -->
-        <!-- <div class='chartDiv' *ngIf="!isGraphDataLoading && poiTweetData.length>0">
-            <app-rose
-            [roseTitle] = "'Sentiment Analysis on tweets'"
-            [roseChartData]="sentimentTweetData"
+    <mat-grid-tile [colspan]="75" style="height: calc(100vh - 155px)"
+    id="filter-wrapper">
+    <mat-tab-group mat-align-tabs="start">
+        <mat-tab label="Fetched Data">
+            <app-listing
+                [hidden]='isDataLoading || tweetsList.length===0'
+                [totalTweetsCount]="totalTweetsCount"
+                [tweetsList]="tweetsList"
+                (pageUpdated)="fetchMoreData($event)"
             >
-            </app-rose>
-        </div> -->
-        <div class='repliesBarChartDiv' *ngIf="!isGraphDataLoading && poiReplyData.length>0">       
-            <app-bar 
-            [barChartData]="poiReplyData"
-            [name]="'Count'"
-            [barTitle]="'POI vs Reply Count'"
-            ></app-bar>
-        </div>
-        <div class='sentimentBarChartDiv' *ngIf="!isGraphDataLoading && poiRepliesSentimentAnalysisData.length>0">       
-            <app-bar 
-            [barChartData]="poiRepliesSentimentAnalysisData"
-            [name]="'Score'"
-            [barTitle]="'POI Replies Sentiment Analysis'"
-            ></app-bar>
-        </div>
-        <mat-spinner *ngIf='isGraphDataLoading'></mat-spinner>
+            </app-listing>
+            <div *ngIf='!isDataLoading && tweetsList.length===0' class='no-data'> NO DATA FOUND.</div>
+            <div class='loader-wrapper'>
+                <mat-spinner *ngIf='isDataLoading'></mat-spinner>    
+            </div>
+        </mat-tab>
+        <mat-tab label="Visualizations"> 
+            <div class='poiTweetBarChartDiv' *ngIf="!isGraphDataLoading && countryTweetData.length>0">       
+                <app-bar 
+                [barChartData]="poiTweetData"
+                [name]="'Tweets'"
+                [barTitle]="'POI vs Tweet Count'"
+                ></app-bar>
+            </div>
+            <div></div>
+            <div class='countryTweetPieChartDiv' *ngIf="!isGraphDataLoading && poiTweetData.length>0">
+                <app-pie
+                [pieTitle]="'Country Wise Distribution'"
+                [pieChartData]="countryTweetData"
+                ></app-pie>
+            </div>
+            <div class='languageTweetPieChartDiv' *ngIf="!isGraphDataLoading && languageTweetData.length>0">
+                <app-pie
+                [pieTitle]="'Language Wise Distribution'"
+                [pieChartData]="languageTweetData"
+                ></app-pie>
+            </div>
+            <!-- LANGUAGE WISE DISTRIBUTION -->
+            <!-- <div class='chartDiv' *ngIf="!isGraphDataLoading && poiTweetData.length>0">
+                <app-rose
+                [roseTitle] = "'Sentiment Analysis on tweets'"
+                [roseChartData]="sentimentTweetData"
+                >
+                </app-rose>
+            </div> -->
+            <div class='repliesBarChartDiv' *ngIf="!isGraphDataLoading && poiReplyData.length>0">       
+                <app-bar 
+                [barChartData]="poiReplyData"
+                [name]="'Count'"
+                [barTitle]="'POI vs Reply Count'"
+                ></app-bar>
+            </div>
+            <div class='sentimentBarChartDiv' *ngIf="!isGraphDataLoading && poiRepliesSentimentAnalysisData.length>0">       
+                <app-bar 
+                [barChartData]="poiRepliesSentimentAnalysisData"
+                [name]="'Score'"
+                [barTitle]="'POI Replies Sentiment Analysis'"
+                ></app-bar>
+            </div>
+            <div *ngIf='!isDataLoading && tweetsList.length===0' class='no-data'> NO DATA FOUND.</div>
+            <div class='loader-wrapper'>
+                <mat-spinner *ngIf='isGraphDataLoading'></mat-spinner>    
+            </div>
+        </mat-tab>
+    </mat-tab-group>
     </mat-grid-tile>
-  </mat-grid-list>
+</mat-grid-list>

@@ -26,7 +26,7 @@
             </div>
             <div>
                 <span style="color:blue">Tweet Date:</span> {{item.tweet_date | date:'MMM dd yyyy'}}
-                <a href="{{item.link}}" target="_blank" style="float: right;">{{item.link}}</a>
+                <!-- <a href="{{item.link}}" *ngIf=" item.link!='' " target="_blank" style="float: right;">{{item.link}}</a> -->
             </div>
         </mat-card-content>
       </mat-card>

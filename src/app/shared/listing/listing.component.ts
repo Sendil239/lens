@@ -27,7 +27,8 @@ export class ListingComponent implements OnInit {
   set setTweetsList(data: ITwitterData[]){
     this.tweetsList = data;
     this.tweetsList.forEach((x)=> {
-      x.link = x.tweet_text.substring(x.tweet_text.indexOf("https://"), x.tweet_text.lastIndexOf(""));
+      let lastIndex = x.tweet_text.lastIndexOf("") > x.tweet_text.lastIndexOf(" ") ? x.tweet_text.lastIndexOf("") : x.tweet_text.lastIndexOf(" ");
+      x.link = x.tweet_text.substring(x.tweet_text.indexOf("https://"), lastIndex);
     });
   }
 

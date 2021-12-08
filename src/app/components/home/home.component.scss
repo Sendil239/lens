@@ -3,18 +3,10 @@
     background-color: white;
   }
 
-
-
-// mat-form-field {
-//   .mat-form-field-wrapper{
-//     div {
-//       .mat-form-field-flex{
-//         background-color: white;
-//       }
-//     }
-//   }
-      
-// }
+.no-data{
+	text-align: center;
+	margin-top: 20%;
+}
 
 .btn-search {
   margin-left: 2%;
@@ -36,11 +28,17 @@
   }
 }
 
+.listing-wrapper{
+	.mat-grid-tile-content {
+		display: block;
+		overflow-y: auto;
+		overflow-x: auto;
+	  }
+}
+
 .loader-wrapper {
-  display: flex;
-  justify-content: center;
-  margin: 20%;
-  position: fixed;
+	margin-top: 20%;
+	margin-left: 40%;
 }
 
 
