@@ -16,12 +16,13 @@ def get_poi():
     results = []
     path = os.path.dirname(Path(__file__))
     # root_dir = '/home/ubuntu/lens/lens_backend/project1_data/'
-    root_dir = path + '\\project1_data'
+    root_dir = path + '/project1_data/'
     dir_names = glob.glob(root_dir + "/*")
+    #print(root_dir, dir_names)
 
     #print(path, root_dir, dir_names)
     for dir_name in dir_names:
-        dir_name = dir_name.split('\\')[-1]
+        dir_name = dir_name.split('/')[-1]
         #print(dir_name)
         if 'keyword' not in dir_name:
             # f_name = dir_name.split('/')[6]
@@ -35,7 +36,7 @@ def getAllPoiTweetCount(ind):
     poi_tweet_count = {}
     path = os.path.dirname(Path(__file__))
     # root_dir = '/home/ubuntu/lens/lens_backend/project1_data/'
-    root_dir = path + '\\static_data\\poi_distribution.json'
+    root_dir = path + '/static_data/poi_distribution.json'
     with open(root_dir) as json_file:
         data = json.load(json_file)
     return data
@@ -81,7 +82,7 @@ def getAllPoiTimeSeriesData(ind):
 
     path = os.path.dirname(Path(__file__))
     # root_dir = '/home/ubuntu/lens/lens_backend/project1_data/'
-    root_dir = path + '\\static_data\\poi_time_series.json'
+    root_dir = path + '/static_data/poi_time_series.json'
     with open(root_dir) as json_file:
         data = json.load(json_file)
     return data
@@ -142,7 +143,7 @@ def getAllCountryTimeSeriesData(ind):
         country_date_info[country] = country_date
     path = os.path.dirname(Path(__file__))
     # root_dir = '/home/ubuntu/lens/lens_backend/project1_data/'
-    root_dir = path + '\\static_data\\country_time_series.json'
+    root_dir = path + '/static_data/country_time_series.json'
     with open(root_dir, 'w') as outfile:
         json.dump(country_date_info, outfile)
     return country_date_info
@@ -150,7 +151,7 @@ def getAllCountryTimeSeriesData(ind):
 def saveAllReply(ind):
     path = os.path.dirname(Path(__file__))
     # root_dir = '/home/ubuntu/lens/lens_backend/project1_data/'
-    root_dir = path + '\\static_data\\poi_reply.json' 
+    root_dir = path + '/static_data/poi_reply.json'
     with open(root_dir) as json_file:
         data = json.load(json_file)
             
