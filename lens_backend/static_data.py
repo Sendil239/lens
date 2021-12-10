@@ -260,14 +260,23 @@ def getTopicsOfDoc(doc):
     return data[doc['id']]
 
 def getTopicsLabel():
-    topic_label_set = set()
+    topic_label_set = []
     with open("/home/ubuntu/lens/lens_backend/static_data/topic_words.json") as json_file:
         data = json.load(json_file)
         #print(data)
         data = literal_eval(data)
         print(type(data))
         for key in data.keys():
-            topic_label_set.add(data[key][0])
+            topic_label_set.append(data[key][0])
 
     print(list(topic_label_set))
     return list(topic_label_set)
+
+def getTopicImportance():
+    with open("/home/ubuntu/lens/lens_backend/static_data/topic_importance.json") as json_file:
+        data = json.load(json_file)
+        #print(data)
+        data = literal_eval(data)
+
+    data = dict(sorted(data.items(), key=lambda item: item[1], reverse=True))
+    return data

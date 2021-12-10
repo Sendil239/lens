@@ -390,6 +390,18 @@ def getTopicsLabel():
     topics_label = sd.getTopicsLabel()
     return flask.jsonify(topics_label)
 
+@app.route("/getFilterData", methods=['GET'])
+def getFilterData():
+    topics_label = sd.getTopicsLabel()
+    poi_list = sd.get_poi()
+    topic_importance = sd.getTopicImportance()
+    response = {
+        "topics_label": topics_label,
+        "poi_names": poi_list,
+        "topic_importance":topic_importance
+    }
+    return flask.jsonify(response)
+
 def testQuery():
     payload = {
         "query": "Modi and India",
