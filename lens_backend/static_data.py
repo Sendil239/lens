@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 import glob
 import json
+from ast import literal_eval
 
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
@@ -196,3 +197,29 @@ def getTopPosNegReply(doc, ind):
 
     #print("TOP--->>>>>   ", top_pos_tweet, top_neg_tweet)
     return top_pos_tweet, top_neg_tweet
+
+def getTopicsOfDoc(doc):
+    with open("/home/ubuntu/lens/lens_backend/static_data/document_topic_score.json") as json_file:
+        data = json.load(json_file)
+        data = literal_eval(data)
+        print(len(data), type(data))
+
+        for key in data.keys():
+            print(key, data[key])
+            print(type(doc['id']), type(key), type(data[key]))
+            break
+        print(data[doc['id']])
+    return data[doc['id']]
+
+def getTopicsLabel():
+    topic_label_set = set()
+    with open("/home/ubuntu/lens/lens_backend/static_data/topic_words.json") as json_file:
+        data = json.load(json_file)
+        #print(data)
+        data = literal_eval(data)
+        print(type(data))
+        for key in data.keys():
+            topic_label_set.add(data[key][0])
+
+    print(list(topic_label_set))
+    return list(topic_label_set)

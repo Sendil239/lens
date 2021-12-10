@@ -36,7 +36,14 @@ import flask
 from flask import Flask
 from flask import request
 
+from flask_cors import CORS
+
+
 app = Flask(__name__)
+
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 
 ind = indexer.Indexer()
 AWS_IP = 'localhost'
@@ -73,13 +80,20 @@ def checkPayloadRequirement(doc, payload):
         "hi": "Hindi",
         "es": "Spanish"
     }
+    print(len(payload['countries'][0]))
     if 'poi_name' not in doc:
         return False
-    if len(payload['countries']) > 0 and doc['country'] not in payload['countries']:
+    if len(payload['countries'][0]) > 0 and doc['country'] not in payload['countries']:
         return False
-    if len(payload['languages']) > 0 and lang_dict[doc['tweet_lang']] not in payload['languages']:
+    if len(payload['languages'][0]) > 0 and lang_dict[doc['tweet_lang']] not in payload['languages']:
         return False
-    if len(payload['poi_names']) > 0 and doc['poi_name'] not in payload['poi_names']:
+    if len(payload['poi_names'][0]) > 0 and doc['poi_name'] not in payload['poi_names']:
+        return False
+    if 'topic' in payload and len(payload['topic']>0):
+        topic_words = getTopicsOfDoc(doc)
+        for topic in topic_words:
+           if payload['topic'] in topic:
+               return True
         return False
 
     return True
@@ -87,7 +101,7 @@ def checkPayloadRequirement(doc, payload):
 def getPoiTweetCount(payload, tweet_list, poi_set):
 
     temp_poi_set = set()
-    if len(payload['poi_names']) > 0:
+    if len(payload['poi_names'][0]) > 0:
         for poi in payload['poi_names']:
             temp_poi_set.add(poi)
     else:
@@ -106,7 +120,7 @@ def getPoiTweetCount(payload, tweet_list, poi_set):
 def getLangTweetCount(payload, tweet_list, language_set):
     temp_language_set = set()
     lang_dict = {"English": "en", "Hindi": "hi", "Spanish": "es"}
-    if len(payload['languages']) > 0:
+    if len(payload['languages']) > 1:
         for lang in payload['languages']:
             temp_language_set.add(lang_dict[lang])
     else:
@@ -124,7 +138,7 @@ def getLangTweetCount(payload, tweet_list, language_set):
 def getCountryTweetCount(payload, tweet_list, country_set):
 
     temp_country_set = set()
-    if len(payload['countries']) > 0:
+    if len(payload['countries'][0]) > 0:
         for country in payload['countries']:
             temp_country_set.add(country)
     else:
@@ -142,7 +156,7 @@ def getCountryTweetCount(payload, tweet_list, country_set):
 
 def getPoiReplyCount(payload, tweet_list, poi_set):
     temp_poi_set = set()
-    if len(payload['poi_names']) > 0:
+    if len(payload['poi_names'][0]) > 0:
         for poi in payload['poi_names']:
             temp_poi_set.add(poi)
     else:
@@ -162,12 +176,13 @@ def getPoiReplyCount(payload, tweet_list, poi_set):
         if poi_name in temp_poi_set:
             tweet_id = tweet['id']
             sentiment = 0.0
-            for reply in poi_reply[poi_name]:
-                #print(type(reply['replied_to_tweet_id']), type(tweet_id))
-                if str(reply['replied_to_tweet_id']) == str(tweet_id):
-                    poi_reply_count[poi_name] += 1
-                    vs = analyzer.polarity_scores(reply['reply_text'])
-                    sentiment += vs['pos']
+            if poi_name in poi_reply:
+                for reply in poi_reply[poi_name]:
+                    #print(type(reply['replied_to_tweet_id']), type(tweet_id))
+                    if str(reply['replied_to_tweet_id']) == str(tweet_id):
+                        poi_reply_count[poi_name] += 1
+                        vs = analyzer.polarity_scores(reply['reply_text'])
+                        sentiment += vs['pos']
 
             '''
             query = "replied_to_tweet_id:" + tweet_id
@@ -219,22 +234,32 @@ def get_from_solr(core_name, query_text, payload):
 
     print(actual_url)
     #actual_url = 'http://3.134.191.90:8983/solr/IRF_21/select?fl=id%2C%20poi_name%2C%20score&q.op=OR&q=text_en%3AModi%20and%20India'
+    #'''
     connection = urllib2.urlopen(actual_url)
+    print("Connection OK")
 
     if wt == "wt=json":
         response = simplejson.load(connection)
     else:
         response = eval(connection.read())
-
-    #print("Number of hits: " + str(response['response']['numFound']))
+    #'''
+    #ret_key = "tweet_text, id, poi_name, hashtags, tweet_date, tweet_lang, country, score, poi_id"
+    #query = "text_en:" + query_text
+    #tweet_list = ind.connection.search(q = query, fl = ret_key ,rows=10000)
+   # for tweet in tweet_list:
+    #    print(tweet)
+    #return
+    print("Number of hits: " + str(response['response']['numFound']))
     #print(type(response))
     result_tweet_list = []
     poi_set = set()
     country_set = set()
     language_set = set()
     for doc in response['response']['docs']:
+    #for doc in tweet_list:
         if checkPayloadRequirement(doc, payload) == False:
             continue
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>   ", doc['country'])
         if 'poi_name' in doc.keys():
             result_tweet_list.append(doc)
             poi_set.add(doc['poi_name'])
@@ -253,6 +278,7 @@ def get_from_solr(core_name, query_text, payload):
         total_tweet = payload['result_in_page']
 
     sentiment_count = {"pos":0, "neg":0, "neu":0}
+    print("OK")
     for doc in result_tweet_list[(cur_page-1)*total_tweet::]:
         vs = analyzer.polarity_scores(doc['tweet_text'])
         if vs['neu'] > .90:
@@ -266,16 +292,13 @@ def get_from_solr(core_name, query_text, payload):
             if vs['pos'] < .0000000001:
                 vs['pos'] = .5
             doc['sentiment'] = vs['pos']
-            if len(doc['tweet_text']) < 500000:
-                short_summary = doc['tweet_text']
-            else:
-                short_summary = summarize(doc['tweet_text'])
-            doc['topics'] = short_summary
-            doc['top_pos_reply'], doc['top_neg_reply']  = sd.getTopPosNegReply(doc, ind)
-            #doc['top_pos_reply'], doc['top_neg_reply'] = "No reply in indexed data", "No reply in indexed data"
+            doc['topics'] = "Nothing"
+            #doc['topics'] = sd.getTopicsOfDoc(doc)
+            #doc['top_pos_reply'], doc['top_neg_reply']  = sd.getTopPosNegReply(doc, ind)
+            doc['top_pos_reply'], doc['top_neg_reply'] = "No reply in indexed data", "No reply in indexed data"
             lens_doc.append(doc)
             #break
-    #print(sentiment_count)
+    print(sentiment_count)
     poi_tweet_count = getPoiTweetCount(payload, result_tweet_list, poi_set)
     country_tweet_count = getCountryTweetCount(payload, result_tweet_list, country_set)
     poi_reply_count, poi_reply_sentiment = getPoiReplyCount(payload, result_tweet_list, poi_set)
@@ -359,15 +382,28 @@ def getCountryTimeSeriesData():
     country_time_series_data = sd.getAllCountryTimeSeriesData(ind)
     return flask.jsonify(country_time_series_data)
 
+@app.route("/getTopicsLabel", methods=['GET'])
+def getTopicsLabel():
+    topics_label = sd.getTopicsLabel()
+    return flask.jsonify(topics_label)
+
+def testQuery():
+    payload = {
+        "query": "Modi and India",
+        "poi_names": ["ShashiTharoor", "nsitharaman"],
+        "countries": ["India"],
+        "languages": ["English", "Hindi"],
+        "page_group": 1,
+        "result_in_page": 10
+    }
+    total_tweet_count, sentiment_count, language_tweet_count = search_query(payload, ind)
+
 if __name__ == "__main__":
     #search_query(payload, ind)
     #get_poi()
 
     #print("OK")
 
-    #getAllCountryTweetCount()
-    #getAllCountryTimeSeriesData()
-
-    #sd.saveAllReply(ind)
+    #testQuery()
     #app.run(debug=True)
-    app.run(host="0.0.0.0", port=9999)
+    app.run(host="0.0.0.0", port=8888)
