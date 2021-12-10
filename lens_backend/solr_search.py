@@ -107,31 +107,34 @@ def getPoiTweetCount(payload, tweet_list, poi_set):
     else:
         temp_poi_set = poi_set.copy()
     poi_tweet_count = {}
-    for poi in temp_poi_set:
-        poi_tweet_count[poi] = 0
-
+    
     for tweet in tweet_list:
         poi_name = tweet['poi_name']
         if poi_name in temp_poi_set:
-            poi_tweet_count[poi_name] += 1
+            try:
+                poi_tweet_count[poi_name] = poi_tweet_count[poi_name] + 1
+            except:
+                poi_tweet_count[poi_name] = 1
 
     return poi_tweet_count
 
 def getLangTweetCount(payload, tweet_list, language_set):
     temp_language_set = set()
+    lang_dict = {"English": "en", "Hindi": "hi", "Spanish": "es"}
     if len(payload['languages']) > 0:
         for lang in payload['languages']:
-            temp_language_set.add(lang)
+            temp_language_set.add(lang_dict[lang])
     else:
         temp_language_set = language_set.copy()
     language_tweet_count = {}
-    for lang in temp_language_set:
-        language_tweet_count[lang] = 0
 
     for tweet in tweet_list:
         lang = tweet['tweet_lang']
         if lang in temp_language_set:
-            language_tweet_count[lang] += 1
+            try:
+                language_tweet_count[lang] = language_tweet_count[lang] + 1
+            except:
+                language_tweet_count[lang] = 1
     return language_tweet_count
 
 def getCountryTweetCount(payload, tweet_list, country_set):
@@ -143,13 +146,14 @@ def getCountryTweetCount(payload, tweet_list, country_set):
     else:
         temp_country_set = country_set.copy()
     country_tweet_count = {}
-    for country in temp_country_set:
-        country_tweet_count[country] = 0
 
     for tweet in tweet_list:
         country_name = tweet['country']
         if country_name in temp_country_set:
-            country_tweet_count[country_name] += 1
+            try:
+                country_tweet_count[country_name] = country_tweet_count[country_name] + 1
+            except:
+                country_tweet_count[country_name] = 1
 
     return country_tweet_count
 

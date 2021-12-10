@@ -52,7 +52,7 @@
             </div>
         </mat-tab>
         <mat-tab label="Visualizations"> 
-            <div class='poiTweetBarChartDiv' *ngIf="!isGraphDataLoading && countryTweetData.length>0">       
+            <div class='poiTweetBarChartDiv' *ngIf="!isGraphDataLoading && poiTweetData.length>0">       
                 <app-bar 
                 [barChartData]="poiTweetData"
                 [name]="'Tweets'"
@@ -60,7 +60,7 @@
                 ></app-bar>
             </div>
             <div></div>
-            <div class='countryTweetPieChartDiv' *ngIf="!isGraphDataLoading && poiTweetData.length>0">
+            <div class='countryTweetPieChartDiv' *ngIf="!isGraphDataLoading && countryTweetData.length>0">
                 <app-pie
                 [pieTitle]="'Country Wise Distribution'"
                 [pieChartData]="countryTweetData"
