@@ -97,7 +97,11 @@ def getAllPoiTimeSeriesData(ind):
     for poi in data.keys():
         poi_month_count[poi] = []
 
+
         temp_count = {}
+        for month in filter:
+            temp_count[month] = 0
+
         for date_key in data[poi]:
             #print(poi, date_key, data[poi][date_key])
             datee = datetime.datetime.strptime(date_key, "%Y-%m-%d")
@@ -105,10 +109,8 @@ def getAllPoiTimeSeriesData(ind):
             poi_month_key = str(date_dict[datee.month]) + " " + str(datee.year)
             #print(poi_month_key)
 
-            if poi_month_key not in filter:
-                continue
             if poi_month_key not in temp_count:
-                temp_count[poi_month_key] = 0
+                continue
             temp_count[poi_month_key] += int(data[poi][date_key])
             #return data
 
