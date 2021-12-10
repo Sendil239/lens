@@ -80,7 +80,7 @@ def checkPayloadRequirement(doc, payload):
         "hi": "Hindi",
         "es": "Spanish"
     }
-    print(len(payload['countries'][0]))
+    #print(len(payload['countries'][0]))
     if 'poi_name' not in doc:
         return False
     if len(payload['countries'][0]) > 0 and doc['country'] not in payload['countries']:
@@ -168,7 +168,7 @@ def getPoiReplyCount(payload, tweet_list, poi_set):
         poi_reply_sentiment[poi] = 0.0
 
     poi_reply = sd.saveAllReply(ind)
-    print(poi_reply.keys(), len(tweet_list))
+    #print(poi_reply.keys(), len(tweet_list))
     analyzer = SentimentIntensityAnalyzer()
     #''''
     for tweet in tweet_list:
@@ -259,7 +259,7 @@ def get_from_solr(core_name, query_text, payload):
     #for doc in tweet_list:
         if checkPayloadRequirement(doc, payload) == False:
             continue
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>   ", doc['country'])
+        #print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>   ", doc['country'])
         if 'poi_name' in doc.keys():
             result_tweet_list.append(doc)
             poi_set.add(doc['poi_name'])
@@ -278,7 +278,7 @@ def get_from_solr(core_name, query_text, payload):
         total_tweet = payload['result_in_page']
 
     sentiment_count = {"pos":0, "neg":0, "neu":0}
-    print("OK")
+    #print("OK")
     for doc in result_tweet_list[(cur_page-1)*total_tweet::]:
         vs = analyzer.polarity_scores(doc['tweet_text'])
         if vs['neu'] > .90:
@@ -298,7 +298,7 @@ def get_from_solr(core_name, query_text, payload):
             doc['top_pos_reply'], doc['top_neg_reply'] = "No reply in indexed data", "No reply in indexed data"
             lens_doc.append(doc)
             #break
-    print(sentiment_count)
+    #print(sentiment_count)
     poi_tweet_count = getPoiTweetCount(payload, result_tweet_list, poi_set)
     country_tweet_count = getCountryTweetCount(payload, result_tweet_list, country_set)
     poi_reply_count, poi_reply_sentiment = getPoiReplyCount(payload, result_tweet_list, poi_set)
@@ -406,4 +406,4 @@ if __name__ == "__main__":
 
     #testQuery()
     #app.run(debug=True)
-    app.run(host="0.0.0.0", port=8888)
+    app.run(host="0.0.0.0", port=9999)
