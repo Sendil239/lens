@@ -53,3 +53,9 @@
   color: white;
   font-size: 13px;
 }
+
+::ng-deep mat-chip-list {
+  .mat-chip-list-wrapper{
+    margin: 0px;
+  }
+}
