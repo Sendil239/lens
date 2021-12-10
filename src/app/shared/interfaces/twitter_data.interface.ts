@@ -9,5 +9,6 @@ export interface ITwitterData {
     top_pos_reply: string,
     topics: string,
     tweet_date: Date,
-    tweet_text: string
+    tweet_text: string,
+    link: string
   }

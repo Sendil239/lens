@@ -15,6 +15,19 @@
         </mat-card-title-group>
         <mat-card-content>
             {{item.tweet_text}}
+            <div>
+                <span style="color: rgba(0,0,0,.54)">Avg Sentiment Score:</span> {{item.sentiment}}
+            </div>
+            <div>
+                <span style="color: green">Top Positive Reply:</span> {{item.top_pos_reply}}
+            </div>
+            <div>
+                <span style="color: red">Top Negative Reply:</span> {{item.top_neg_reply}}
+            </div>
+            <div>
+                <span style="color:blue">Tweet Date:</span> {{item.tweet_date | date:'MMM dd yyyy'}}
+                <!-- <a href="{{item.link}}" *ngIf=" item.link!='' " target="_blank" style="float: right;">{{item.link}}</a> -->
+            </div>
         </mat-card-content>
       </mat-card>
 </div>

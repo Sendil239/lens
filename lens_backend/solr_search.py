@@ -61,7 +61,7 @@ def tokenizer(text):
 
     text = text.lower()
     text = text.replace("'", "")
-    text = text.replace("’", "")
+    text = text.replace("'", "")
     text = text.replace("#", "%23")
     #text = re.sub(r'[-]+', ' ', text)
     #text = re.sub(r'[^A-Za-z0-9 ]+', ' ', text)
@@ -83,14 +83,14 @@ def checkPayloadRequirement(doc, payload):
     #print(len(payload['countries'][0]))
     if 'poi_name' not in doc:
         return False
-    if len(payload['countries'][0]) > 0 and doc['country'] not in payload['countries']:
+    if len(payload['countries']) > 0 and doc['country'] not in payload['countries']:
         return False
-    if len(payload['languages'][0]) > 0 and lang_dict[doc['tweet_lang']] not in payload['languages']:
+    if len(payload['languages']) > 0 and lang_dict[doc['tweet_lang']] not in payload['languages']:
         return False
-    if len(payload['poi_names'][0]) > 0 and doc['poi_name'] not in payload['poi_names']:
+    if len(payload['poi_names']) > 0 and doc['poi_name'] not in payload['poi_names']:
         return False
     if 'topic' in payload and len(payload['topic']>0):
-        topic_words = getTopicsOfDoc(doc)
+        topic_words = sd.getTopicsOfDoc(doc)
         for topic in topic_words:
            if payload['topic'] in topic:
                return True
@@ -101,62 +101,65 @@ def checkPayloadRequirement(doc, payload):
 def getPoiTweetCount(payload, tweet_list, poi_set):
 
     temp_poi_set = set()
-    if len(payload['poi_names'][0]) > 0:
+    if len(payload['poi_names']) > 0:
         for poi in payload['poi_names']:
             temp_poi_set.add(poi)
     else:
         temp_poi_set = poi_set.copy()
     poi_tweet_count = {}
-    for poi in temp_poi_set:
-        poi_tweet_count[poi] = 0
-
+    
     for tweet in tweet_list:
         poi_name = tweet['poi_name']
         if poi_name in temp_poi_set:
-            poi_tweet_count[poi_name] += 1
+            try:
+                poi_tweet_count[poi_name] = poi_tweet_count[poi_name] + 1
+            except:
+                poi_tweet_count[poi_name] = 1
 
     return poi_tweet_count
 
 def getLangTweetCount(payload, tweet_list, language_set):
     temp_language_set = set()
     lang_dict = {"English": "en", "Hindi": "hi", "Spanish": "es"}
-    if len(payload['languages']) > 1:
+    if len(payload['languages']) > 0:
         for lang in payload['languages']:
             temp_language_set.add(lang_dict[lang])
     else:
         temp_language_set = language_set.copy()
     language_tweet_count = {}
-    for lang in temp_language_set:
-        language_tweet_count[lang] = 0
 
     for tweet in tweet_list:
         lang = tweet['tweet_lang']
         if lang in temp_language_set:
-            language_tweet_count[lang] += 1
+            try:
+                language_tweet_count[lang] = language_tweet_count[lang] + 1
+            except:
+                language_tweet_count[lang] = 1
     return language_tweet_count
 
 def getCountryTweetCount(payload, tweet_list, country_set):
 
     temp_country_set = set()
-    if len(payload['countries'][0]) > 0:
+    if len(payload['countries']) > 0:
         for country in payload['countries']:
             temp_country_set.add(country)
     else:
         temp_country_set = country_set.copy()
     country_tweet_count = {}
-    for country in temp_country_set:
-        country_tweet_count[country] = 0
 
     for tweet in tweet_list:
         country_name = tweet['country']
         if country_name in temp_country_set:
-            country_tweet_count[country_name] += 1
+            try:
+                country_tweet_count[country_name] = country_tweet_count[country_name] + 1
+            except:
+                country_tweet_count[country_name] = 1
 
     return country_tweet_count
 
 def getPoiReplyCount(payload, tweet_list, poi_set):
     temp_poi_set = set()
-    if len(payload['poi_names'][0]) > 0:
+    if len(payload['poi_names']) > 0:
         for poi in payload['poi_names']:
             temp_poi_set.add(poi)
     else:
@@ -304,7 +307,7 @@ def get_from_solr(core_name, query_text, payload):
     poi_reply_count, poi_reply_sentiment = getPoiReplyCount(payload, result_tweet_list, poi_set)
     language_tweet_count = getLangTweetCount(payload, result_tweet_list, language_set)
     #print(lens_doc)
-    return lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment, len(result_tweet_list), sentiment_count, language_tweet_count
+    return lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment, len(result_tweet_list), language_tweet_count, sentiment_count
 
 
 
@@ -334,8 +337,8 @@ def searchQuery():
         print(payload['query'])
 
     # Search document in solr with query
-    lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment, \
-    total_tweet_count, sentiment_count, language_tweet_count = search_query(payload, ind)
+    lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment, total_tweet_count, language_tweet_count, sentiment_count = search_query(payload, ind)
+
 
     response = {
         'tweet_list': lens_doc,
@@ -344,8 +347,8 @@ def searchQuery():
         'poi_reply_count': poi_reply_count,
         'poi_reply_sentiment': poi_reply_sentiment,
         'total_tweet_count': total_tweet_count,
-        'sentiment_count':sentiment_count,
-        'language_tweet_count': language_tweet_count
+        'language_tweet_count': language_tweet_count,
+        'sentiment_count':sentiment_count
     }
     return flask.jsonify(response)
 

@@ -3,18 +3,10 @@
     background-color: white;
   }
 
-
-
-// mat-form-field {
-//   .mat-form-field-wrapper{
-//     div {
-//       .mat-form-field-flex{
-//         background-color: white;
-//       }
-//     }
-//   }
-      
-// }
+.no-data{
+	text-align: center;
+	margin-top: 20%;
+}
 
 .btn-search {
   margin-left: 2%;
@@ -36,11 +28,17 @@
   }
 }
 
+.listing-wrapper{
+	.mat-grid-tile-content {
+		display: block;
+		overflow-y: auto;
+		overflow-x: auto;
+	  }
+}
+
 .loader-wrapper {
-  display: flex;
-  justify-content: center;
-  margin: 20%;
-  position: fixed;
+	margin-top: 20%;
+	margin-left: 40%;
 }
 
 
@@ -103,7 +101,39 @@
 	margin: 0px auto;
 }
 
-.chartDiv{
+::ng-deep .mat-grid-list .mat-grid-tile-content div[_ngcontent-lub-c304]{
+	margin-right: 25px;
+}
+
+::ng-deep .mat-grid-tile-content .mat-raised-button.mat-primary{
+	background-color: #D32F2F;
+}
+
+::ng-deep .sentimentBarChartDiv{
+	.bar-chart {
+	  position: static !important;
+	}
+}
+
+::ng-deep .repliesBarChartDiv{
+	.bar-chart {
+		position: static !important;
+	  }
+}
+
+::ng-deep .countryTweetPieChartDiv {
+    .pie-chart {
+        position: static !important;
+    }
+}
+
+::ng-deep .languageTweetPieChartDiv {
+    .pie-chart {
+        position: static !important;
+    }
+}
+
+.poiTweetBarChartDiv, .countryTweetPieChartDiv, .sentimentBarChartDiv, .repliesBarChartDiv, .languageTweetPieChartDiv{
 	width: auto;
-	overflow-x: scroll;
+	overflow-x: auto;
 }

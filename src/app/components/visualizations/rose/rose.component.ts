@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
-import { IPoiTweet } from 'src/app/shared/interfaces/poi_tweet.interface';
+import { IChart } from 'src/app/shared/interfaces/barchart.interface';
 
 @Component({
   selector: 'app-rose',
   templateUrl: './rose.component.html',
-  styleUrls: ['./rose.component.css']
+  styleUrls: ['./rose.component.scss']
 })
 export class RoseComponent implements OnInit {
   initOpts: object;
@@ -16,10 +16,18 @@ export class RoseComponent implements OnInit {
   ngOnInit(): void {
     this.initOpts = {
       renderer: 'svg',
-      width: 300,
+      width: 320,
       height: 300
     };
     this.chartOption ={
+      title: {
+        text: this.roseTitle,
+        left: 'center',
+        top: 10,
+        textStyle:{
+          color:'black',
+        }
+      },
       tooltip: {
         trigger: 'item',
         formatter: '{a} <br/>{b} : {c} ({d}%)'
@@ -27,7 +35,7 @@ export class RoseComponent implements OnInit {
       legend: {
         x: 'center',
         y: 'bottom',
-        data: this.poiTweetsList.map(a => a.name)
+        data: this.roseChartData.map(a => a.name)
       },
       calculable: true,
       series: [
@@ -36,13 +44,16 @@ export class RoseComponent implements OnInit {
           type: 'pie',
           radius: [30, 110],
           roseType: 'area',
-          data: this.poiTweetsList
+          data: this.roseChartData
         }
       ]
     }
   }
 
-  @Input('poiTweetsCountList')
-    poiTweetsList: IPoiTweet[];  
+  @Input()
+    roseChartData: IChart[];
+  @Input()
+    roseTitle: string;
+
 
 }
