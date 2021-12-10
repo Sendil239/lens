@@ -3,6 +3,7 @@ from pathlib import Path
 import glob
 import json
 from ast import literal_eval
+import datetime
 
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
@@ -39,6 +40,7 @@ def getAllPoiTweetCount(ind):
     root_dir = path + '/static_data/poi_distribution.json'
     with open(root_dir) as json_file:
         data = json.load(json_file)
+
     return data
     for poi in temp_poi_set:
         poi_tweet_count[poi] = 0
@@ -85,7 +87,33 @@ def getAllPoiTimeSeriesData(ind):
     root_dir = path + '/static_data/poi_time_series.json'
     with open(root_dir) as json_file:
         data = json.load(json_file)
-    return data
+
+    print(type(data['PeteButtigieg']))
+
+    date_dict = {1:"Jan", 2:"Feb",3:"Mar",4:"Apr",5:"May",6:"Jun",7:"Jul",8:"Aug",9:"Sep",10:"Oct",11:"Nov",12:"Dec"}
+
+    poi_month_count = {}
+    for poi in data.keys():
+        poi_month_count[poi] = []
+
+        temp_count = {}
+        for date_key in data[poi]:
+            print(poi, date_key, data[poi][date_key])
+            datee = datetime.datetime.strptime(date_key, "%Y-%m-%d")
+            print(datee.month, datee.year)
+            poi_month_key = str(date_dict[datee.month]) + " " + str(datee.year)
+            print(poi_month_key)
+
+            if poi_month_key not in temp_count:
+                temp_count[poi_month_key] = 0
+            temp_count[poi_month_key] += int(data[poi][date_key])
+            #return data
+
+        poi_month_count[poi] = temp_count
+        #for month_count in temp_count.items():
+         #   poi_month_count[poi].append(dict(month_count))
+
+    return poi_month_count
     for poi in temp_poi_set:
         #poi_date_info[poi] = []
         query = "poi_name:" + poi
