@@ -88,9 +88,10 @@ def getAllPoiTimeSeriesData(ind):
     with open(root_dir) as json_file:
         data = json.load(json_file)
 
-    print(type(data['PeteButtigieg']))
+    #print(type(data['PeteButtigieg']))
 
     date_dict = {1:"Jan", 2:"Feb",3:"Mar",4:"Apr",5:"May",6:"Jun",7:"Jul",8:"Aug",9:"Sep",10:"Oct",11:"Nov",12:"Dec"}
+    filter = ["Apr 2021", "May 2021", "Jun 2021", "Jul 2021", "Aug 2021", "Sep 2021"]
 
     poi_month_count = {}
     for poi in data.keys():
@@ -98,12 +99,14 @@ def getAllPoiTimeSeriesData(ind):
 
         temp_count = {}
         for date_key in data[poi]:
-            print(poi, date_key, data[poi][date_key])
+            #print(poi, date_key, data[poi][date_key])
             datee = datetime.datetime.strptime(date_key, "%Y-%m-%d")
-            print(datee.month, datee.year)
+           # print(datee.month, datee.year)
             poi_month_key = str(date_dict[datee.month]) + " " + str(datee.year)
-            print(poi_month_key)
+            #print(poi_month_key)
 
+            if poi_month_key not in filter:
+                continue
             if poi_month_key not in temp_count:
                 temp_count[poi_month_key] = 0
             temp_count[poi_month_key] += int(data[poi][date_key])
@@ -114,6 +117,7 @@ def getAllPoiTimeSeriesData(ind):
          #   poi_month_count[poi].append(dict(month_count))
 
     return poi_month_count
+
     for poi in temp_poi_set:
         #poi_date_info[poi] = []
         query = "poi_name:" + poi
