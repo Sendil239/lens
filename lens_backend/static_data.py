@@ -7,6 +7,7 @@ import datetime
 
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
+path = os.path.dirname(Path(__file__))
 
 def solr_search_query(connection, query, rows=0):
     results = connection.search(q=query, rows=rows)
@@ -23,7 +24,7 @@ def get_poi():
 
     #print(path, root_dir, dir_names)
     for dir_name in dir_names:
-        dir_name = dir_name.split('/')[-1]
+        dir_name = dir_name.split('\\')[-1]
         #print(dir_name)
         if 'keyword' not in dir_name:
             # f_name = dir_name.split('/')[6]
@@ -175,7 +176,6 @@ def getAllCountryTimeSeriesData(ind):
                 country_date[tweet["tweet_date"]] += 1
 
         country_date_info[country] = country_date
-    path = os.path.dirname(Path(__file__))
     # root_dir = '/home/ubuntu/lens/lens_backend/project1_data/'
     root_dir = path + '/static_data/country_time_series.json'
     with open(root_dir, 'w') as outfile:
@@ -183,7 +183,6 @@ def getAllCountryTimeSeriesData(ind):
     return country_date_info
 
 def saveAllReply(ind):
-    path = os.path.dirname(Path(__file__))
     # root_dir = '/home/ubuntu/lens/lens_backend/project1_data/'
     root_dir = path + '/static_data/poi_reply.json'
     with open(root_dir) as json_file:
@@ -217,7 +216,7 @@ def saveAllReply(ind):
     #print(poi_reply)
     #print(reply_count)
 
-    with open('/home/ubuntu/lens/lens_backend/static_data/poi_reply.json', 'w') as outfile:
+    with open(path + '/static_data/poi_reply.json', 'w') as outfile:
        json.dump(poi_reply, outfile)
 
     return poi_reply
@@ -247,26 +246,27 @@ def getTopPosNegReply(doc, ind):
     return top_pos_tweet, top_neg_tweet
 
 def getTopicsOfDoc(doc):
-    with open("/home/ubuntu/lens/lens_backend/static_data/document_topic_score.json") as json_file:
+   
+    with open(path + "/static_data/document_topic_score.json") as json_file:
         data = json.load(json_file)
 
-    with open("/home/ubuntu/lens/lens_backend/static_data/topic_words.json") as json_file:
+    with open(path + "/static_data/topic_words.json") as json_file:
         topic_words = json.load(json_file)
 
     return topic_words[str(data[doc['id']])]
 
 def getAllTopicsAndWords():
-    with open("/home/ubuntu/lens/lens_backend/static_data/document_topic_score.json") as json_file:
+    with open(path + "/static_data/document_topic_score.json") as json_file:
         doc_topic = json.load(json_file)
 
-    with open("/home/ubuntu/lens/lens_backend/static_data/topic_words.json") as json_file:
+    with open(path + "/static_data/topic_words.json") as json_file:
         topic_words = json.load(json_file)
 
     return doc_topic, topic_words
 
 def getTopicsLabel():
     topic_label_set = []
-    with open("/home/ubuntu/lens/lens_backend/static_data/topic_words.json") as json_file:
+    with open(path + "/static_data/topic_words.json") as json_file:
         data = json.load(json_file)
         #print(data)
         #data = literal_eval(data)
@@ -278,7 +278,7 @@ def getTopicsLabel():
     return list(topic_label_set)
 
 def getTopicImportance():
-    with open("/home/ubuntu/lens/lens_backend/static_data/topic_importance.json") as json_file:
+    with open(path + "/static_data/topic_importance.json") as json_file:
         data = json.load(json_file)
         #print(data)
         data = literal_eval(data)
@@ -287,7 +287,7 @@ def getTopicImportance():
     return data
 
 def getHashtagDistribution():
-    with open("/home/ubuntu/lens/lens_backend/static_data/hashtag_distribution.json") as json_file:
+    with open(path + "/static_data/hashtag_distribution.json") as json_file:
         data = json.load(json_file)
         print(type(data))
         #data = literal_eval(data)
@@ -298,14 +298,14 @@ def getHashtagDistribution():
     return data
 
 def getPoiVaccineHesitance():
-    with open("/home/ubuntu/lens/lens_backend/static_data/vaccine_hesitancy.json") as json_file:
+    with open(path + "/static_data/vaccine_hesitancy.json") as json_file:
         vaccine_hesitancy = json.load(json_file)
         print(type(vaccine_hesitancy))
         #data = literal_eval(data)
     return vaccine_hesitancy
 
 def getCountryVaccineHesitance():
-    with open("/home/ubuntu/lens/lens_backend/static_data/country_vaccine_hesitancy.json") as json_file:
+    with open(path + "/static_data/country_vaccine_hesitancy.json") as json_file:
         vaccine_hesitancy = json.load(json_file)
         print(type(vaccine_hesitancy))
         #data = literal_eval(data)

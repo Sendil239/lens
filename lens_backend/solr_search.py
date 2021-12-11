@@ -321,8 +321,6 @@ def get_from_solr(core_name, query_text, payload):
     #print("total  4   ",len(lens_doc))
     return lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment, len(result_tweet_list), language_tweet_count, sentiment_count
 
-
-
 def search_query(payload, solr_core):
     core_name = 'IRF_21'
 
@@ -351,7 +349,6 @@ def searchQuery():
     # Search document in solr with query
     lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment, total_tweet_count, language_tweet_count, sentiment_count = search_query(payload, ind)
 
-
     response = {
         'tweet_list': lens_doc,
         'poi_tweet_count': poi_tweet_count,
@@ -364,59 +361,39 @@ def searchQuery():
     }
     return flask.jsonify(response)
 
-@app.route("/getPoi", methods=['GET'])
-def getPoi():
-    poi_list = sd.get_poi()
-    response = {
-        "poi_names": poi_list
-    }
-    return flask.jsonify(response)
-
-@app.route("/getPoiDistribution", methods=['GET'])
-def getPoiDistribution():
-    poi_tweet_count = sd.getAllPoiTweetCount(ind)
-    return flask.jsonify(poi_tweet_count)
-
-@app.route("/getCountryDistribution", methods=['GET'])
-def getCountryDistribution():
-    country_tweet_count = sd.getAllCountryTweetCount(ind)
-    return flask.jsonify(country_tweet_count)
-
-@app.route("/getLanguageDistribution", methods=['GET'])
-def getLanguageDistribution():
-    language_tweet_count = sd.getAllLanguageTweetCount(ind)
-    return flask.jsonify(language_tweet_count)
-
-@app.route("/getTimeSeriesData", methods=['GET'])
-def getTimeSeriesData():
-    time_series_data = sd.getAllPoiTimeSeriesData(ind)
-    return flask.jsonify(time_series_data)
-
-@app.route("/getCountryTimeSeriesData", methods=['GET'])
-def getCountryTimeSeriesData():
-    country_time_series_data = sd.getAllCountryTimeSeriesData(ind)
-    return flask.jsonify(country_time_series_data)
-
-@app.route("/getTopicsLabel", methods=['GET'])
-def getTopicsLabel():
-    topics_label = sd.getTopicsLabel()
-    return flask.jsonify(topics_label)
-
 @app.route("/getFilterData", methods=['GET'])
 def getFilterData():
     topics_label = sd.getTopicsLabel()
     poi_list = sd.get_poi()
+    
+    response = {
+        "topics_label": topics_label,
+        "poi_names": poi_list
+    }
+    return flask.jsonify(response)
+
+@app.route("/getCorpusChartData", methods=['GET'])
+def getCorpusChartData():
     topic_importance = sd.getTopicImportance()
     hashtag_distribution = sd.getHashtagDistribution()
     vaccine_hesitancy = sd.getPoiVaccineHesitance()
     country_vaccine_hesitancy = sd.getCountryVaccineHesitance()
+    country_time_series_data = sd.getAllCountryTimeSeriesData(ind)
+    all_poi_time_series_data = sd.getAllPoiTimeSeriesData(ind)
+    lang_distribution = sd.getAllLanguageTweetCount(ind)
+    country_distribution = sd.getAllCountryTweetCount(ind)
+    poi_tweet_distribution = sd.getAllPoiTweetCount(ind)
     response = {
-        "topics_label": topics_label,
-        "poi_names": poi_list,
         "topic_importance":topic_importance,
         "hashtag_distribution":hashtag_distribution,
         "vaccine_hesitancy":vaccine_hesitancy,
-        "country_vaccine_hesitancy":country_vaccine_hesitancy
+        "country_vaccine_hesitancy":country_vaccine_hesitancy,
+        "all_poi_time_series_data": all_poi_time_series_data,
+        "country_time_series_data": country_time_series_data,
+        "lang_distribution": lang_distribution,
+        "country_distribution": country_distribution,
+        "poi_tweet_distribution" : poi_tweet_distribution
+
     }
     return flask.jsonify(response)
 

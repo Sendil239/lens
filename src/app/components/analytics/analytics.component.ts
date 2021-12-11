@@ -20,6 +20,7 @@ export class AnalyticsComponent implements OnInit {
   Wordcloud: any;
   options:any;
   isWordCloudLoading: boolean;
+  hashtagsImportanceList: any;
 
   constructor(private analyticsService: AnalyticsService, private utilService: UtilService) {
       this.isLoading = false;
@@ -31,47 +32,23 @@ export class AnalyticsComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.analyticsService.getPoiDistribution()
-    .subscribe((result: any)=>{
-      this.poiTweetList = this.utilService.objectToArray(result);
-      this.getCountryDistribution();
-    });
-  }
-
-  getCountryDistribution(){
-    this.isLoading = true;
-    this.analyticsService.getCountryDistribution()
-    .subscribe((result: any)=>{
-      this.countryTweetList = this.utilService.objectToArray(result);
-      this.getLanguageDistribution();
-    });
-  }
-
-  getLanguageDistribution(){
-    this.isLoading = true;
-    this.analyticsService.getLanguageDistribution()
-    .subscribe((result: any)=>{
-      this.languageTweetList = this.utilService.objectToArray(result);  
-      this.getTimeSeriesData();    
-    });
-  }
-
-  getTimeSeriesData(){
-    this.isLoading = true;
-    this.analyticsService.getTimeSeriesData()
-    .subscribe((result: any) => {   
-      this.timeSeriesList = result;
-      this.getTopicsImportance();      
-    });
-  }
-
-  getTopicsImportance(){
-    this.isLoading = true;
-    this.analyticsService.getTopicsImportance()
-    .subscribe((result: any)=>{
-      this.isLoading = false;      
+    this.analyticsService.getCorpusChartData()
+    .subscribe((result: any) => {
+      this.poiTweetList = this.utilService.objectToArray(result.poi_tweet_distribution);
+      this.countryTweetList = this.utilService.objectToArray(result.country_distribution);
+      this.languageTweetList = this.utilService.objectToArray(result.lang_distribution);  
+      this.timeSeriesList = result.all_poi_time_series_data;
       this.topicsImportanceList = this.utilService.objectToArrayWordCloud(result.topic_importance);
-      Highcharts.chart('container', {
+      this.isLoading = false;
+      this.drawWordCloud(this.topicsImportanceList, 'topicsContainer', 'Wordcloud of Covid Corpus');
+      this.isWordCloudLoading = true;
+      this.hashtagsImportanceList = this.utilService.objectToArrayWordCloud(result.hashtag_distribution);
+      this.drawWordCloud(this.hashtagsImportanceList, 'hashtagsContainer', 'Wordcloud of Covid Hastags');      
+    });
+  }
+
+  drawWordCloud(data: any, container: string, titleText: string){
+      Highcharts.chart(container, {
         accessibility: {
             screenReaderSection: {
                 beforeChartFormat: '<h5>{chartTitle}</h5>' +
@@ -82,18 +59,16 @@ export class AnalyticsComponent implements OnInit {
         },
         series: [{
             type: 'wordcloud',
-            data: this.topicsImportanceList,
+            data,
             name: 'Occurrences'
         }],
         title: {
-            text: 'Wordcloud of Covid Corpus'
+            text: titleText
         }
       });
       setInterval(()=>{
         this.isWordCloudLoading = false;
       }, 1000);
-      
-    });  
   }
 
 }

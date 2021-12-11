@@ -10,7 +10,7 @@ import glob
 
 
 CORE_NAME = "IRF_21"
-AWS_IP = "localhost"
+AWS_IP = "3.134.191.90"
 
 
 # [CAUTION] :: Run this script once, i.e. during core creation

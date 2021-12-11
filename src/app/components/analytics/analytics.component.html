@@ -37,8 +37,9 @@
     >
     </app-line>
 </div>
-<div class='wordCloud' id="container" [hidden]="isWordCloudLoading"></div>
-<div class='loader-wrapper' *ngIf='isLoading'>
+<div class='wordCloud' id="topicsContainer" [hidden]="isWordCloudLoading"></div>
+<div class='wordCloud' id="hashtagsContainer" [hidden]="isWordCloudLoading"></div>
+<div class='loader-wrapper' *ngIf='isLoading || isWordCloudLoading'>
     <mat-spinner></mat-spinner>    
 </div>
 
