@@ -57,14 +57,14 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.filterData.countryList = ['India', 'Mexico', 'USA'];
-    this.filterData.languageList = ['English', 'Hindi', 'Spanish'];
-    this.filterData.topicList = ["president", "covid", "state", "country", "election", "congress", "pass", "voter", "thank", "life", "government", "today", "marriage", "supreme", "disease", "pandemic"];
+    this.filterData.languageList = ['English', 'Hindi', 'Spanish'];    
     this.isFilterLoading = true;
-    this.homeService.getPois()
+    this.homeService.getFilterData()
       .subscribe(result => {
         this.isFilterLoading = false;
         if(result){
           this.filterData.poiList = result.poi_names;
+          this.filterData.topicList = result.topics_label;
         }
       })
   }

@@ -12,8 +12,8 @@ export class HomeService {
 
     }
 
-    getPois() {
-        return this.dataService.get('/getPoi').pipe(
+    getFilterData() {
+        return this.dataService.get('/getFilterData').pipe(
             map(
                 (response: any) => {
                     return response;

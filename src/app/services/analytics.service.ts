@@ -40,7 +40,7 @@ export class AnalyticsService {
                 }
             )
         )
-    }
+    }    
 
     getTimeSeriesData(){
         return this.dataService.get('/getTimeSeriesData').pipe(
@@ -54,6 +54,16 @@ export class AnalyticsService {
 
     getCountryTimeSeriesData(){
         return this.dataService.get('/getCountryTimeSeriesData').pipe(
+            map(
+                (response: any) => {
+                    return response;
+                }
+            )
+        )
+    }
+
+    getTopicsImportance(){
+        return this.dataService.get('/getTopicsImportance').pipe(
             map(
                 (response: any) => {
                     return response;

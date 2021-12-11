@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-line',
@@ -9,14 +10,18 @@ import { EChartsOption } from 'echarts';
 export class LineComponent implements OnInit {
   initOpts: object;
   chartOption: any;
+  lineChartData: any;
+  lineSeriesData: any;
 
-  constructor() { }
+  constructor(private utilService: UtilService) {
+    this.lineSeriesData = [];
+   }
 
   ngOnInit(): void {
     this.initOpts = {
       renderer: 'svg',
-      width: 7 * 150,
-      height: 300
+      width: 7 * 200,
+      height: 600
     };
     this.chartOption = {
       title: {
@@ -39,11 +44,11 @@ export class LineComponent implements OnInit {
       legend: {
         x: 'center',
         y: 'bottom',
-        data: ['Aravind Kejriwal', 'Narendra Modi', 'Barack Obama', 'Trump', 'Claudiashein']
+        data: this.lineChartData.map((x: any) => x.name)
       },
       grid: {
-        left: '3%',
-        right: '4%',
+        left: '1%',
+        right: '1%',
         bottom: '3%',
         containLabel: true
       },
@@ -51,7 +56,7 @@ export class LineComponent implements OnInit {
         {
           type: 'category',
           boundaryGap: false,
-          data: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
+          data: ['Apr 2021', 'May 2021', 'Jun 2021', 'Jul 2021', 'Aug 2021', 'Sep 2021']
         }
       ],
       yAxis: [
@@ -59,43 +64,24 @@ export class LineComponent implements OnInit {
           type: 'value'
         }
       ],
-      series: [
-        {
-          name: 'Aravind Kejriwal',
-          type: 'line',
-          stack: 'counts',
-          data: [20, 13, 8, 30, 12, 5, 35]
-        },
-        {
-          name: 'Narendira Modi',
-          type: 'line',
-          stack: 'counts',
-          data: [10, 5, 20, 24, 18, 2, 57]
-        },
-        {
-          name: 'Barack Obama',
-          type: 'line',
-          stack: 'counts',
-          data: [45, 30, 35, 10, 38, 20, 13]
-        },
-        {
-          name: 'Trump',
-          type: 'line',
-          stack: 'counts',
-          data: [14, 20, 23, 15, 30, 26, 32]
-        },
-        {
-          name: 'Claudiashein',
-          type: 'line',
-          stack: 'counts',
-          data: [4, 10, 5, 10, 13, 25, 20]
-        }
-      ]
+      series: this.lineSeriesData
     }
   }
 
-  @Input()
-    lineChartData: any
+  @Input('lineChartData')
+  set lineData(data: any){
+    this.lineChartData = this.utilService.objectToArray(data);
+    this.lineChartData.forEach((element: any) => {
+      let monthData = this.utilService.objectToArray(element.value);
+      this.lineSeriesData.push({
+        name: element.name,
+        type: 'line',
+        stack: 'counts',
+        data: monthData.map(x => x.value)
+      })
+    });
+  }
+    
   @Input()
     lineTitle: string;
 }

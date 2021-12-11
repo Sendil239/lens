@@ -1,42 +1,36 @@
-<mat-grid-list cols="100">
-    <mat-grid-tile [colspan]="5" style="height: 1300px"></mat-grid-tile>
-    <mat-grid-tile [colspan]="90" id="charts-wrapper" style="height: 1400px">
-        <div class="barChartDiv">
-            <app-bar
-                *ngIf="!isLoading"
-                [barChartData]="poiTweetList"
-                [name]="'Tweets'"
-                [barTitle]="'POI Vs Tweet Count'"
-            ></app-bar>
-        </div>
-        <br>
-        <div class="pieChartDiv">
-            <app-pie 
-            *ngIf="!isLoading"
-            [pieChartData]="countryTweetList"
-            [pieTitle]="'Country Vs Tweet Count'"
-            >
-            </app-pie>
-        </div>
-        <br>
-    <div class="roseChartDiv">
-            <app-rose 
-            *ngIf="!isLoading"
-            [roseChartData]="languageTweetList"
-            [roseTitle]="'Language Vs Tweet Count'"
-            >
-            </app-rose>
-        </div>
-        <br>
-    <div class="lineChartDiv">
-        <app-line 
-        *ngIf="!isLoading"
-        [lineChartData]="timeSeriesList"
-        [lineTitle]="'Language Vs Tweet Count'"
+<div class="barChartDiv" *ngIf="!isLoading">
+    <app-bar
+        [barChartData]="poiTweetList"
+        [name]="'Tweets'"
+        [barTitle]="'POI Vs Tweet Count'"
+    ></app-bar>
+</div>
+<br>
+<div class="pieChartDiv" *ngIf="!isLoading">
+    <app-pie 
+    [pieChartData]="countryTweetList"
+    [pieTitle]="'Country Vs Tweet Count'"
+    >
+    </app-pie>
+</div>
+<br>
+<div class="roseChartDiv" *ngIf="!isLoading">
+        <app-rose 
+        [roseChartData]="languageTweetList"
+        [roseTitle]="'Language Vs Tweet Count'"
         >
-        </app-line>
+        </app-rose>
     </div>
-    </mat-grid-tile>
-    <mat-grid-tile [colspan]="5" style="height: 1300px"></mat-grid-tile>
+    <br>
+<div class="lineChartDiv" *ngIf="!isLoading">
+    <app-line 
+    [lineChartData]="timeSeriesList"
+    [lineTitle]="'Language Vs Tweet Count'"
+    >
+    </app-line>
+</div>
+<div class='wordCloud' id="container" [hidden]="isWordCloudLoading"></div>
+<div class='loader-wrapper' *ngIf='isLoading'>
+    <mat-spinner></mat-spinner>    
+</div>
 
-</mat-grid-list>
