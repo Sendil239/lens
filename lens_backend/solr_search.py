@@ -74,7 +74,7 @@ def tokenizer(text):
     #tokenized_text = [ps.stem(word) for word in tokenized_text]
     return tokenized_text
 
-def checkPayloadRequirement(doc, payload):
+def checkPayloadRequirement(doc, payload, doc_topic, topic_words_list):
     lang_dict = {
         "en": "English",
         "hi": "Hindi",
@@ -89,15 +89,13 @@ def checkPayloadRequirement(doc, payload):
         return False
     if len(payload['poi_names']) > 0 and doc['poi_name'] not in payload['poi_names']:
         return False
-    '''
-    if 'topic' in payload and len(payload['topic']) >0:
-        topic_words = sd.getTopicsOfDoc(doc)
-        #print(topic_words)
+
+    if 'topic' in payload and len(payload['topic']) > 0:
+        topic_words = topic_words_list[str(doc_topic[doc['id']])]
         if payload['topic'][0] in topic_words:
             return True
         else:
             return False
-    '''
     return True
 
 def getPoiTweetCount(payload, tweet_list, poi_set):
@@ -173,7 +171,7 @@ def getPoiReplyCount(payload, tweet_list, poi_set):
         poi_reply_sentiment[poi] = 0.0
 
     poi_reply = sd.saveAllReply(ind)
-    #print(poi_reply.keys(), len(tweet_list))
+    print(poi_reply.keys(), len(tweet_list))
     analyzer = SentimentIntensityAnalyzer()
     #''''
     for tweet in tweet_list:
@@ -239,7 +237,7 @@ def get_from_solr(core_name, query_text, payload):
 
     print(actual_url)
     #actual_url = 'http://3.134.191.90:8983/solr/IRF_21/select?fl=id%2C%20poi_name%2C%20score&q.op=OR&q=text_en%3AModi%20and%20India'
-    #'''
+    '''
     connection = urllib2.urlopen(actual_url)
     print("Connection OK")
 
@@ -248,21 +246,23 @@ def get_from_solr(core_name, query_text, payload):
     else:
         response = eval(connection.read())
     #'''
-    #ret_key = "tweet_text, id, poi_name, hashtags, tweet_date, tweet_lang, country, score, poi_id"
-    #query = "text_en:" + query_text
-    #tweet_list = ind.connection.search(q = query, fl = ret_key ,rows=10000)
-   # for tweet in tweet_list:
+    ret_key = "tweet_text, id, poi_name, hashtags, tweet_date, tweet_lang, country, score, poi_id, verified, tweet_urls"
+    query = "tweet_text:" + query_text
+    tweet_list = ind.connection.search(q = query, fl = ret_key ,rows=10000)
+    #for tweet in tweet_list:
     #    print(tweet)
     #return
-    print("Number of hits: " + str(response['response']['numFound']))
+    #print("Number of hits: " + str(response['response']['numFound']))
     #print(type(response))
     result_tweet_list = []
     poi_set = set()
     country_set = set()
     language_set = set()
-    for doc in response['response']['docs']:
-    #for doc in tweet_list:
-        if checkPayloadRequirement(doc, payload) == False:
+
+    doc_topic, topic_words_list = sd.getAllTopicsAndWords()
+    #for doc in response['response']['docs']:
+    for doc in tweet_list:
+        if checkPayloadRequirement(doc, payload, doc_topic, topic_words_list) == False:
             continue
         #print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>   ", doc['country'])
         if 'poi_name' in doc.keys():
@@ -284,8 +284,9 @@ def get_from_solr(core_name, query_text, payload):
 
     sentiment_count = {"pos":0, "neg":0, "neu":0}
 
-    doc_topic, topic_words_list = sd.getAllTopicsAndWords()
-    #print("OK")
+
+    #print("Len----->>>>>  ", len(result_tweet_list), total_tweet)
+
     for doc in result_tweet_list[(cur_page-1)*total_tweet::]:
         vs = analyzer.polarity_scores(doc['tweet_text'])
         if vs['neu'] > .90:
@@ -294,21 +295,13 @@ def get_from_solr(core_name, query_text, payload):
             sentiment_count['pos'] += 1
         else:
             sentiment_count['neg'] += 1
-
+        #print("OK--->>>")
         if(len(lens_doc) < total_tweet):
             doc['topics'] = ""
-            if 'topic' in payload and len(payload['topic']) > 0:
-                topic_words = topic_words_list[str(doc_topic[doc['id']])]
-
-                for word in topic_words[:7]:
-                    doc['topics'] +=word + " "
-                if payload['topic'][0] not in doc ['topics']:
-                    continue
-            else:
-                topic_words = topic_words_list[str(doc_topic[doc['id']])]
-                print(type(topic_words), topic_words[0])
-                for word in topic_words[:7]:
-                    doc['topics'] += word + " "
+            topic_words = topic_words_list[str(doc_topic[doc['id']])]
+            #print(type(topic_words), topic_words[0])
+            for word in topic_words[:7]:
+                doc['topics'] += word + " "
 
             if vs['pos'] < .0000000001:
                 vs['pos'] = .5
@@ -319,10 +312,13 @@ def get_from_solr(core_name, query_text, payload):
             #break
     #print(sentiment_count)
     poi_tweet_count = getPoiTweetCount(payload, result_tweet_list, poi_set)
+    #print("total  1   ", len(lens_doc))
     country_tweet_count = getCountryTweetCount(payload, result_tweet_list, country_set)
+    #print("total 2    ", len(lens_doc))
     poi_reply_count, poi_reply_sentiment = getPoiReplyCount(payload, result_tweet_list, poi_set)
+    #print("total 3    ", len(lens_doc))
     language_tweet_count = getLangTweetCount(payload, result_tweet_list, language_set)
-    #print(lens_doc)
+    #print("total  4   ",len(lens_doc))
     return lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment, len(result_tweet_list), language_tweet_count, sentiment_count
 
 
