@@ -55,7 +55,7 @@ def getAllPoiTweetCount(ind):
 
 def getAllCountryTweetCount(ind):
     country_tweet_count = {"India":0, "USA":0, "Mexico":0}
-    country_tweet_count = {"Mexico": 26650, "USA":29675, "India":20809}
+    country_tweet_count = {"Mexico": 33706, "USA":49259, "India":27051}
     return country_tweet_count
 
     for country in country_tweet_count:
@@ -96,6 +96,8 @@ def getAllPoiTimeSeriesData(ind):
 
     poi_month_count = {}
     for poi in data.keys():
+        if poi == 'NaN':
+            continue
         poi_month_count[poi] = []
 
 
