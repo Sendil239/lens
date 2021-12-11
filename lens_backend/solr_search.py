@@ -307,7 +307,7 @@ def get_from_solr(core_name, query_text, payload):
                 vs['pos'] = .5
             doc['sentiment'] = vs['pos']
             #doc['top_pos_reply'], doc['top_neg_reply']  = sd.getTopPosNegReply(doc, ind)
-            doc['top_pos_reply'], doc['top_neg_reply'] = "No reply in indexed data", "No reply in indexed data"
+            doc['top_pos_reply'], doc['top_neg_reply'] = "", ""
             lens_doc.append(doc)
             #break
     #print(sentiment_count)

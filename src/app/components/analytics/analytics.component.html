@@ -1,9 +1,11 @@
-<div class="barChartDiv" *ngIf="!isLoading">
-    <app-bar
-        [barChartData]="poiTweetList"
-        [name]="'Tweets'"
-        [barTitle]="'POI Vs Tweet Count'"
-    ></app-bar>
+<div class='barChartDiv' *ngIf="!isLoading">   
+    <app-bar 
+    [barContainer]="'poiTweetBarChart'"
+    [barChartData]="poiTweetList"
+    [name]="'Tweet Count'"
+    [barTitle]="'POI vs Tweet Count'"
+    >
+    </app-bar>
 </div>
 <br>
 <div class="roundChartDiv" *ngIf="!isLoading" style="display: flex;">
@@ -22,23 +24,29 @@
     </app-rose>
 </div>
 <br>
-<!-- <div class="roseChartDiv" *ngIf="!isLoading">
-        <app-rose 
-        [roseChartData]="languageTweetList"
-        [roseTitle]="'Language Vs Tweet Count'"
-        >
-        </app-rose>
-    </div> -->
-    <br>
 <div class="lineChartDiv" *ngIf="!isLoading">
     <app-line 
     [lineChartData]="timeSeriesList"
-    [lineTitle]="'Language Vs Tweet Count'"
+    [lineTitle]="'POI Time Series Data (Apr - Sep 2021)'"
+    [lineContainer]="'poiTimeSeriesContainer'"    
     >
     </app-line>
 </div>
 <div class='wordCloud' id="topicsContainer" [hidden]="isWordCloudLoading"></div>
+<div class="lineChartDiv" *ngIf="!isLoading">
+    <app-line 
+    [lineChartData]="countryVaccineHesitancy"
+    [lineTitle]="'Country Vaccine Hesitancy (Apr - Sep 2021)'"
+    [lineContainer]="'countryVaccineHesitancyContainer'"    
+    >
+    </app-line>
+</div>
 <div class='wordCloud' id="hashtagsContainer" [hidden]="isWordCloudLoading"></div>
+<div id="vaccineHesitancyTweetContainer" [hidden]="isLoading"></div>
+<div id="vaccineHesitancyContainer" [hidden]="isLoading">
+
+
+</div>
 <div class='loader-wrapper' *ngIf='isLoading || isWordCloudLoading'>
     <mat-spinner></mat-spinner>    
 </div>

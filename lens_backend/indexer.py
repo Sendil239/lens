@@ -5,7 +5,7 @@ import pysolr
 import requests
 import json
 import pandas as pd
-import pickle5 as pickle
+import pickle as pickle
 
 
 

@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
 import { IChart } from 'src/app/shared/interfaces/barchart.interface';
+import * as Highcharts from 'highcharts';
 
 @Component({
   selector: 'app-bar',
@@ -8,67 +9,100 @@ import { IChart } from 'src/app/shared/interfaces/barchart.interface';
   styleUrls: ['./bar.component.scss']
 })
 
-export class BarComponent implements OnInit {
+export class BarComponent implements OnInit, AfterViewInit  {
   initOpts: object;
   chartOption: any;
+  barChartData: any;
+  barTitle: string;
+  barContainer: string;
 
-  constructor() { }
-
-  ngOnInit(): void {
-    this.initOpts = {
-      renderer: 'svg',
-      width: this.barChartData.length > 4 ? this.barChartData.length * 170 : 300,
-      height: 300
-    };
-    this.chartOption = {
-      title: {
-        text: this.barTitle,
-        left: 'center',
-        top: 20,
-        textStyle: {
-          color: 'black',
-        },
-      },
-      color: ['#3398DB'],
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'shadow'
-        }
-      },
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
-      },
-      xAxis: [
-        {
-          type: 'category',
-          data: this.barChartData.map(x=>x.name),
-          axisTick: {
-            alignWithLabel: true
-          }
-        }
-      ],
-      yAxis: [{
-        type: 'value'
-      }],
-      series: [{
-        name: this.name,
-        type: 'bar',
-        barWidth: '25%',
-        data: this.barChartData.map(x=>x.value)
-      }],
-      
-    };
+  constructor() {
+    
   }
 
+  ngOnInit(): void {
+    
+  }
+
+  ngAfterViewInit(): void{
+    this.drawBarChart();
+  }
+
+  drawBarChart(){
+    if(this.barChartData?.length > 0 && this.barTitle != '' && this.barContainer != ''){
+      Highcharts.chart(this.barContainer, {
+        chart: {
+          type: 'bar',
+          height: 750,
+          events: {
+            load: function() {
+              let categoryHeight = 35;
+              this.update({
+                chart: {
+                  height: categoryHeight * 20 + (this.chartHeight - this.plotHeight)
+                }
+              })
+            }
+          }
+        },
+        title: {
+          text: this.barTitle
+        },
+        xAxis: {
+          categories: this.barChartData.map((x: any) => x.name),//['First', 'Second', 'Third', 'Fourth', 'Fifth'],
+          crosshair: true
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: this.name
+          }
+        },
+        tooltip: {
+          headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+          pointFormat: '<tr><td style="padding:0"><b>{point.y}</b></td></tr>',
+          footerFormat: '</table>',
+          shared: true,
+          useHTML: true
+        },
+        plotOptions: {
+          column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+          }
+        },
+        series: [{
+                  pointWidth:20,                
+                  type: 'bar',
+                  showInLegend:false,
+                  data: this.barChartData
+                }]
+      });
+    }
+  }
+
+  @Input('barChartData')
+    set barData(data: any){
+      this.barChartData = data;
+      // if(data != undefined)
+      //   this.drawBarChart();  
+    }
+    
   @Input()
-  barChartData: IChart[];
-  @Input()
-  name: string;
-  @Input()
-  barTitle: string;
+    name: string;
+  @Input('barTitle')
+    set barChartTitle(data: any){
+      this.barTitle = data;
+      // if(data != '')
+      //   this.drawBarChart();
+    }
+
+    @Input('barContainer')
+    set barChartContainer(data: any){
+      this.barContainer = data;
+      // if(data!= '')
+      //   this.drawBarChart();
+    }
+    
 
 }

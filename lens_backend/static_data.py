@@ -114,7 +114,7 @@ def getAllPoiTimeSeriesData(ind):
                 continue
             temp_count[poi_month_key] += int(data[poi][date_key])
             #return data
-
+        
         poi_month_count[poi] = temp_count
         #for month_count in temp_count.items():
          #   poi_month_count[poi].append(dict(month_count))
@@ -292,7 +292,7 @@ def getHashtagDistribution():
         print(type(data))
         #data = literal_eval(data)
 
-    data = dict(sorted(data.items(), key=lambda item: item[1], reverse=True)[:1000])
+    data = dict(sorted(data.items(), key=lambda item: item[1], reverse=True)[:100])
 
     #ret_data = dict(data[:500])
     return data

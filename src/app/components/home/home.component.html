@@ -51,53 +51,60 @@
                 <mat-spinner *ngIf='isDataLoading'></mat-spinner>    
             </div>
         </mat-tab>
-        <mat-tab label="Visualizations"> 
-            <div class='poiTweetBarChartDiv' *ngIf="!isGraphDataLoading && poiTweetData.length>0">       
-                <app-bar 
-                [barChartData]="poiTweetData"
-                [name]="'Tweets'"
-                [barTitle]="'POI vs Tweet Count'"
-                ></app-bar>
-            </div>
-            <div></div>
-            <div class='countryTweetPieChartDiv' *ngIf="!isGraphDataLoading && countryTweetData.length>0">
-                <app-pie
-                [pieTitle]="'Country Wise Distribution'"
-                [pieChartData]="countryTweetData"
-                ></app-pie>
-            </div>
-            <div class='languageTweetPieChartDiv' *ngIf="!isGraphDataLoading && languageTweetData.length>0">
-                <app-pie
-                [pieTitle]="'Language Wise Distribution'"
-                [pieChartData]="languageTweetData"
-                ></app-pie>
-            </div>
-            <!-- LANGUAGE WISE DISTRIBUTION -->
-            <!-- <div class='chartDiv' *ngIf="!isGraphDataLoading && poiTweetData.length>0">
-                <app-rose
-                [roseTitle] = "'Sentiment Analysis on tweets'"
-                [roseChartData]="sentimentTweetData"
-                >
-                </app-rose>
-            </div> -->
-            <div class='repliesBarChartDiv' *ngIf="!isGraphDataLoading && poiReplyData.length>0">       
-                <app-bar 
-                [barChartData]="poiReplyData"
-                [name]="'Count'"
-                [barTitle]="'POI vs Reply Count'"
-                ></app-bar>
-            </div>
-            <div class='sentimentBarChartDiv' *ngIf="!isGraphDataLoading && poiRepliesSentimentAnalysisData.length>0">       
-                <app-bar 
-                [barChartData]="poiRepliesSentimentAnalysisData"
-                [name]="'Score'"
-                [barTitle]="'POI Replies Sentiment Analysis'"
-                ></app-bar>
-            </div>
-            <div *ngIf='!isDataLoading && tweetsList.length===0' class='no-data'> NO DATA FOUND.</div>
-            <div class='loader-wrapper'>
-                <mat-spinner *ngIf='isGraphDataLoading'></mat-spinner>    
-            </div>
+        <mat-tab label="Visualizations">
+            <ng-template matTabContent>
+                <div class='poiTweetBarChartDiv' *ngIf="!isGraphDataLoading && poiTweetData.length>0">   
+                    <app-bar 
+                    [barContainer]="'poiTweetsBarChart'"
+                    [barChartData]="poiTweetData"
+                    [name]="'Tweet Count'"
+                    [barTitle]="'POI vs Tweet Count'"
+                    >
+                </app-bar>
+                </div>
+                <div class='countryTweetPieChartDiv' *ngIf="!isGraphDataLoading && countryTweetData.length>0">
+                    <app-pie
+                    [pieTitle]="'Country Wise Distribution'"
+                    [pieChartData]="countryTweetData"
+                    ></app-pie>
+                </div>
+                <div class='languageTweetPieChartDiv' *ngIf="!isGraphDataLoading && languageTweetData.length>0">
+                    <app-pie
+                    [pieTitle]="'Language Wise Distribution'"
+                    [pieChartData]="languageTweetData"
+                    ></app-pie>
+                </div>
+                <!-- LANGUAGE WISE DISTRIBUTION -->
+                <!-- <div class='chartDiv' *ngIf="!isGraphDataLoading && poiTweetData.length>0">
+                    <app-rose
+                    [roseTitle] = "'Sentiment Analysis on tweets'"
+                    [roseChartData]="sentimentTweetData"
+                    >
+                    </app-rose>
+                </div> -->
+                <div class='repliesBarChartDiv' *ngIf="!isGraphDataLoading && poiReplyData.length>0">   
+                    <app-bar 
+                    [barContainer]="'poiRepliesBarChart'"
+                    [barChartData]="poiReplyData"
+                    [name]="'Tweet Count'"
+                    [barTitle]="'POI vs Reply Count'"
+                    >
+                    </app-bar>
+                </div>
+                <div class='sentimentBarChartDiv' *ngIf="!isGraphDataLoading && poiRepliesSentimentAnalysisData.length>0">   
+                    <app-bar 
+                    [barContainer]="'poiRepliesSentimentAnalysisBarChart'"
+                    [barChartData]="poiRepliesSentimentAnalysisData"
+                    [name]="'Sentiment'"
+                    [barTitle]="'POI Replies Sentiment Analysis'"
+                    >
+                    </app-bar>
+                </div>
+                <div *ngIf='!isDataLoading && tweetsList.length===0' class='no-data'> NO DATA FOUND.</div>
+                <div class='loader-wrapper'>
+                    <mat-spinner *ngIf='isGraphDataLoading'></mat-spinner>    
+                </div>
+            </ng-template>
         </mat-tab>
     </mat-tab-group>
     </mat-grid-tile>

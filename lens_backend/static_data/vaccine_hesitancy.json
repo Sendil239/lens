@@ -1,1 +1,152 @@
-{"narendramodi": {"covid": 16, "non-covid": 507, "covid-sentiment": 0.1833125, "non-covid-sentiment": 0.17964891518737672}, "mansukhmandviya": {"covid": 34, "non-covid": 477, "covid-sentiment": 0.09870588235294118, "non-covid-sentiment": 0.08549266247379457}, "MoHFW_INDIA": {"covid": 46, "non-covid": 944, "covid-sentiment": 0.08604347826086958, "non-covid-sentiment": 0.049646186440677934}, "AmitShah": {"covid": 5, "non-covid": 1114, "covid-sentiment": 0.05620000000000001, "non-covid-sentiment": 0.06048922800718133}, "ArvindKejriwal": {"covid": 15, "non-covid": 1381, "covid-sentiment": 0.147, "non-covid-sentiment": 0.11684793627805935}, "smritiirani": {"covid": 17, "non-covid": 606, "covid-sentiment": 0.18552941176470591, "non-covid-sentiment": 0.10018481848184824}, "ShashiTharoor": {"covid": 44, "non-covid": 1364, "covid-sentiment": 0.10497727272727274, "non-covid-sentiment": 0.1429780058651025}, "drharshvardhan": {"covid": 131, "non-covid": 1363, "covid-sentiment": 0.12295419847328247, "non-covid-sentiment": 0.07302421129860596}, "nsitharaman": {"covid": 44, "non-covid": 691, "covid-sentiment": 0.11059090909090906, "non-covid-sentiment": 0.17677568740955132}, "lopezobrador_": {"covid": 15, "non-covid": 1475, "covid-sentiment": 0.0, "non-covid-sentiment": 0.006347118644067797}, "SSalud_mx": {"covid": 20, "non-covid": 1496, "covid-sentiment": 0.031000000000000007, "non-covid-sentiment": 0.009920454545454566}, "HLGatell": {"covid": 28, "non-covid": 1472, "covid-sentiment": 0.005464285714285714, "non-covid-sentiment": 0.0062540760869565235}, "Claudiashein": {"covid": 49, "non-covid": 2437, "covid-sentiment": 0.002081632653061225, "non-covid-sentiment": 0.005619614279852277}, "SRE_mx": {"covid": 17, "non-covid": 1464, "covid-sentiment": 0.009, "non-covid-sentiment": 0.025047131147540987}, "EPN": {"covid": 0, "non-covid": 1498, "covid-sentiment": 0, "non-covid-sentiment": 0.012255674232309745}, "tatclouthier": {"covid": 0, "non-covid": 252, "covid-sentiment": 0, "non-covid-sentiment": 0.011714285714285714}, "LuisaAlcalde": {"covid": 2, "non-covid": 1455, "covid-sentiment": 0.0, "non-covid-sentiment": 0.011216494845360822}, "JoeBiden": {"covid": 44, "non-covid": 699, "covid-sentiment": 0.10100000000000002, "non-covid-sentiment": 0.12882975679542205}, "HillaryClinton": {"covid": 60, "non-covid": 1422, "covid-sentiment": 0.12899999999999998, "non-covid-sentiment": 0.16291350210970446}, "CDCgov": {"covid": 316, "non-covid": 1184, "covid-sentiment": 0.08081645569620258, "non-covid-sentiment": 0.10515962837837842}, "POTUS": {"covid": 65, "non-covid": 933, "covid-sentiment": 0.11712307692307694, "non-covid-sentiment": 0.14003429796355824}, "VP": {"covid": 238, "non-covid": 1262, "covid-sentiment": 0.14086974789915963, "non-covid-sentiment": 0.15085023771790826}, "SpeakerPelosi": {"covid": 148, "non-covid": 1350, "covid-sentiment": 0.12635810810810813, "non-covid-sentiment": 0.15125333333333352}, "BarackObama": {"covid": 40, "non-covid": 1456, "covid-sentiment": 0.12972499999999998, "non-covid-sentiment": 0.1660535714285716}, "PeteButtigieg": {"covid": 9, "non-covid": 484, "covid-sentiment": 0.142, "non-covid-sentiment": 0.15209710743801672}}
+{
+    "narendramodi": {
+        "covid": 16,
+        "non_covid": 507,
+        "covid_sentiment": 0.1833125,
+        "non_covid_sentiment": 0.17964891518737672
+    },
+    "mansukhmandviya": {
+        "covid": 34,
+        "non_covid": 477,
+        "covid_sentiment": 0.09870588235294118,
+        "non_covid_sentiment": 0.08549266247379457
+    },
+    "MoHFW_INDIA": {
+        "covid": 46,
+        "non_covid": 944,
+        "covid_sentiment": 0.08604347826086958,
+        "non_covid_sentiment": 0.049646186440677934
+    },
+    "AmitShah": {
+        "covid": 5,
+        "non_covid": 1114,
+        "covid_sentiment": 0.05620000000000001,
+        "non_covid_sentiment": 0.06048922800718133
+    },
+    "ArvindKejriwal": {
+        "covid": 15,
+        "non_covid": 1381,
+        "covid_sentiment": 0.147,
+        "non_covid_sentiment": 0.11684793627805935
+    },
+    "smritiirani": {
+        "covid": 17,
+        "non_covid": 606,
+        "covid_sentiment": 0.18552941176470591,
+        "non_covid_sentiment": 0.10018481848184824
+    },
+    "ShashiTharoor": {
+        "covid": 44,
+        "non_covid": 1364,
+        "covid_sentiment": 0.10497727272727274,
+        "non_covid_sentiment": 0.1429780058651025
+    },
+    "drharshvardhan": {
+        "covid": 131,
+        "non_covid": 1363,
+        "covid_sentiment": 0.12295419847328247,
+        "non_covid_sentiment": 0.07302421129860596
+    },
+    "nsitharaman": {
+        "covid": 44,
+        "non_covid": 691,
+        "covid_sentiment": 0.11059090909090906,
+        "non_covid_sentiment": 0.17677568740955132
+    },
+    "lopezobrador_": {
+        "covid": 15,
+        "non_covid": 1475,
+        "covid_sentiment": 0.0,
+        "non_covid_sentiment": 0.006347118644067797
+    },
+    "SSalud_mx": {
+        "covid": 20,
+        "non_covid": 1496,
+        "covid_sentiment": 0.031000000000000007,
+        "non_covid_sentiment": 0.009920454545454566
+    },
+    "HLGatell": {
+        "covid": 28,
+        "non_covid": 1472,
+        "covid_sentiment": 0.005464285714285714,
+        "non_covid_sentiment": 0.0062540760869565235
+    },
+    "Claudiashein": {
+        "covid": 49,
+        "non_covid": 2437,
+        "covid_sentiment": 0.002081632653061225,
+        "non_covid_sentiment": 0.005619614279852277
+    },
+    "SRE_mx": {
+        "covid": 17,
+        "non_covid": 1464,
+        "covid_sentiment": 0.009,
+        "non_covid_sentiment": 0.025047131147540987
+    },
+    "EPN": {
+        "covid": 0,
+        "non_covid": 1498,
+        "covid_sentiment": 0,
+        "non_covid_sentiment": 0.012255674232309745
+    },
+    "tatclouthier": {
+        "covid": 0,
+        "non_covid": 252,
+        "covid_sentiment": 0,
+        "non_covid_sentiment": 0.011714285714285714
+    },
+    "LuisaAlcalde": {
+        "covid": 2,
+        "non_covid": 1455,
+        "covid_sentiment": 0.0,
+        "non_covid_sentiment": 0.011216494845360822
+    },
+    "JoeBiden": {
+        "covid": 44,
+        "non_covid": 699,
+        "covid_sentiment": 0.10100000000000002,
+        "non_covid_sentiment": 0.12882975679542205
+    },
+    "HillaryClinton": {
+        "covid": 60,
+        "non_covid": 1422,
+        "covid_sentiment": 0.12899999999999998,
+        "non_covid_sentiment": 0.16291350210970446
+    },
+    "CDCgov": {
+        "covid": 316,
+        "non_covid": 1184,
+        "covid_sentiment": 0.08081645569620258,
+        "non_covid_sentiment": 0.10515962837837842
+    },
+    "POTUS": {
+        "covid": 65,
+        "non_covid": 933,
+        "covid_sentiment": 0.11712307692307694,
+        "non_covid_sentiment": 0.14003429796355824
+    },
+    "VP": {
+        "covid": 238,
+        "non_covid": 1262,
+        "covid_sentiment": 0.14086974789915963,
+        "non_covid_sentiment": 0.15085023771790826
+    },
+    "SpeakerPelosi": {
+        "covid": 148,
+        "non_covid": 1350,
+        "covid_sentiment": 0.12635810810810813,
+        "non_covid_sentiment": 0.15125333333333352
+    },
+    "BarackObama": {
+        "covid": 40,
+        "non_covid": 1456,
+        "covid_sentiment": 0.12972499999999998,
+        "non_covid_sentiment": 0.1660535714285716
+    },
+    "PeteButtigieg": {
+        "covid": 9,
+        "non_covid": 484,
+        "covid_sentiment": 0.142,
+        "non_covid_sentiment": 0.15209710743801672
+    }
+}

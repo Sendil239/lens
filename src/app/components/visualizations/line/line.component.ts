@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
 import { UtilService } from 'src/app/services/util.service';
 import * as Highcharts from 'highcharts';
@@ -8,7 +8,7 @@ import * as Highcharts from 'highcharts';
   templateUrl: './line.component.html',
   styleUrls: ['./line.component.scss']
 })
-export class LineComponent implements OnInit {
+export class LineComponent implements OnInit, AfterViewInit {
   initOpts: object;
   chartOption: any;
   lineChartData: any;
@@ -19,82 +19,40 @@ export class LineComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.initOpts = {
-      renderer: 'svg',
-      width: 7 * 210,
-      height: 600
-    };
-    this.chartOption = {
-      title: {
-        text: "TimeSeries Analysis of POIs",
-        left: 'center',
-        top: 0,
-        textStyle:{
-          color:'black',
-        }
-      },
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'cross',
-          label: {
-            backgroundColor: '#6a7985'
+  }
+
+  ngAfterViewInit(): void{
+    this.drawLineChart();
+  }
+
+  drawLineChart(){
+    Highcharts.chart(this.lineContainer, {
+      chart: {
+        type: 'spline',
+        events: {
+          load: function() {
+            let categoryHeight = 35;
+            this.update({
+              chart: {
+                height: categoryHeight * 15 + (this.chartHeight - this.plotHeight)
+              }
+            })
           }
         }
       },
-      legend: {
-        x: 'center',
-        y: 'bottom',
-        data: this.lineChartData.map((x: any) => x.name)
-      },
-      grid: {
-        left: '1%',
-        right: '1%',
-        bottom: '3%',
-        containLabel: true
-      },
-      xAxis: [
-        {
-          type: 'category',
-          boundaryGap: false,
-          data: ['Apr 2021', 'May 2021', 'Jun 2021', 'Jul 2021', 'Aug 2021', 'Sep 2021']
-        }
-      ],
-      yAxis: [
-        {
-          type: 'value'
-        }
-      ],
-      series: this.lineSeriesData
-    }
-  }
-
-  @Input('lineChartData')
-  set lineData(data: any){
-    this.lineChartData = this.utilService.objectToArray(data);
-    this.lineChartData.forEach((element: any) => {
-      let monthData = this.utilService.objectToArray(element.value);
-      this.lineSeriesData.push({
-        name: element.name,
-        data: monthData.map(x => x.value)
-      })
-    });
-    Highcharts.chart('container', {
-      chart: {
-        type: 'spline'
-      },
       title: {
-        text: 'abcd'
+        text: this.lineTitle
       },
       xAxis: {
-        type: 'datetime',
-        dateTimeLabelFormats: { // don't display the dummy year
-          month: '%e. %b',
-          year: '%b'
-        },
+        // type: 'datetime',
+        // dateTimeLabelFormats: { // don't display the dummy year
+        //   month: '%e. %b',
+        //   year: '%b'
+        // },
         title: {
-          text: 'Date'
-        }
+          text: 'MMM yyyy'
+        },
+        categories: ["Apr 2021", "May 2021", "Jun 2021", "Jul 2021", "Aug 2021", "Sep 2021"]
       },
       yAxis: {
         title: {
@@ -104,7 +62,7 @@ export class LineComponent implements OnInit {
       },
       tooltip: {
         headerFormat: '<b>{series.name}</b><br>',
-        pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+        pointFormat: '{point.y}'
       },
     
       plotOptions: {
@@ -140,7 +98,22 @@ export class LineComponent implements OnInit {
       }
     });
   }
+
+  @Input('lineChartData')
+  set lineData(data: any){
+    this.lineChartData = this.utilService.objectToArray(data);
+    this.lineChartData.forEach((element: any) => {
+      let monthData = this.utilService.objectToArray(element.value);
+      this.utilService.sortByMonth(monthData)
+      this.lineSeriesData.push({
+        name: element.name,
+        data: monthData.map(x => x.value)
+      })
+    });
+  }
     
   @Input()
     lineTitle: string;
+  @Input()
+    lineContainer: string;
 }

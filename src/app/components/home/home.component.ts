@@ -27,9 +27,9 @@ export class HomeComponent implements OnInit {
   isGraphDataLoading: boolean;
   totalTweetsCount: number;
   countryTweetData: IChart[];
-  poiTweetData: IChart[];
-  poiRepliesSentimentAnalysisData: IChart[];
-  poiReplyData: IChart[];
+  poiTweetData: any;
+  poiRepliesSentimentAnalysisData: any;
+  poiReplyData: any;
   languageTweetData: IChart[];
 
   constructor(private homeService: HomeService, private utilService: UtilService) {
@@ -105,9 +105,9 @@ export class HomeComponent implements OnInit {
           this.totalTweetsCount = result.total_tweet_count;          
           if(isFilterSearch){
             this.countryTweetData = this.utilService.objectToArray(result.country_tweet_count);
-            this.poiTweetData = this.utilService.objectToArray(result.poi_tweet_count);
-            this.poiRepliesSentimentAnalysisData = this.utilService.objectToArray(result.poi_reply_sentiment);
-            this.poiReplyData = this.utilService.objectToArray(result.poi_reply_count);
+            this.poiTweetData = this.utilService.objectToArrayData(result.poi_tweet_count);
+            this.poiRepliesSentimentAnalysisData = this.utilService.objectToArrayData(result.poi_reply_sentiment);
+            this.poiReplyData = this.utilService.objectToArrayData(result.poi_reply_count);
             this.languageTweetData = this.utilService.objectToArray(result.language_tweet_count);
           }
         }

@@ -12,7 +12,7 @@ import * as Highcharts from 'highcharts';
 export class AnalyticsComponent implements OnInit {
 
   isLoading: boolean;
-  poiTweetList: IChart[];
+  poiTweetList: any;
   countryTweetList: IChart[];
   languageTweetList: IChart[];
   timeSeriesList: any;
@@ -21,6 +21,8 @@ export class AnalyticsComponent implements OnInit {
   options:any;
   isWordCloudLoading: boolean;
   hashtagsImportanceList: any;
+  countryVaccineHesitancy: any;
+  vaccineHesitancy: any;
 
   constructor(private analyticsService: AnalyticsService, private utilService: UtilService) {
       this.isLoading = false;
@@ -34,16 +36,20 @@ export class AnalyticsComponent implements OnInit {
     this.isLoading = true;
     this.analyticsService.getCorpusChartData()
     .subscribe((result: any) => {
-      this.poiTweetList = this.utilService.objectToArray(result.poi_tweet_distribution);
+      this.poiTweetList = this.utilService.objectToArrayData(result.poi_tweet_distribution);
       this.countryTweetList = this.utilService.objectToArray(result.country_distribution);
-      this.languageTweetList = this.utilService.objectToArray(result.lang_distribution);  
+      this.languageTweetList = this.utilService.objectToArray(result.lang_distribution);
       this.timeSeriesList = result.all_poi_time_series_data;
       this.topicsImportanceList = this.utilService.objectToArrayWordCloud(result.topic_importance);
+      this.countryVaccineHesitancy = result.country_vaccine_hesitancy;
+      this.vaccineHesitancy = this.utilService.objectToArray(result.vaccine_hesitancy);
       this.isLoading = false;
       this.drawWordCloud(this.topicsImportanceList, 'topicsContainer', 'Wordcloud of Covid Corpus');
       this.isWordCloudLoading = true;
       this.hashtagsImportanceList = this.utilService.objectToArrayWordCloud(result.hashtag_distribution);
-      this.drawWordCloud(this.hashtagsImportanceList, 'hashtagsContainer', 'Wordcloud of Covid Hastags');      
+      this.drawWordCloud(this.hashtagsImportanceList, 'hashtagsContainer', 'Wordcloud of Covid Hashtags');      
+      this.drawVaccineHesitancyColumnCloud(this.vaccineHesitancy, 'vaccineHesitancyContainer', 'Vaccine Hesitancy');
+      this.drawVaccineHesitancyTweetColumnCloud(this.vaccineHesitancy, 'vaccineHesitancyTweetContainer', 'Vaccine Hesitancy For Diff Tweets');
     });
   }
 
@@ -69,6 +75,98 @@ export class AnalyticsComponent implements OnInit {
       setInterval(()=>{
         this.isWordCloudLoading = false;
       }, 1000);
+  }
+
+  drawVaccineHesitancyColumnCloud(data: any, container:string, titleText:string){
+    Highcharts.chart(container, {
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: titleText
+      },
+      xAxis: {
+        categories: data.map((x:any)=>x.name),
+        crosshair: true
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: 'Score'
+        }
+      },
+      tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+          '<td style="padding:0"><b>{point.y:.3f}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+      },
+      plotOptions: {
+        column: {
+          pointPadding: 0.2,
+          borderWidth: 0
+        }
+      },
+      series: [{
+        type: 'column',
+        name: 'Covid sentiment',
+        data: data.map((x:any)=>x.value.covid_sentiment)
+    
+      }, {
+        type: 'column',
+        name: 'Non-covid sentiment',
+        data: data.map((x:any)=>x.value.non_covid_sentiment)
+    
+      }]
+    });
+  }
+
+  drawVaccineHesitancyTweetColumnCloud(data: any, container:string, titleText:string){
+    Highcharts.chart(container, {
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: titleText
+      },
+      xAxis: {
+        categories: data.map((x:any)=>x.name),
+        crosshair: true
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: 'Tweet Count'
+        }
+      },
+      tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+          '<td style="padding:0"><b>{point.y}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+      },
+      plotOptions: {
+        column: {
+          pointPadding: 0.2,
+          borderWidth: 0
+        }
+      },
+      series: [{
+        type: 'column',
+        name: 'Covid Related Tweets',
+        data: data.map((x:any)=>x.value.covid)
+    
+      }, {
+        type: 'column',
+        name: 'Non-covid Related Tweets',
+        data: data.map((x:any)=>x.value.non_covid)
+    
+      }]
+    });
   }
 
 }
