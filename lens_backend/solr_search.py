@@ -224,7 +224,7 @@ def get_from_solr(core_name, query_text, payload):
     extra_percent = '%2C%20'
     result_fields = "id" + extra_percent + 'poi_name' + extra_percent + 'tweet_text'  + \
                     extra_percent + 'hashtags' + extra_percent + 'tweet_date' + extra_percent + 'country' + extra_percent + 'score' + \
-                    extra_percent + 'tweet_lang' + extra_percent +'poi_id'
+                    extra_percent + 'tweet_lang' + extra_percent +'poi_id' + extra_percent +'verified' + extra_percent +'tweet_urls'
 
     fl = "q.op=OR&fl=" + result_fields
     fq = "fq="
@@ -407,10 +407,12 @@ def getFilterData():
     topics_label = sd.getTopicsLabel()
     poi_list = sd.get_poi()
     topic_importance = sd.getTopicImportance()
+    hashtag_distribution = sd.getHashtagDistribution()
     response = {
         "topics_label": topics_label,
         "poi_names": poi_list,
-        "topic_importance":topic_importance
+        "topic_importance":topic_importance,
+        "hashtag_distribution":hashtag_distribution
     }
     return flask.jsonify(response)
 
