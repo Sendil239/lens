@@ -54,24 +54,21 @@
 ::ng-deep .mat-grid-tile[ng-reflect-colspan="25"], .mat-grid-tile[ng-reflect-colspan="27"]{
 	background: #EEEEEE;
 }
-::ng-deep echarts > div:first-child{
-	margin: 0px auto;
-}
 
 ::ng-deep #charts-wrapper {
 	.mat-grid-tile-content {
 	  display: block;
 	  overflow-x: auto;
 	}
-  }
+}
 
-::ng-deep .pieChartDiv {
+::ng-deep .roundChartDiv {
     .pie-chart {
         position: static !important;
     }
 }
 
-::ng-deep .roseChartDiv {
+::ng-deep .roundChartDiv {
     .rose-chart {
         position: static !important;
     }
@@ -83,13 +80,7 @@
     }
 }
 
-::ng-deep .barChartDiv{
-	.bar-chart {
-	  position: static !important;
-	}
-}
-
-.barChartDiv, .pieChartDiv, .roseChartDiv, .lineChartDiv{
+.barChartDiv, .roundChartDiv, .roseChartDiv, .lineChartDiv{
 	width: auto;
 	overflow-x: auto;
 }

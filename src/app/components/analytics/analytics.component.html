@@ -6,21 +6,29 @@
     ></app-bar>
 </div>
 <br>
-<div class="pieChartDiv" *ngIf="!isLoading">
-    <app-pie 
-    [pieChartData]="countryTweetList"
-    [pieTitle]="'Country Vs Tweet Count'"
-    >
-    </app-pie>
+<div class="roundChartDiv" *ngIf="!isLoading" style="display: flex;">
+    <div style='width: 50%; margin-left: 13%;'>
+        <app-pie 
+        [pieChartData]="countryTweetList"
+        [pieTitle]="'Country Vs Tweet Count'"
+        >
+        </app-pie>
+    </div>
+    
+    <app-rose 
+        [roseChartData]="languageTweetList"
+        [roseTitle]="'Language Vs Tweet Count'"
+        >
+    </app-rose>
 </div>
 <br>
-<div class="roseChartDiv" *ngIf="!isLoading">
+<!-- <div class="roseChartDiv" *ngIf="!isLoading">
         <app-rose 
         [roseChartData]="languageTweetList"
         [roseTitle]="'Language Vs Tweet Count'"
         >
         </app-rose>
-    </div>
+    </div> -->
     <br>
 <div class="lineChartDiv" *ngIf="!isLoading">
     <app-line 
