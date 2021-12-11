@@ -48,7 +48,7 @@ export class AnalyticsComponent implements OnInit {
       this.isWordCloudLoading = true;
       this.hashtagsImportanceList = this.utilService.objectToArrayWordCloud(result.hashtag_distribution);
       this.drawWordCloud(this.hashtagsImportanceList, 'hashtagsContainer', 'Wordcloud of Covid Hashtags');      
-      this.drawVaccineHesitancyColumnCloud(this.vaccineHesitancy, 'vaccineHesitancyContainer', 'Vaccine Hesitancy');
+      this.drawVaccineHesitancyColumnCloud(this.vaccineHesitancy, 'vaccineHesitancyContainer', 'Vaccine Hesitancy Sentiment Analysis');
       this.drawVaccineHesitancyTweetColumnCloud(this.vaccineHesitancy, 'vaccineHesitancyTweetContainer', 'Vaccine Hesitancy For Diff Tweets');
     });
   }
