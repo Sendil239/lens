@@ -24,7 +24,7 @@ def get_poi():
 
     #print(path, root_dir, dir_names)
     for dir_name in dir_names:
-        dir_name = dir_name.split('\\')[-1]
+        dir_name = dir_name.split('/')[-1]
         #print(dir_name)
         if 'keyword' not in dir_name:
             # f_name = dir_name.split('/')[6]

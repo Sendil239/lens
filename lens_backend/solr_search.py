@@ -322,7 +322,7 @@ def get_from_solr(core_name, query_text, payload):
     return lens_doc, poi_tweet_count, country_tweet_count, poi_reply_count, poi_reply_sentiment, len(result_tweet_list), language_tweet_count, sentiment_count
 
 def search_query(payload, solr_core):
-    core_name = 'IRF_21'
+    core_name = indexer.CORE_NAME
 
     search_query = ""
     query = payload['query']
@@ -410,7 +410,6 @@ def testQuery():
 
 if __name__ == "__main__":
     #search_query(payload, ind)
-    #get_poi()
 
     #print("OK")
 

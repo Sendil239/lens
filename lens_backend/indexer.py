@@ -1,15 +1,20 @@
 import os
+from pathlib import Path
+import glob
 import pysolr
 import requests
 import json
 import pandas as pd
-import pickle as pickle
-import glob
+import pickle5 as pickle
+
+
+
+path = os.path.dirname(Path(__file__))
 
 # https://tecadmin.net/install-apache-solr-on-ubuntu/
 
 
-CORE_NAME = "IRF_21"
+CORE_NAME = "IRF_new"
 AWS_IP = "3.134.191.90"
 
 
@@ -55,6 +60,7 @@ class Indexer:
     def __init__(self):
         self.solr_url = f'http://{AWS_IP}:8983/solr/'
         self.connection = pysolr.Solr(self.solr_url + CORE_NAME, always_commit=True, timeout=50000)
+        self.CORE_NAME = CORE_NAME
 
     def do_initial_setup(self):
         delete_core()
@@ -134,10 +140,44 @@ def add_data(indexer):
             print(len(json_list))
             indexer.create_documents(json_list)
 
+
+def add_new_data(indexer):
+    path = os.path.dirname(Path(__file__))
+    root_dir = '/home/ubuntu/lens/lens_backend/new_keywords/'
+    #root_dir = path + '/new_POIS/'
+    file_names = glob.glob(root_dir + "/*")
+
+    cnt =0
+    for file_name in file_names:
+
+        if 'poi' in file_name:
+            continue
+        print(file_name)
+        cnt +=1
+        if cnt <45:
+            continue
+        #continue
+        with open(file_name, 'rb') as f:
+            data = pickle.load(f)
+
+        json_list = json.loads(json.dumps(list(data.T.to_dict().values())))
+
+        ret_list = []
+
+        for doc in json_list:
+            if doc['tweet_lang'] == 'es' or doc['tweet_lang'] == 'hi' or doc['tweet_lang'] == 'en':
+                ret_list.append(doc)
+
+        #print(len(json_list))
+        #print(json_list[0])
+        #break
+        indexer.create_documents(ret_list)
+
 if __name__ == "__main__":
     i = Indexer()
     #i.do_initial_setup()
     #i.add_fields()
-    add_data(i)
+    #add_data(i)
+    add_new_data(i)
     #i.delete_fields()
    # i.create_documents(collection[0])
