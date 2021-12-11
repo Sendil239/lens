@@ -8,7 +8,8 @@ export interface ITwitterData {
     top_neg_reply: string,
     top_pos_reply: string,
     topics: string,
-    tweet_date: Date,
+    tweet_date: string,
     tweet_text: string,
-    link: string
+    link: string,
+    verified: boolean
   }

@@ -10,7 +10,7 @@
 <div *ngFor="let item of tweetsList">
     <mat-card class="example-card">
         <mat-card-title-group>
-          <mat-card-title>@{{item.poi_name}}</mat-card-title>
+          <mat-card-title>@{{item.poi_name}}<mat-icon *ngIf="item.verified">verified_user</mat-icon></mat-card-title>
           <mat-card-subtitle>{{item.country}}</mat-card-subtitle>
         </mat-card-title-group>
         <mat-card-content>
@@ -18,14 +18,18 @@
             <div>
                 <span style="color: rgba(0,0,0,.54)">Avg Sentiment Score:</span> {{item.sentiment}}
             </div>
-            <div>
+            <div *ngIf='item.top_pos_reply !=""'>
                 <span style="color: green">Top Positive Reply:</span> {{item.top_pos_reply}}
             </div>
-            <div>
+            <div *ngIf='item.top_neg_reply !=""'>
                 <span style="color: red">Top Negative Reply:</span> {{item.top_neg_reply}}
             </div>
-            <div>
+            <div *ngIf='item.tweet_date !=""'>
                 <span style="color:blue">Tweet Date:</span> {{item.tweet_date | date:'MMM dd yyyy'}}
+                <!-- <a href="{{item.link}}" *ngIf=" item.link!='' " target="_blank" style="float: right;">{{item.link}}</a> -->
+            </div>
+            <div *ngIf='item.topics !=""'>
+                <span style="color: rgba(0,0,0,.54)">Topics:</span> {{item.topics}}
                 <!-- <a href="{{item.link}}" *ngIf=" item.link!='' " target="_blank" style="float: right;">{{item.link}}</a> -->
             </div>
         </mat-card-content>
