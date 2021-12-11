@@ -249,23 +249,19 @@ def getTopPosNegReply(doc, ind):
 def getTopicsOfDoc(doc):
     with open("/home/ubuntu/lens/lens_backend/static_data/document_topic_score.json") as json_file:
         data = json.load(json_file)
-        data = literal_eval(data)
-        print(len(data), type(data))
 
-        for key in data.keys():
-            print(key, data[key])
-            print(type(doc['id']), type(key), type(data[key]))
-            break
-        print(data[doc['id']])
-    return data[doc['id']]
+    with open("/home/ubuntu/lens/lens_backend/static_data/topic_words.json") as json_file:
+        topic_words = json.load(json_file)
+
+    return topic_words[str(data[doc['id']])]
 
 def getTopicsLabel():
     topic_label_set = []
     with open("/home/ubuntu/lens/lens_backend/static_data/topic_words.json") as json_file:
         data = json.load(json_file)
         #print(data)
-        data = literal_eval(data)
-        print(type(data))
+        #data = literal_eval(data)
+        #print(type(data))
         for key in data.keys():
             topic_label_set.append(data[key][0])
 

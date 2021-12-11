@@ -89,13 +89,15 @@ def checkPayloadRequirement(doc, payload):
         return False
     if len(payload['poi_names']) > 0 and doc['poi_name'] not in payload['poi_names']:
         return False
-    if 'topic' in payload and len(payload['topic']>0):
+    '''
+    if 'topic' in payload and len(payload['topic']) >0:
         topic_words = sd.getTopicsOfDoc(doc)
-        for topic in topic_words:
-           if payload['topic'] in topic:
-               return True
-        return False
-
+        #print(topic_words)
+        if payload['topic'][0] in topic_words:
+            return True
+        else:
+            return False
+    '''
     return True
 
 def getPoiTweetCount(payload, tweet_list, poi_set):
@@ -292,11 +294,23 @@ def get_from_solr(core_name, query_text, payload):
             sentiment_count['neg'] += 1
 
         if(len(lens_doc) < total_tweet):
+            doc['topics'] = ""
+            if 'topic' in payload and len(payload['topic']) > 0:
+                topic_words = sd.getTopicsOfDoc(doc)
+
+                for word in topic_words[:7]:
+                    doc['topics'] +=word + " "
+                if payload['topic'][0] not in doc['topics']:
+                    continue
+            else:
+                topic_words = sd.getTopicsOfDoc(doc)
+                print(type(topic_words), topic_words[0])
+                for word in topic_words[:5]:
+                    doc['topics'] += word + " "
+
             if vs['pos'] < .0000000001:
                 vs['pos'] = .5
             doc['sentiment'] = vs['pos']
-            doc['topics'] = "Nothing"
-            #doc['topics'] = sd.getTopicsOfDoc(doc)
             #doc['top_pos_reply'], doc['top_neg_reply']  = sd.getTopPosNegReply(doc, ind)
             doc['top_pos_reply'], doc['top_neg_reply'] = "No reply in indexed data", "No reply in indexed data"
             lens_doc.append(doc)
