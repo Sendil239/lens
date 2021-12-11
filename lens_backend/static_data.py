@@ -285,3 +285,28 @@ def getTopicImportance():
 
     data = dict(sorted(data.items(), key=lambda item: item[1], reverse=True))
     return data
+
+def getHashtagDistribution():
+    with open("/home/ubuntu/lens/lens_backend/static_data/hashtag_distribution.json") as json_file:
+        data = json.load(json_file)
+        print(type(data))
+        #data = literal_eval(data)
+
+    data = dict(sorted(data.items(), key=lambda item: item[1], reverse=True)[:1000])
+
+    #ret_data = dict(data[:500])
+    return data
+
+def getPoiVaccineHesitance():
+    with open("/home/ubuntu/lens/lens_backend/static_data/vaccine_hesitancy.json") as json_file:
+        vaccine_hesitancy = json.load(json_file)
+        print(type(vaccine_hesitancy))
+        #data = literal_eval(data)
+    return vaccine_hesitancy
+
+def getCountryVaccineHesitance():
+    with open("/home/ubuntu/lens/lens_backend/static_data/country_vaccine_hesitancy.json") as json_file:
+        vaccine_hesitancy = json.load(json_file)
+        print(type(vaccine_hesitancy))
+        #data = literal_eval(data)
+    return vaccine_hesitancy

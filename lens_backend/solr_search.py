@@ -408,11 +408,15 @@ def getFilterData():
     poi_list = sd.get_poi()
     topic_importance = sd.getTopicImportance()
     hashtag_distribution = sd.getHashtagDistribution()
+    vaccine_hesitancy = sd.getPoiVaccineHesitance()
+    country_vaccine_hesitancy = sd.getCountryVaccineHesitance()
     response = {
         "topics_label": topics_label,
         "poi_names": poi_list,
         "topic_importance":topic_importance,
-        "hashtag_distribution":hashtag_distribution
+        "hashtag_distribution":hashtag_distribution,
+        "vaccine_hesitancy":vaccine_hesitancy,
+        "country_vaccine_hesitancy":country_vaccine_hesitancy
     }
     return flask.jsonify(response)
 
