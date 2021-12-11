@@ -283,6 +283,8 @@ def get_from_solr(core_name, query_text, payload):
         total_tweet = payload['result_in_page']
 
     sentiment_count = {"pos":0, "neg":0, "neu":0}
+
+    doc_topic, topic_words_list = sd.getAllTopicsAndWords()
     #print("OK")
     for doc in result_tweet_list[(cur_page-1)*total_tweet::]:
         vs = analyzer.polarity_scores(doc['tweet_text'])
@@ -296,16 +298,16 @@ def get_from_solr(core_name, query_text, payload):
         if(len(lens_doc) < total_tweet):
             doc['topics'] = ""
             if 'topic' in payload and len(payload['topic']) > 0:
-                topic_words = sd.getTopicsOfDoc(doc)
+                topic_words = topic_words_list[str(doc_topic[doc['id']])]
 
                 for word in topic_words[:7]:
                     doc['topics'] +=word + " "
-                if payload['topic'][0] not in doc['topics']:
+                if payload['topic'][0] not in doc ['topics']:
                     continue
             else:
-                topic_words = sd.getTopicsOfDoc(doc)
+                topic_words = topic_words_list[str(doc_topic[doc['id']])]
                 print(type(topic_words), topic_words[0])
-                for word in topic_words[:5]:
+                for word in topic_words[:7]:
                     doc['topics'] += word + " "
 
             if vs['pos'] < .0000000001:
