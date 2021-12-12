@@ -34,7 +34,7 @@ export class AnalyticsComponent implements OnInit {
       this.languageTweetList = this.utilService.objectToArray(result.lang_distribution);
       this.vaccineHesitancy = this.utilService.objectToArray(result.vaccine_hesitancy);
       this.isLoading = false;
-      this.drawVaccineHesitancyColumnCloud(this.vaccineHesitancy, 'vaccineHesitancyContainer', 'Attitude Score of POIs');
+      this.drawVaccineHesitancyColumnCloud(this.vaccineHesitancy, 'vaccineHesitancyContainer', 'Positive attitude score of POIs');
       this.drawVaccineHesitancyTweetColumnCloud(this.vaccineHesitancy, 'vaccineHesitancyTweetContainer', 'Covid vaccine and other tweet counts of POIs');
     });
   }

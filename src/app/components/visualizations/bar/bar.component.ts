@@ -55,7 +55,7 @@ export class BarComponent implements OnInit, AfterViewInit  {
         yAxis: {
           min: 0,
           title: {
-            text: this.name
+            text: "<b>"+this.name+"</b>"
           }
         },
         tooltip: {
