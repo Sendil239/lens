@@ -56,7 +56,7 @@ export class LineComponent implements OnInit, AfterViewInit {
       },
       yAxis: {
         title: {
-          text: 'Tweet Count'
+          text: this.lineYLabel
         },
         min: 0
       },
@@ -116,4 +116,6 @@ export class LineComponent implements OnInit, AfterViewInit {
     lineTitle: string;
   @Input()
     lineContainer: string;
+  @Input()
+    lineYLabel: string
 }

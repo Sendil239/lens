@@ -40,6 +40,9 @@ export class FilterComponent implements OnInit {
   @Input('filterData')
   filterData: IFilter;
 
+  @Input()
+  isSearchTermPresent: boolean;
+
   @Output() filterApplied = new EventEmitter();
 
   resetFilters(){

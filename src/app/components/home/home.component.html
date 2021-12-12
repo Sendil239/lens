@@ -32,6 +32,7 @@
         *ngIf="!isFilterLoading"
         [filterData]="filterData"
         (filterApplied)="applyFilter($event)"
+        [isSearchTermPresent]="keyword!=''"
         ></app-filter>
         <mat-spinner *ngIf='isFilterLoading'></mat-spinner>
     </mat-grid-tile>

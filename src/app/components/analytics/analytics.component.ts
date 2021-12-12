@@ -44,12 +44,12 @@ export class AnalyticsComponent implements OnInit {
       this.countryVaccineHesitancy = result.country_vaccine_hesitancy;
       this.vaccineHesitancy = this.utilService.objectToArray(result.vaccine_hesitancy);
       this.isLoading = false;
-      this.drawWordCloud(this.topicsImportanceList, 'topicsContainer', 'Wordcloud of Covid Corpus');
+      this.drawWordCloud(this.topicsImportanceList, 'topicsContainer', 'Wordcloud of Corpus Topics');
       this.isWordCloudLoading = true;
       this.hashtagsImportanceList = this.utilService.objectToArrayWordCloud(result.hashtag_distribution);
-      this.drawWordCloud(this.hashtagsImportanceList, 'hashtagsContainer', 'Wordcloud of Covid Hashtags');      
-      this.drawVaccineHesitancyColumnCloud(this.vaccineHesitancy, 'vaccineHesitancyContainer', 'Vaccine Hesitancy Sentiment Analysis');
-      this.drawVaccineHesitancyTweetColumnCloud(this.vaccineHesitancy, 'vaccineHesitancyTweetContainer', 'Vaccine Hesitancy For Diff Tweets');
+      this.drawWordCloud(this.hashtagsImportanceList, 'hashtagsContainer', 'Wordcloud of Corpus Hashtags');
+      this.drawVaccineHesitancyColumnCloud(this.vaccineHesitancy, 'vaccineHesitancyContainer', 'Attitude Score of POIs');
+      this.drawVaccineHesitancyTweetColumnCloud(this.vaccineHesitancy, 'vaccineHesitancyTweetContainer', 'Covid vaccine and other tweet counts of POIs');
     });
   }
 
@@ -111,12 +111,12 @@ export class AnalyticsComponent implements OnInit {
       },
       series: [{
         type: 'column',
-        name: 'Covid sentiment',
+        name: 'Score from Covid vaccine related tweets',
         data: data.map((x:any)=>x.value.covid_sentiment)
     
       }, {
         type: 'column',
-        name: 'Non-covid sentiment',
+        name: 'Score from other tweets',
         data: data.map((x:any)=>x.value.non_covid_sentiment)
     
       }]
@@ -157,12 +157,12 @@ export class AnalyticsComponent implements OnInit {
       },
       series: [{
         type: 'column',
-        name: 'Covid Related Tweets',
+        name: 'Covid Vaccine Related Tweets',
         data: data.map((x:any)=>x.value.covid)
     
       }, {
         type: 'column',
-        name: 'Non-covid Related Tweets',
+        name: 'Other Tweets',
         data: data.map((x:any)=>x.value.non_covid)
     
       }]

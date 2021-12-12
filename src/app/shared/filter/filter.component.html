@@ -50,10 +50,12 @@
     color="primary"
     class='btn-filter-results'
     (click)="applyFilter()"
+    [disabled]="isSearchTermPresent ? null : true"
     > Apply Filter </button>
     <button           
     mat-raised-button
     class='btn-clear-filter'
     (click)="clearFilters()"
+    [disabled]="isSearchTermPresent ? null : true"
     > Clear Filter </button>
 </div>

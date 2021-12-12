@@ -28,7 +28,8 @@
     <app-line 
     [lineChartData]="timeSeriesList"
     [lineTitle]="'POI Time Series Data (Apr - Sep 2021)'"
-    [lineContainer]="'poiTimeSeriesContainer'"    
+    [lineContainer]="'poiTimeSeriesContainer'"  
+    [lineYLabel]="'Tweet Count'"
     >
     </app-line>
 </div>
@@ -37,7 +38,8 @@
     <app-line 
     [lineChartData]="countryVaccineHesitancy"
     [lineTitle]="'Country Vaccine Hesitancy (Apr - Sep 2021)'"
-    [lineContainer]="'countryVaccineHesitancyContainer'"    
+    [lineContainer]="'countryVaccineHesitancyContainer'"
+    [lineYLabel]="'Hesitancy Score'" 
     >
     </app-line>
 </div>

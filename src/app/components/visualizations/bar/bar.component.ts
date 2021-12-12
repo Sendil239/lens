@@ -84,8 +84,6 @@ export class BarComponent implements OnInit, AfterViewInit  {
   @Input('barChartData')
     set barData(data: any){
       this.barChartData = data;
-      // if(data != undefined)
-      //   this.drawBarChart();  
     }
     
   @Input()
@@ -93,15 +91,11 @@ export class BarComponent implements OnInit, AfterViewInit  {
   @Input('barTitle')
     set barChartTitle(data: any){
       this.barTitle = data;
-      // if(data != '')
-      //   this.drawBarChart();
     }
 
     @Input('barContainer')
     set barChartContainer(data: any){
       this.barContainer = data;
-      // if(data!= '')
-      //   this.drawBarChart();
     }
     
 
