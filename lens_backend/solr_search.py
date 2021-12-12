@@ -297,8 +297,13 @@ def get_from_solr(core_name, query_text, payload):
                 doc['topics'] += word + " "
 
             if vs['pos'] < .0000000001:
-                vs['pos'] = .5
-            doc['sentiment'] = vs['pos']
+                doc['sentiment'] = 0
+            elif vs['pos'] > vs['neg']:
+                doc['sentiment'] = vs['pos']
+            else:
+                doc['sentiment'] = -vs['neg']
+
+            print(doc['sentiment'])
 
             if doc['id'] in doc_reply_count and doc_reply_count[doc['id']] > 0:
                 doc['top_pos_reply'], doc['top_neg_reply']  = sd.getTopPosNegReply(doc, ind, doc_reply_count)
@@ -307,6 +312,9 @@ def get_from_solr(core_name, query_text, payload):
             lens_doc.append(doc)
             #break
     #print(sentiment_count)
+    if "NaN" in poi_set:
+        poi_set.remove("NaN")
+
     poi_tweet_count = getPoiTweetCount(payload, result_tweet_list, poi_set)
     #print("total  1   ", len(lens_doc))
     country_tweet_count = getCountryTweetCount(payload, result_tweet_list, country_set)
@@ -379,6 +387,7 @@ def getCorpusChartData():
     lang_distribution = sd.getAllLanguageTweetCount(ind)
     country_distribution = sd.getAllCountryTweetCount(ind)
     poi_tweet_distribution = sd.getAllPoiTweetCount(ind)
+    reply_sentiment_time_series = sd.getReplySentimentTimeSeriesData(ind)
     response = {
         "topic_importance":topic_importance,
         "hashtag_distribution":hashtag_distribution,
@@ -388,7 +397,9 @@ def getCorpusChartData():
         "country_time_series_data": country_time_series_data,
         "lang_distribution": lang_distribution,
         "country_distribution": country_distribution,
-        "poi_tweet_distribution" : poi_tweet_distribution
+        "poi_tweet_distribution" : poi_tweet_distribution,
+        "reply_sentiment_time_series":reply_sentiment_time_series
+
 
     }
     return flask.jsonify(response)

@@ -239,11 +239,13 @@ def getTopPosNegReply(doc, ind, doc_reply_count):
         if vs['pos'] > max_pos:
             max_pos = vs['pos']
             top_pos_tweet = tweet['reply_text']
-        if vs['neg'] > max_neg:
+        if vs['neg'] > max_neg and doc_reply_count[doc['id']]!= 1:
             max_neg = vs['neg']
             top_neg_tweet = tweet['reply_text']
 
     #print("TOP--->>>>>   ", top_pos_tweet, top_neg_tweet)
+    if top_neg_tweet == top_pos_tweet:
+        top_neg_tweet = ""
     return top_pos_tweet, top_neg_tweet
 
 def getTopicsOfDoc(doc):
@@ -311,3 +313,8 @@ def getCountryVaccineHesitance():
         print(type(vaccine_hesitancy))
         #data = literal_eval(data)
     return vaccine_hesitancy
+
+def getReplySentimentTimeSeriesData(ind):
+    with open("/home/ubuntu/lens/lens_backend/static_data/reply_sentiment.json") as json_file:
+        data = json.load(json_file)
+    return data
