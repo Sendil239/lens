@@ -15,21 +15,14 @@ export class AnalyticsComponent implements OnInit {
   poiTweetList: any;
   countryTweetList: IChart[];
   languageTweetList: IChart[];
-  timeSeriesList: any;
-  topicsImportanceList: any;
   Wordcloud: any;
   options:any;
-  isWordCloudLoading: boolean;
-  hashtagsImportanceList: any;
-  countryVaccineHesitancy: any;
   vaccineHesitancy: any;
 
   constructor(private analyticsService: AnalyticsService, private utilService: UtilService) {
-      this.isLoading = false;
-      this.topicsImportanceList = [];    
+      this.isLoading = false;  
       this.Wordcloud = require('highcharts/modules/wordcloud');
       this.Wordcloud(Highcharts);
-      this.isWordCloudLoading = true;
    }
 
   ngOnInit(): void {
@@ -39,42 +32,11 @@ export class AnalyticsComponent implements OnInit {
       this.poiTweetList = this.utilService.objectToArrayData(result.poi_tweet_distribution);
       this.countryTweetList = this.utilService.objectToArray(result.country_distribution);
       this.languageTweetList = this.utilService.objectToArray(result.lang_distribution);
-      this.timeSeriesList = result.all_poi_time_series_data;
-      this.topicsImportanceList = this.utilService.objectToArrayWordCloud(result.topic_importance);
-      this.countryVaccineHesitancy = result.country_vaccine_hesitancy;
       this.vaccineHesitancy = this.utilService.objectToArray(result.vaccine_hesitancy);
       this.isLoading = false;
-      this.drawWordCloud(this.topicsImportanceList, 'topicsContainer', 'Wordcloud of Corpus Topics');
-      this.isWordCloudLoading = true;
-      this.hashtagsImportanceList = this.utilService.objectToArrayWordCloud(result.hashtag_distribution);
-      this.drawWordCloud(this.hashtagsImportanceList, 'hashtagsContainer', 'Wordcloud of Corpus Hashtags');
       this.drawVaccineHesitancyColumnCloud(this.vaccineHesitancy, 'vaccineHesitancyContainer', 'Attitude Score of POIs');
       this.drawVaccineHesitancyTweetColumnCloud(this.vaccineHesitancy, 'vaccineHesitancyTweetContainer', 'Covid vaccine and other tweet counts of POIs');
     });
-  }
-
-  drawWordCloud(data: any, container: string, titleText: string){
-      Highcharts.chart(container, {
-        accessibility: {
-            screenReaderSection: {
-                beforeChartFormat: '<h5>{chartTitle}</h5>' +
-                    '<div>{chartSubtitle}</div>' +
-                    '<div>{chartLongdesc}</div>' +
-                    '<div>{viewTableButton}</div>'
-            }
-        },
-        series: [{
-            type: 'wordcloud',
-            data,
-            name: 'Occurrences'
-        }],
-        title: {
-            text: titleText
-        }
-      });
-      setInterval(()=>{
-        this.isWordCloudLoading = false;
-      }, 1000);
   }
 
   drawVaccineHesitancyColumnCloud(data: any, container:string, titleText:string){

@@ -378,28 +378,39 @@ def getFilterData():
 
 @app.route("/getCorpusChartData", methods=['GET'])
 def getCorpusChartData():
-    topic_importance = sd.getTopicImportance()
-    hashtag_distribution = sd.getHashtagDistribution()
     vaccine_hesitancy = sd.getPoiVaccineHesitance()
-    country_vaccine_hesitancy = sd.getCountryVaccineHesitance()
-    country_time_series_data = sd.getAllCountryTimeSeriesData(ind)
-    all_poi_time_series_data = sd.getAllPoiTimeSeriesData(ind)
+    country_vaccine_hesitancy = sd.getCountryVaccineHesitance()    
     lang_distribution = sd.getAllLanguageTweetCount(ind)
     country_distribution = sd.getAllCountryTweetCount(ind)
-    poi_tweet_distribution = sd.getAllPoiTweetCount(ind)
-    reply_sentiment_time_series = sd.getReplySentimentTimeSeriesData(ind)
+    poi_tweet_distribution = sd.getAllPoiTweetCount(ind)    
     response = {
-        "topic_importance":topic_importance,
-        "hashtag_distribution":hashtag_distribution,
         "vaccine_hesitancy":vaccine_hesitancy,
         "country_vaccine_hesitancy":country_vaccine_hesitancy,
-        "all_poi_time_series_data": all_poi_time_series_data,
-        "country_time_series_data": country_time_series_data,
         "lang_distribution": lang_distribution,
         "country_distribution": country_distribution,
-        "poi_tweet_distribution" : poi_tweet_distribution,
-        "reply_sentiment_time_series":reply_sentiment_time_series
+        "poi_tweet_distribution" : poi_tweet_distribution
+    }
+    return flask.jsonify(response)
 
+@app.route("/getWordCloudData", methods=['GET'])
+def getWordCloudData():
+    topic_importance = sd.getTopicImportance()
+    hashtag_distribution = sd.getHashtagDistribution()
+    response = {
+        "topic_importance": topic_importance,
+        "hashtag_distribution": hashtag_distribution
+    }
+    return flask.jsonify(response)
+
+@app.route("/getTimeSeriesData", methods=['GET'])
+def getTimeSeriesData():
+    all_poi_time_series_data = sd.getAllPoiTimeSeriesData(ind)
+    reply_sentiment_time_series = sd.getReplySentimentTimeSeriesData(ind)
+    country_vaccine_hesitancy = sd.getCountryVaccineHesitance()
+    response = {
+        "country_vaccine_hesitancy":country_vaccine_hesitancy,
+        "reply_sentiment_time_series":reply_sentiment_time_series,
+        "all_poi_time_series_data": all_poi_time_series_data,
 
     }
     return flask.jsonify(response)

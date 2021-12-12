@@ -1,0 +1,33 @@
+<div class="lineChartDiv" *ngIf="!isLoading">
+    <app-line 
+    [lineChartData]="timeSeriesList"
+    [lineTitle]="'POI Time Series Data (Apr - Sep 2021)'"
+    [lineContainer]="'poiTimeSeriesContainer'"  
+    [lineYLabel]="'Tweet Count'"
+    [lineXList]="timeSeriesXList"
+    >
+    </app-line>
+</div>
+<div class="lineChartDiv" *ngIf="!isLoading">
+    <app-line 
+    [lineChartData]="replySentimentTimeSeriesList"
+    [lineTitle]="'POI Reply Sentiment Time Series Data (14 Sep 2021 - 23 Sep 2021)'"
+    [lineContainer]="'replySentimentTimeSeriesContainer'"  
+    [lineYLabel]="'Sentiment Score'"
+    [lineXList]="replySentimentXList"
+    >
+    </app-line>
+</div>
+<div class="lineChartDiv" *ngIf="!isLoading">
+    <app-line 
+    [lineChartData]="countryVaccineHesitancy"
+    [lineTitle]="'Country Vaccine Hesitancy (Apr - Sep 2021)'"
+    [lineContainer]="'countryVaccineHesitancyContainer'"
+    [lineYLabel]="'Hesitancy Score'"
+    [lineXList]="countryVaccineHesitancyXList"
+    >
+    </app-line>
+</div>
+<div class='loader-wrapper' *ngIf='isLoading'>
+    <mat-spinner></mat-spinner>    
+</div>

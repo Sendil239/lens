@@ -24,32 +24,10 @@
     </app-rose>
 </div>
 <br>
-<div class="lineChartDiv" *ngIf="!isLoading">
-    <app-line 
-    [lineChartData]="timeSeriesList"
-    [lineTitle]="'POI Time Series Data (Apr - Sep 2021)'"
-    [lineContainer]="'poiTimeSeriesContainer'"  
-    [lineYLabel]="'Tweet Count'"
-    >
-    </app-line>
-</div>
-<div class='wordCloud' id="topicsContainer" [hidden]="isWordCloudLoading"></div>
-<div class="lineChartDiv" *ngIf="!isLoading">
-    <app-line 
-    [lineChartData]="countryVaccineHesitancy"
-    [lineTitle]="'Country Vaccine Hesitancy (Apr - Sep 2021)'"
-    [lineContainer]="'countryVaccineHesitancyContainer'"
-    [lineYLabel]="'Hesitancy Score'" 
-    >
-    </app-line>
-</div>
-<div class='wordCloud' id="hashtagsContainer" [hidden]="isWordCloudLoading"></div>
 <div id="vaccineHesitancyTweetContainer" [hidden]="isLoading"></div>
 <div id="vaccineHesitancyContainer" [hidden]="isLoading">
-
-
 </div>
-<div class='loader-wrapper' *ngIf='isLoading || isWordCloudLoading'>
+<div class='loader-wrapper' *ngIf='isLoading'>
     <mat-spinner></mat-spinner>    
 </div>
 

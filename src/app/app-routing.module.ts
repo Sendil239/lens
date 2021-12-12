@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './components/layout/layout.component';
+import { TimeseriesanalysisComponent } from './components/timeseriesanalysis/timeseriesanalysis.component';
+import { WordcloudComponent } from './components/wordcloud/wordcloud.component';
 
 const routes: Routes = [
   {
@@ -20,6 +22,14 @@ const routes: Routes = [
         loadChildren: () => 
         import ('./modules/analytics/analytics.module').then(m=>m.AnalyticsModule)
       }, {
+        path: 'word_cloud',
+        component: WordcloudComponent
+      },
+      {
+        path: 'time_series_analysis',
+        component: TimeseriesanalysisComponent
+      },
+      {
         path: 'world_analytics',
         loadChildren: () => 
         import ('./modules/world-analytics/world-analytics.module').then(m=>m.WorldAnalyticsModule)

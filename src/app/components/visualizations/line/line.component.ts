@@ -22,7 +22,12 @@ export class LineComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void{
-    this.drawLineChart();
+    if(this.lineContainer == 'replySentimentTimeSeriesContainer'){
+      this.drawReplySentimentTimeSeries();
+    }else {
+      this.drawLineChart();
+    }
+    
   }
 
   drawLineChart(){
@@ -52,7 +57,7 @@ export class LineComponent implements OnInit, AfterViewInit {
         title: {
           text: 'MMM yyyy'
         },
-        categories: ["Apr 2021", "May 2021", "Jun 2021", "Jul 2021", "Aug 2021", "Sep 2021"]
+        categories: this.lineXList
       },
       yAxis: {
         title: {
@@ -71,9 +76,73 @@ export class LineComponent implements OnInit, AfterViewInit {
             enabled: true
           }
         }
+      },    
+      // Define the data points. All series have a dummy year
+      // of 1970/71 in order to be compared on the same x axis. Note
+      // that in JavaScript, months start at 0 for January, 1 for February etc.
+      series: this.lineSeriesData,
+    
+      responsive: {
+        rules: [{
+          condition: {
+            maxWidth: 500
+          },
+          chartOptions: {
+            plotOptions: {
+              series: {
+                marker: {
+                  radius: 2.5
+                }
+              }
+            }
+          }
+        }]
+      }
+    });
+  }
+
+  drawReplySentimentTimeSeries(){
+    Highcharts.chart(this.lineContainer, {
+      chart: {
+        type: 'spline',
+        events: {
+          load: function() {
+            let categoryHeight = 35;
+            this.update({
+              chart: {
+                height: categoryHeight * 15 + (this.chartHeight - this.plotHeight)
+              }
+            })
+          }
+        }
+      },
+      title: {
+        text: this.lineTitle
+      },
+      xAxis: {
+        title: {
+          text: 'dd MMM yyyy'
+        },
+        categories: this.lineXList
+      },
+      yAxis: {
+        title: {
+          text: this.lineYLabel
+        },
+        min: 0
+      },
+      tooltip: {
+        headerFormat: '<b>{series.name}</b><br>',
+        pointFormat: '{point.y:.5f}'
       },
     
-      colors: ['#6CF', '#39F', '#06C', '#036', '#000'],
+      plotOptions: {
+        series: {
+          marker: {
+            enabled: true
+          }
+        }
+      },
     
       // Define the data points. All series have a dummy year
       // of 1970/71 in order to be compared on the same x axis. Note
@@ -104,13 +173,18 @@ export class LineComponent implements OnInit, AfterViewInit {
     this.lineChartData = this.utilService.objectToArray(data);
     this.lineChartData.forEach((element: any) => {
       let monthData = this.utilService.objectToArray(element.value);
-      this.utilService.sortByMonth(monthData)
+      if(this.lineTitle != 'replySentimentTimeSeriesContainer'){
+        this.utilService.sortByMonth(monthData);
+      }      
       this.lineSeriesData.push({
         name: element.name,
         data: monthData.map(x => x.value)
       })
     });
   }
+
+  @Input()
+    lineXList: any;
     
   @Input()
     lineTitle: string;

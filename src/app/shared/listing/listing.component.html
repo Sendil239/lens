@@ -6,12 +6,12 @@
         </p>
     </div>
 </div> -->
-
+<div style="text-align: center; padding-top: 2%; padding-bottom: 1%;">Total Records Fetched: {{length}}</div>
 <div *ngFor="let item of tweetsList">
     <mat-card class="example-card">
         <mat-card-title-group>
             <mat-card-title *ngIf="item.verified">@{{item.poi_name}}<mat-icon>verified_user</mat-icon></mat-card-title>
-            <mat-card-title *ngIf="!item.verified">Not A POI</mat-card-title>
+            <mat-card-title *ngIf="!item.verified">Public User</mat-card-title>
           
           <mat-card-subtitle>{{item.country}}</mat-card-subtitle>
         </mat-card-title-group>

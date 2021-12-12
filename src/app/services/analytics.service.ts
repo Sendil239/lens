@@ -21,5 +21,25 @@ export class AnalyticsService {
             )
         )
     }
+
+    getWordCloudData(){
+        return this.dataService.get('/getWordCloudData').pipe(
+            map(
+                (response: any) => {
+                    return response;
+                }
+            )
+        )
+    }
+
+    getTimeSeriesData(){
+        return this.dataService.get('/getTimeSeriesData').pipe(
+            map(
+                (response: any) => {
+                    return response;
+                }
+            )
+        )
+    }
         
 }

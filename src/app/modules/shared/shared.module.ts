@@ -8,8 +8,7 @@ import { BarComponent } from 'src/app/components/visualizations/bar/bar.componen
 import { PieComponent } from 'src/app/components/visualizations/pie/pie.component';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { CategoryComponent } from 'src/app/components/visualizations/category/category.component'
-import { RoseComponent } from 'src/app/components/visualizations/rose/rose.component'
-import { LineComponent } from 'src/app/components/visualizations/line/line.component';
+import { RoseComponent } from 'src/app/components/visualizations/rose/rose.component';
 import { TimeseriesComponent } from 'src/app/components/visualizations/timeseries/timeseries.component';
 
 import { UtilService } from 'src/app/services/util.service';
@@ -20,7 +19,6 @@ import { UtilService } from 'src/app/services/util.service';
     PieComponent, 
     CategoryComponent,
     RoseComponent,
-    LineComponent,
     TimeseriesComponent,
   ],
   imports: [MaterialModule, 
@@ -33,6 +31,6 @@ import { UtilService } from 'src/app/services/util.service';
   providers: [
     UtilService
     ],
-  exports: [BarComponent, PieComponent, CategoryComponent, RoseComponent, LineComponent,TimeseriesComponent, MaterialModule, CommonModule, ReactiveFormsModule, FormsModule]
+  exports: [BarComponent, PieComponent, CategoryComponent, RoseComponent,TimeseriesComponent, MaterialModule, CommonModule, ReactiveFormsModule, FormsModule]
 })
 export class SharedModule { }
