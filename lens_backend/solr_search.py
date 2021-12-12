@@ -297,8 +297,13 @@ def get_from_solr(core_name, query_text, payload):
                 doc['topics'] += word + " "
 
             if vs['pos'] < .0000000001:
-                vs['pos'] = .5
-            doc['sentiment'] = vs['pos']
+                doc['sentiment'] = 0
+            elif vs['pos'] > vs['neg']:
+                doc['sentiment'] = vs['pos']
+            else:
+                doc['sentiment'] = -vs['neg']
+
+            print(doc['sentiment'])
 
             if doc['id'] in doc_reply_count and doc_reply_count[doc['id']] > 0:
                 doc['top_pos_reply'], doc['top_neg_reply']  = sd.getTopPosNegReply(doc, ind, doc_reply_count)
