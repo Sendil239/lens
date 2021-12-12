@@ -307,6 +307,9 @@ def get_from_solr(core_name, query_text, payload):
             lens_doc.append(doc)
             #break
     #print(sentiment_count)
+    if "NaN" in poi_set:
+        poi_set.remove("NaN")
+
     poi_tweet_count = getPoiTweetCount(payload, result_tweet_list, poi_set)
     #print("total  1   ", len(lens_doc))
     country_tweet_count = getCountryTweetCount(payload, result_tweet_list, country_set)
