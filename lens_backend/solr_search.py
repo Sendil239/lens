@@ -387,6 +387,7 @@ def getCorpusChartData():
     lang_distribution = sd.getAllLanguageTweetCount(ind)
     country_distribution = sd.getAllCountryTweetCount(ind)
     poi_tweet_distribution = sd.getAllPoiTweetCount(ind)
+    reply_sentiment_time_series = sd.getReplySentimentTimeSeriesData(ind)
     response = {
         "topic_importance":topic_importance,
         "hashtag_distribution":hashtag_distribution,
@@ -396,7 +397,9 @@ def getCorpusChartData():
         "country_time_series_data": country_time_series_data,
         "lang_distribution": lang_distribution,
         "country_distribution": country_distribution,
-        "poi_tweet_distribution" : poi_tweet_distribution
+        "poi_tweet_distribution" : poi_tweet_distribution,
+        "reply_sentiment_time_series":reply_sentiment_time_series
+
 
     }
     return flask.jsonify(response)

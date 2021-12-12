@@ -313,3 +313,8 @@ def getCountryVaccineHesitance():
         print(type(vaccine_hesitancy))
         #data = literal_eval(data)
     return vaccine_hesitancy
+
+def getReplySentimentTimeSeriesData(ind):
+    with open("/home/ubuntu/lens/lens_backend/static_data/reply_sentiment.json") as json_file:
+        data = json.load(json_file)
+    return data
