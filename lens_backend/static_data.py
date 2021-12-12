@@ -68,7 +68,7 @@ def getAllCountryTweetCount(ind):
 
 def getAllLanguageTweetCount(ind):
     language_tweet_count = {"en":0, "hi":0, "es":0}
-    language_tweet_count = {"en": 36470, "hi": 14018, "es": 26646}
+    language_tweet_count = {"en": 58296, "hi": 18033, "es": 33687}
     return language_tweet_count
 
     for language in language_tweet_count:
@@ -186,7 +186,7 @@ def getAllCountryTimeSeriesData(ind):
 
 def saveAllReply(ind):
     # root_dir = '/home/ubuntu/lens/lens_backend/project1_data/'
-    root_dir = path + '/static_data/poi_reply.json'
+    root_dir = path + '/static_data/doc_reply_count.json'
     with open(root_dir) as json_file:
         data = json.load(json_file)
             
@@ -223,8 +223,7 @@ def saveAllReply(ind):
 
     return poi_reply
 
-def getTopPosNegReply(doc, ind):
-    poi_reply = saveAllReply(ind)
+def getTopPosNegReply(doc, ind, doc_reply_count):
     analyzer = SentimentIntensityAnalyzer()
     top_pos_tweet = ""
     top_neg_tweet = ""
@@ -232,15 +231,15 @@ def getTopPosNegReply(doc, ind):
     max_neg = 0
 
     query = "replied_to_tweet_id:" + doc['id']
-    result = solr_search_query(ind.connection, query, 10)
-    print(len(result))
+    result = solr_search_query(ind.connection, query, doc_reply_count[doc['id']])
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>     ",len(result))
     for tweet in result:
         vs = analyzer.polarity_scores(tweet['reply_text'])
         print(vs)
         if vs['pos'] > max_pos:
             max_pos = vs['pos']
             top_pos_tweet = tweet['reply_text']
-        if vs['neg'] < max_neg:
+        if vs['neg'] > max_neg:
             max_neg = vs['neg']
             top_neg_tweet = tweet['reply_text']
 

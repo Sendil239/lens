@@ -170,8 +170,10 @@ def getPoiReplyCount(payload, tweet_list, poi_set):
         poi_reply_count[poi] = 0
         poi_reply_sentiment[poi] = 0.0
 
-    poi_reply = sd.saveAllReply(ind)
-    print(poi_reply.keys(), len(tweet_list))
+    print("before loading")
+    doc_reply_count = sd.saveAllReply(ind)
+    print("after loading")
+    #print(poi_reply.keys(), len(tweet_list))
     analyzer = SentimentIntensityAnalyzer()
     #''''
     for tweet in tweet_list:
@@ -179,27 +181,17 @@ def getPoiReplyCount(payload, tweet_list, poi_set):
         if poi_name in temp_poi_set:
             tweet_id = tweet['id']
             sentiment = 0.0
-            if poi_name in poi_reply:
-                for reply in poi_reply[poi_name]:
-                    #print(type(reply['replied_to_tweet_id']), type(tweet_id))
-                    if str(reply['replied_to_tweet_id']) == str(tweet_id):
-                        poi_reply_count[poi_name] += 1
-                        vs = analyzer.polarity_scores(reply['reply_text'])
-                        sentiment += vs['pos']
+            if tweet_id in doc_reply_count:
+                poi_reply_count[poi_name] += doc_reply_count[tweet_id]
+                query = "replied_to_tweet_id:" + tweet_id
+                reply_tweet_list = sd.solr_search_query(ind.connection, query, doc_reply_count[tweet_id])
 
-            '''
-            query = "replied_to_tweet_id:" + tweet_id
-            reply_tweet_list = sd.solr_search_query(ind.connection, query, 500)
-            poi_reply_count[poi_name] += len(reply_tweet_list)
+                sentiment = 0.0
+                for reply_tweet in reply_tweet_list:
+                    vs = analyzer.polarity_scores(reply_tweet['reply_text'])
+                    sentiment += vs['pos']
 
-            sentiment = 0.0
-            for reply_tweet in reply_tweet_list:
-                vs = analyzer.polarity_scores(reply_tweet['reply_text'])
-                sentiment += vs['pos']
-                # print(vs)
-            # print( vs['pos'])
-            #'''
-            poi_reply_sentiment[poi_name] += sentiment
+                poi_reply_sentiment[poi_name] += sentiment
     #'''
     for poi_name in temp_poi_set:
         if poi_reply_count[poi_name] > 0.000001:
@@ -286,6 +278,7 @@ def get_from_solr(core_name, query_text, payload):
 
 
     #print("Len----->>>>>  ", len(result_tweet_list), total_tweet)
+    doc_reply_count = sd.saveAllReply(ind)
 
     for doc in result_tweet_list[(cur_page-1)*total_tweet::]:
         vs = analyzer.polarity_scores(doc['tweet_text'])
@@ -306,8 +299,11 @@ def get_from_solr(core_name, query_text, payload):
             if vs['pos'] < .0000000001:
                 vs['pos'] = .5
             doc['sentiment'] = vs['pos']
-            #doc['top_pos_reply'], doc['top_neg_reply']  = sd.getTopPosNegReply(doc, ind)
-            doc['top_pos_reply'], doc['top_neg_reply'] = "", ""
+
+            if doc['id'] in doc_reply_count and doc_reply_count[doc['id']] > 0:
+                doc['top_pos_reply'], doc['top_neg_reply']  = sd.getTopPosNegReply(doc, ind, doc_reply_count)
+            else:
+                doc['top_pos_reply'], doc['top_neg_reply'] = "", ""
             lens_doc.append(doc)
             #break
     #print(sentiment_count)
